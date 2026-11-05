@@ -44,7 +44,7 @@ const on = {
   initialize: (m) => send({ id: m.id, result: { protocolVersion: 1, agentCapabilities: { loadSession: true } } }),
   'session/new': (m) => send({ id: m.id, result: { sessionId: 'agent-session' } }),
   'session/load': (m) => send({ id: m.id, result: {} }),
-  'session/prompt': (m) => { say('做完了'); send({ id: m.id, result: { stopReason: 'end_turn' } }); },
+  'session/prompt': (m) => { say('Закончено'); send({ id: m.id, result: { stopReason: 'end_turn' } }); },
 };
 ${script}
 readline.createInterface({ input: process.stdin }).on('line', (line) => {

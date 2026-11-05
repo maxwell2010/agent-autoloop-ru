@@ -10,7 +10,7 @@ while :; do
     run=$(printf '%s' "$job" | jq -r '.run')
     token=$(printf '%s' "$job" | jq -r '.token')
     curl -fsS -H "Authorization: Bearer $token" -H 'Content-Type: application/json' -d '{}' "$AGENT_AUTOLOOP_URL/v1/runs/$run/started" >/dev/null
-    receipt=${AGENT_AUTOLOOP_RECEIPT:-'{"outcome":"done","summary":"处理完成"}'}
+    receipt=${AGENT_AUTOLOOP_RECEIPT:-'{"outcome":"done","summary":"Обработка завершена"}'}
     curl -fsS -H "Authorization: Bearer $token" -H 'Content-Type: application/json' -d "$receipt" "$AGENT_AUTOLOOP_URL/v1/runs/$run/result"
     claim="curl-$$-$run"
   fi

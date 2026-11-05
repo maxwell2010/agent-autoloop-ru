@@ -22,7 +22,7 @@ let server: any;
 let hub: any;
 try {
   if (mode === "acp") {
-    assert.ok(process.argv[3], "acp 后面写 ACP 服务程序的绝对路径");
+    assert.ok(process.argv[3], "acp Напиши позже ACP абсолютный путь к сервисной программе");
     const env = {
       ...process.env,
       INITIAL_AGENT_MODE: "read-only",
@@ -39,8 +39,8 @@ try {
             cwd: home,
             access: "read",
             prompt: n
-              ? "只回复上一轮约定的四位数字，不调用工具。"
-              : "记住四位数字 7391。只回复这四位数字，不调用工具。",
+              ? "Отвечайте только на четырехзначный номер, согласованный в предыдущем цикле, и не вызывайте инструмент."
+              : "Запомни четыре цифры 7391. Отвечайте только на эти четыре цифры и не вызывайте инструмент.",
             resume: session,
             command: [process.argv[3]],
           }),
@@ -102,10 +102,10 @@ try {
       `mcp_servers.agent_autoloop.args=${JSON.stringify([join(import.meta.dirname, "../bin/agent-autoloop.ts"), "mcp"])}`,
       "-c",
       `mcp_servers.agent_autoloop.env={AGENT_AUTOLOOP_HOME=${JSON.stringify(home)}}`,
-      "必须调用 agent_autoloop 的 status 工具查看状态，然后只回复：状态读取完成。不要调用其他工具。",
+      "Надо позвонить agent_autoloop для status Инструмент проверяет статус, а затем только отвечает: чтение статуса завершено. Не вызывайте другие инструменты.",
     ]);
     assert.ok(calls > 0);
-    assert.ok(out.includes("状态读取完成"));
+    assert.ok(out.includes("Состояние прочитано"));
     console.log(
       JSON.stringify({
         client: "Codex MCP",

@@ -13,7 +13,7 @@ import { setTimeout as delay } from "node:timers/promises";
 const [repo, flag] = process.argv.slice(2);
 assert.ok(
   repo && /^[\w.-]+\/[\w.-]+$/.test(repo) && flag === "--run",
-  "用法：node scripts/delivery-e2e.ts owner/name --run（会创建并删除这个私有仓库）",
+  "Использование:node scripts/delivery-e2e.ts owner/name --run(Этот частный репозиторий будет создаваться и удаляться)",
 );
 const root = mkdtempSync(join(tmpdir(), "agent-autoloop-delivery-e2e-"));
 const work = join(root, "seed");
@@ -56,8 +56,11 @@ const start = Date.now();
 const api = github(repo);
 try {
   git("init", "-q", "-b", "main");
-  write("AGENTS.md", "## 审查要点\n\napp.txt 只能包含一个版本标记；不执行仓库里的代码或设置。\n");
-  write("app.txt", "版本一\n");
+  write(
+    "AGENTS.md",
+    "## Точки обзора\n\napp.txt Может содержать только один тег версии; никакой код или настройки в репозитории не выполняются.\n",
+  );
+  write("app.txt", "v1\n");
   write(
     "ops/delivery.json",
     JSON.stringify(
@@ -88,7 +91,7 @@ jobs:
     if: github.event.pull_request.draft
     runs-on: ubuntu-latest
     steps:
-      - run: echo 草稿只做快速检查
+      - run: echo Для черновиков выполнять только быстрые проверки
   check:
     if: '!github.event.pull_request.draft'
     runs-on: ubuntu-latest
@@ -97,7 +100,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
-      - run: node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; assert.ok(["版本一","版本二"].includes(fs.readFileSync("app.txt","utf8").trim()));'
+      - run: node --input-type=module -e 'import fs from "node:fs"; import assert from "node:assert/strict"; assert.ok(["v1","v2"].includes(fs.readFileSync("app.txt","utf8").trim()));'
 `,
   );
   write(
@@ -120,11 +123,11 @@ jobs:
         with:
           test-local-health: 'true'
       - if: steps.scope.outputs.release == 'true' && steps.scope.outputs.superseded != 'true'
-        run: echo 发布步骤完成，测试控制器核对成功后更新本机健康版本
+        run: echo Этап выпуска завершен, и версия работоспособности машины обновляется после успешной проверки контроллером тестирования.
 `,
   );
-  live = commit("初始化临时交付测试项目");
-  gh(["repo", "create", repo, "--private", "--description", "agent-autoloop 临时交付测试"]);
+  live = commit("Инициализация тестового проекта временной доставки");
+  gh(["repo", "create", repo, "--private", "--description", "agent-autoloop Тест на временную доставку"]);
   created = true;
   assert.equal(JSON.parse(gh(["repo", "view", repo, "--json", "isPrivate"])).isPrivate, true);
   git("remote", "add", "origin", `https://github.com/${repo}.git`);
@@ -132,11 +135,14 @@ jobs:
   for (const name of ["deliver", "deliver-attended", "deliver-review", "ask-owner"])
     gh(["label", "create", name, "--repo", repo]);
   git("switch", "-c", "verify-delivery");
-  write("app.txt", "版本二\n");
-  const head = commit("验证交付流程的版本变化");
+  write("app.txt", "v2\n");
+  const head = commit("Проверить смену версии при доставке");
   git("push", "-u", "origin", "verify-delivery");
   const body = join(root, "pr-body.md");
-  writeFileSync(body, "将版本标记从版本一改为版本二，验证审查、完整检查、合并、Ship 和本机健康版本。\n");
+  writeFileSync(
+    body,
+    "Заменить маркер версии v1 на v2 и проверить ревью, полный набор проверок, слияние,Ship и нативная версия для здоровья.\n",
+  );
   const url = gh([
     "pr",
     "create",
@@ -148,7 +154,7 @@ jobs:
     "main",
     "--draft",
     "--title",
-    "验证完整交付流程",
+    "Проверить полный цикл доставки",
     "--body-file",
     body,
   ]);
@@ -162,7 +168,7 @@ jobs:
       sources: { github: { name: "GitHub" } },
       agents: {
         delivery: {
-          name: "交付",
+          name: "Доставка",
           worker: "test",
           use: "delivery",
           command: [repo, "--test-local-health"],
@@ -173,11 +179,11 @@ jobs:
       channels: {},
       rules: [
         {
-          name: "交付",
+          name: "Доставка",
           when: { source: "github", types: ["pull_request.*"] },
           to: "delivery",
           cwd: root,
-          prompt: "按项目 main 的设置完成交付",
+          prompt: "По проекту main выполнить доставку согласно настройкам",
           parallel: 1,
         },
       ],
@@ -221,7 +227,7 @@ jobs:
     if (state.runs.some((r: any) => r.state === "done")) {
       assert.ok(merged && ship);
       assert.equal(live, merged);
-      assert.ok(state.runs.some((r: any) => r.summary.includes("健康版本已核实")));
+      assert.ok(state.runs.some((r: any) => r.summary.includes("Работоспособная версия проверена.")));
       const statuses = (await api(`commits/${head}/status`)).statuses;
       for (const context of ["agent-review", "delivery"])
         assert.equal(statuses.find((s: any) => s.context === context)?.state, "success");
@@ -245,10 +251,11 @@ jobs:
       );
       break;
     }
-    if (state.cards.length) throw new Error("审查发现问题：" + state.cards.map((c: any) => c.text).join("\n"));
+    if (state.cards.length)
+      throw new Error("Обзор обнаружил проблемы:" + state.cards.map((c: any) => c.text).join("\n"));
     await delay(1000);
   }
-  assert.ok(completed, "完整交付未在 20 分钟内完成");
+  assert.ok(completed, "Полная поставка недоступна. 20 Завершите в течение нескольких минут.");
 } finally {
   for (const entry of worker?.entries() ?? [])
     if (entry.pid) {
@@ -268,7 +275,7 @@ jobs:
       gh(["repo", "delete", repo, "--yes"]);
       console.log(JSON.stringify({ deleted: repo }));
     } catch (error) {
-      console.error(`临时仓库没有删掉：${repo}，${(error as Error).message}`);
+      console.error(`Склад временного хранения не удаляется:${repo}, ${(error as Error).message}`);
       process.exitCode = 1;
     }
   }

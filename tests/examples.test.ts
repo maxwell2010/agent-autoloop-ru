@@ -50,7 +50,7 @@ test("curl and jq examples run against a conforming hub and complete the answer 
   for (const table of ["events", "runs", "run_events", "cards", "deliveries", "timers", "seen"] as const)
     hub.fixtureClear(table);
   hub.ingest("app", { id: "shell", type: "feedback.new", subject: "shell" });
-  const receipt = { outcome: "done", summary: "问了", ask: [{ title: "选一个", text: "测试", options: ["甲", "乙"] }] };
+  const receipt = { outcome: "done", summary: "问了", ask: [{ title: "选Один", text: "测试", options: ["А", "Б"] }] };
   const worker = await shell("worker", keys.worker, {
     AGENT_AUTOLOOP_RECEIPT: JSON.stringify(receipt),
     AGENT_AUTOLOOP_CLAIM: "shell-1",
@@ -59,7 +59,7 @@ test("curl and jq examples run against a conforming hub and complete the answer 
   const channel = await shell("channel", keys.channel);
   assert.equal(channel.code, 0, channel.err);
   const card = JSON.parse(channel.out);
-  assert.equal(card.title, "选一个");
+  assert.equal(card.title, "选Один");
   const answer = await fetch(`${url}/v1/cards/${card.id}/answer`, {
     method: "POST",
     headers: { authorization: `Bearer ${keys.channel}`, "content-type": "application/json" },

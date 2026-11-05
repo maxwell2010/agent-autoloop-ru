@@ -1,14 +1,22 @@
 {
   "timezone": "Asia/Shanghai",
-  "askFirst": ["删数据", "停服", "花钱", "对外发消息", "改产品方向", "新建或轮换密钥", "修改权限"],
-  "sources": { "browser-tasks": { "name": "网页核实请求" } },
+  "askFirst": [
+    "Удаление данных",
+    "Остановка сервиса",
+    "расходы",
+    "Отправка сообщений во внешний мир",
+    "менять направление продукта",
+    "Создать или обновить ключ",
+    "Изменение полномочий"
+  ],
+  "sources": { "browser-tasks": { "name": "Запрос проверки страницы" } },
   "agents": {
-    "browser-owner": { "name": "Claude 主任务", "worker": "my-computer", "use": "claude", "access": "edit" }
+    "browser-owner": { "name": "Claude Основная задача", "worker": "my-computer", "use": "claude", "access": "edit" }
   },
-  "channels": { "feishu": { "name": "飞书", "answerers": ["ou_REPLACE_ME"] } },
+  "channels": { "feishu": { "name": "Feishu", "answerers": ["ou_REPLACE_ME"] } },
   "rules": [
     {
-      "name": "委托 Codex 核实网页",
+      "name": "Комиссия Codex Проверить веб-страницу",
       "when": { "source": "browser-tasks", "types": ["browser.verify"] },
       "to": "browser-owner",
       "cwd": "~/.agent-autoloop/work/browser-handoff",

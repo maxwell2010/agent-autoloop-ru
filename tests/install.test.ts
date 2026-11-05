@@ -59,7 +59,7 @@ function computer({ node = "real" }: { node?: "real" | "old" | "none" } = {}) {
     join(tools, "git"),
     `echo "git $*" >> "${called}"
 case " $* " in *" clone "*) for target; do :; done; cp -R "${copy}" "$target"; mkdir "$target/.git" ;; esac
-[ "$3" != config ] || echo https://github.com/KKKKhazix/agent-autoloop.git`,
+[ "$3" != config ] || echo https://github.com/maxwell2010/agent-autoloop-ru.git`,
   );
   // `launchctl print` failing says nothing's loaded, which is what lets a first load go ahead at once.
   executable(join(tools, "launchctl"), `echo "launchctl $*" >> "${called}"\n[ "$1" != print ]`);
@@ -105,12 +105,12 @@ test("a computer that only takes work joins through the installer, with nothing 
     url: "https://hub.test",
     worker: { name: "mac", key: "k" },
   });
-  assert.match(done.stdout, /接活/);
+  assert.match(done.stdout, /как исполнитель/);
   assert.equal(readlinkSync(join(it.local, "agent-autoloop")), it.program);
   // A second try, with the key corrected, must say it did nothing rather than that it updated.
   const again = it.run([it.local], ["join", "https://hub.test", "--worker", "mac", "--key", "other", "--no-service"]);
   assert.notEqual(again.status, 0);
-  assert.match(again.stderr, /已经配置过了/);
+  assert.match(again.stderr, /Уже настроено/);
   assert.equal(JSON.parse(readFileSync(join(it.hub, "config.json"), "utf8")).worker.key, "k");
 });
 
@@ -121,7 +121,10 @@ test("the command goes in ~/.local/bin when that's on PATH, even behind another 
   assert.equal(done.status, 0, done.stderr);
   assert.equal(readlinkSync(join(it.local, "agent-autoloop")), it.program);
   assert.ok(!isLink(join(other, "agent-autoloop")));
-  assert.match(done.stdout, /先运行 agent-autoloop up 启动中台，再开一个终端运行 agent-autoloop try/);
+  assert.match(
+    done.stdout,
+    /Сначала выполните agent-autoloop up, затем в другом терминале выполните agent-autoloop try/,
+  );
   assert.doesNotMatch(done.stdout, /alias/);
 });
 
@@ -155,7 +158,7 @@ test("someone's own agent-autoloop stays as it was, and the next step doesn't se
   assert.equal(done.status, 0, done.stderr);
   assert.match(readFileSync(join(theirs, "agent-autoloop"), "utf8"), /echo their own/);
   assert.equal(readlinkSync(join(after, "agent-autoloop")), it.program);
-  assert.match(done.stdout, new RegExp(`先运行 ${it.program} up`));
+  assert.match(done.stdout, new RegExp(`Сначала выполните ${it.program} up`));
   assert.match(done.stdout, new RegExp(`alias agent-autoloop='${it.program}'`));
 
   const linked = computer();
@@ -173,7 +176,10 @@ test(
     const done = it.run([]);
     assert.equal(done.status, 0, done.stderr);
     assert.ok(!existsSync(it.local));
-    assert.match(done.stdout, new RegExp(`先运行 ${it.program} up 启动中台，再开一个终端运行 ${it.program} try`));
+    assert.match(
+      done.stdout,
+      new RegExp(`Сначала выполните ${it.program} up, затем в другом терминале выполните ${it.program} try`),
+    );
     assert.match(done.stdout, new RegExp(`alias agent-autoloop='${it.program}'`));
     assert.doesNotMatch(readFileSync(script, "utf8"), /sudo/);
   },
@@ -183,13 +189,13 @@ test("the next step is try alone when a service has been started", () => {
   const it = computer();
   const done = it.run([it.local], ["--command", "true", "--port", "3999"]);
   assert.equal(done.status, 0, done.stderr);
-  assert.match(done.stdout, /运行 agent-autoloop try 跑一遍完整流程/);
+  assert.match(done.stdout, /Выполните agent-autoloop try Выполнить полный цикл/);
   assert.doesNotMatch(done.stdout, /agent-autoloop up/);
 });
 
 for (const [node, words] of [
-  ["old", /需要 Node\.js 24 或更新，现在是 v22\.1\.0/],
-  ["none", /需要 Node\.js 24 或更新，这台电脑上没找到/],
+  ["old", /Требуется Node\.js 24 или новее, сейчас установлен v22\.1\.0/],
+  ["none", /Требуется Node\.js 24 или новее; Node на этом компьютере не найден/],
 ] as const) {
   test(`with Node ${node === "old" ? "too old" : "missing"} it says what to run, and those lines work as written`, () => {
     const it = computer({ node });
@@ -220,14 +226,14 @@ test("running it again updates and doesn't set anything up over what's there", (
   rmSync(it.called);
   const kept = it.run([it.local]);
   assert.equal(kept.status, 0, kept.stderr);
-  assert.match(kept.stdout, /更新好了/);
+  assert.match(kept.stdout, /Обновление завершено/);
   assert.equal(readFileSync(join(it.hub, "rules.json"), "utf8"), "my rules");
   assert.equal(readFileSync(join(it.hub, "config.json"), "utf8"), config);
   assert.equal(readlinkSync(join(it.local, "agent-autoloop")), it.program);
   // This stand-in lists no releases. What happens with some is in releases.test.ts, with the real git.
   assert.deepEqual(readFileSync(it.called, "utf8").trim().split("\n"), [
     `git -C ${join(it.hub, "app")} config --get remote.origin.url`,
-    "git ls-remote --refs --tags https://github.com/KKKKhazix/agent-autoloop.git v*",
+    "git ls-remote --refs --tags https://github.com/maxwell2010/agent-autoloop-ru.git v*",
     `git -C ${join(it.hub, "app")} pull --ff-only --quiet`,
   ]);
 

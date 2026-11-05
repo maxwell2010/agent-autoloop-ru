@@ -21,7 +21,7 @@ const age = (path: string, days: number) => utimesSync(path, daysAgo(days), days
 function finished(name: string, days: number) {
   const dir = join(runs, name);
   mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, "stdout-1.log"), "它说过的话");
+  writeFileSync(join(dir, "stdout-1.log"), "Что там написано");
   age(dir, days);
   return dir;
 }

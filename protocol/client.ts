@@ -26,7 +26,7 @@ export function hubClient(url: string, key: string) {
     try {
       data = text ? JSON.parse(text) : null;
     } catch {}
-    if (!response.ok) throw new HubError(response.status, data?.error ?? `中台返回 ${response.status}`);
+    if (!response.ok) throw new HubError(response.status, data?.error ?? `Центр возвращается ${response.status}`);
     return data;
   }
   return {

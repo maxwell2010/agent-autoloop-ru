@@ -97,7 +97,7 @@ test("each door takes its own kind of key and no other", async () => {
   assert.equal((await call("/v1/state", { key: keys.owner })).status, 200);
   const taken = await call("/v1/events", { key: keys.app, body: note(1) });
   assert.equal(taken.status, 200);
-  assert.deepEqual(taken.json.routed, ["意见"]);
+  assert.deepEqual(taken.json.routed, ["Мнение"]);
   assert.equal(all<{ source: string }>("SELECT source FROM events")[0].source, "app", "the key says who it's from");
 });
 
@@ -124,7 +124,7 @@ test("a worker's wait: what arrives while it waits comes at once; nothing comes,
   const started = Date.now();
   const got = await waiting;
   assert.ok(Date.now() - started < 2000);
-  assert.equal(got.json.job.rule.name, "告警");
+  assert.equal(got.json.job.rule.name, "Тревога");
   const again = await call("/v1/work?claim=c-2&wait=0", { key: keys.w2 });
   assert.equal(again.json.job.run, got.json.job.run, "the same claim gets the same work back");
   // Only the latest token holds the run.
@@ -147,14 +147,18 @@ test("a worker's wait: what arrives while it waits comes at once; nothing comes,
     ).status,
     200,
   );
-  const result = { outcome: "done", summary: "好了", ask: [{ title: "问", text: "怎么办", options: ["甲", "乙"] }] };
+  const result = {
+    outcome: "done",
+    summary: "Хорошо",
+    ask: [{ title: "Вопрос", text: "Что делать?", options: ["А", "Б"] }],
+  };
   const done = await call(`/v1/runs/${again.json.job.run}/result`, { key: again.json.job.token, body: result });
   assert.deepEqual(done.json, { rejected: [] });
   const replay = await call(`/v1/runs/${again.json.job.run}/result`, { key: again.json.job.token, body: result });
   assert.equal(replay.json.duplicate, true);
   const conflict = await call(`/v1/runs/${again.json.job.run}/result`, {
     key: again.json.job.token,
-    body: { outcome: "done", summary: "别的" },
+    body: { outcome: "done", summary: "Другие" },
   });
   assert.equal(conflict.status, 409);
   const bad = await call(`/v1/work?claim=${"x".repeat(201)}&wait=0`, { key: keys.w2 });
@@ -162,27 +166,33 @@ test("a worker's wait: what arrives while it waits comes at once; nothing comes,
 });
 
 test("a source tells under its own name, once per key; a worker only as its own task", async () => {
-  const told = await call("/v1/tell", { key: keys.app, body: { key: "weekly-44", text: "周报" } });
+  const told = await call("/v1/tell", { key: keys.app, body: { key: "weekly-44", text: "Еженедельный отчет" } });
   assert.deepEqual([told.status, told.json.duplicate], [200, false]);
-  assert.equal(one<{ title: string }>("SELECT title FROM cards WHERE id = ?", [told.json.card])!.title, "应用");
+  assert.equal(one<{ title: string }>("SELECT title FROM cards WHERE id = ?", [told.json.card])!.title, "Применение");
   assert.equal(
-    (await call("/v1/tell", { key: keys.app, body: { key: "weekly-44", text: "周报" } })).json.duplicate,
+    (await call("/v1/tell", { key: keys.app, body: { key: "weekly-44", text: "Еженедельный отчет" } })).json.duplicate,
     true,
   );
   assert.equal((await call("/v1/tell", { key: keys.app, body: { key: "Bad Key", text: "x" } })).status, 400);
   assert.equal((await call("/v1/tell", { key: keys.app, body: { key: "k", text: " " } })).status, 400);
   assert.equal((await call("/v1/tell", { key: keys.app, body: { key: "k", text: "x", oops: 1 } })).status, 400);
   assert.equal((await call("/v1/tell", { body: { key: "k", text: "x" } })).status, 401);
-  const task = await call("/v1/tell", { key: keys.w1, body: { task: "每周清理", key: "m", text: "要你看一眼" } });
+  const task = await call("/v1/tell", {
+    key: keys.w1,
+    body: { task: "Еженедельная очистка", key: "m", text: "требуетсяты看Один眼" },
+  });
   assert.equal(task.status, 200);
-  assert.equal(one<{ title: string }>("SELECT title FROM cards WHERE id = ?", [task.json.card])!.title, "每周清理");
   assert.equal(
-    (await call("/v1/tell", { key: keys.w2, body: { task: "每周清理", key: "m2", text: "x" } })).status,
+    one<{ title: string }>("SELECT title FROM cards WHERE id = ?", [task.json.card])!.title,
+    "Еженедельная очистка",
+  );
+  assert.equal(
+    (await call("/v1/tell", { key: keys.w2, body: { task: "Еженедельная очистка", key: "m2", text: "x" } })).status,
     401,
     "not a task of its agents",
   );
   assert.equal(
-    (await call("/v1/tell", { key: keys.w1, body: { task: "没有这个", key: "m3", text: "x" } })).status,
+    (await call("/v1/tell", { key: keys.w1, body: { task: "Не найдено", key: "m3", text: "x" } })).status,
     401,
   );
 });
@@ -205,7 +215,7 @@ test("a channel comes for cards, reports them, and passes on who answered; the l
     );
   }
   const ask = seen.find((c) => c.kind === "ask");
-  assert.deepEqual(ask.options, ["甲", "乙"]);
+  assert.deepEqual(ask.options, ["А", "Б"]);
   const url = `/v1/cards/${ask.id}/answer`;
   assert.equal((await call(url, { key: keys.w1, body: { choice: 0, by: "me", ref: `om_${ask.id}` } })).status, 401);
   assert.equal(
@@ -224,7 +234,7 @@ test("a channel comes for cards, reports them, and passes on who answered; the l
   assert.equal(next.json.job.context.answers[0].choice, 1);
   await call(`/v1/runs/${next.json.job.run}/result`, {
     key: next.json.job.token,
-    body: { outcome: "done", summary: "选了乙" },
+    body: { outcome: "done", summary: "选了Б" },
   });
   assert.equal(
     (await call(`/v1/cards/${ask.id}/failed`, { key: keys.chat, body: { version: 1, error: "x" } })).status,
@@ -246,8 +256,8 @@ test("the owner's key reads everything, answers, resolves and stops; nothing els
   const job = (await call("/v1/work?claim=c-9&wait=0", { key: keys.w1 })).json.job;
   const asked = {
     outcome: "done",
-    ask: [{ title: "本人答", text: "选一个", options: ["甲", "乙"], key: "own" }],
-    notice: [{ title: "看看", text: "这个" }],
+    ask: [{ title: "本人答", text: "选Один", options: ["А", "Б"], key: "own" }],
+    notice: [{ title: "看看", text: "этот" }],
   };
   await call(`/v1/runs/${job.run}/result`, { key: job.token, body: asked });
   const [card, notice] = (await call("/v1/state", { key: keys.owner })).json.cards
@@ -258,10 +268,10 @@ test("the owner's key reads everything, answers, resolves and stops; nothing els
   assert.equal((await call(url, { body: { choice: 0 } })).status, 401);
   assert.equal((await call(url, { key: keys.w1, body: { choice: 0 } })).status, 401);
   assert.equal((await call(url, { key: keys.owner, body: { choice: 0 } })).json.changed, true);
-  assert.equal(one<{ by: string }>("SELECT by FROM cards WHERE id = ?", [card.id])!.by, "本人");
-  assert.equal((await call(`/v1/cards/${notice.id}/resolve`, { body: { reason: "处理了" } })).status, 401);
+  assert.equal(one<{ by: string }>("SELECT by FROM cards WHERE id = ?", [card.id])!.by, "владелец");
+  assert.equal((await call(`/v1/cards/${notice.id}/resolve`, { body: { reason: "Обработано" } })).status, 401);
   assert.equal((await call(`/v1/cards/${notice.id}/resolve`, { key: keys.owner, body: { reason: " " } })).status, 400);
-  const resolved = await call(`/v1/cards/${notice.id}/resolve`, { key: keys.owner, body: { reason: "处理了" } });
+  const resolved = await call(`/v1/cards/${notice.id}/resolve`, { key: keys.owner, body: { reason: "Обработано" } });
   assert.deepEqual([resolved.status, resolved.json.changed], [200, true]);
   const waiting = await call("/v1/work?claim=c-10&wait=0", { key: keys.w1 });
   assert.equal((await call(`/v1/runs/${waiting.json.job.run}/cancel`, { body: {} })).status, 401);
@@ -295,15 +305,15 @@ const stored = (id: number) =>
   )!;
 
 test("a card's link is a plain page: it shows that card as words, runs nothing, and only a press answers", async () => {
-  const title = "<script>alert(1)</script>链接答";
+  const title = "<script>alert(1)</script>ссылка答";
   const { id, path } = await linkFor(60, {
-    ask: [{ title, text: "选一个 & <b>别的</b>", options: ["甲", "乙<i>"], recommend: 0 }],
+    ask: [{ title, text: "选Один & <b>Другие</b>", options: ["А", "Б<i>"], recommend: 0 }],
   });
   const page = await call(path);
   assert.equal(page.status, 200);
   assert.match(page.headers.get("content-type")!, /^text\/html/);
   assert.ok(!/<script|<b>|<i>/.test(page.text), page.text);
-  assert.ok(page.text.includes("&lt;script&gt;alert(1)&lt;/script&gt;链接答"));
+  assert.ok(page.text.includes("&lt;script&gt;alert(1)&lt;/script&gt;ссылка答"));
   assert.match(page.headers.get("content-security-policy")!, /default-src 'none'/);
   assert.equal(page.headers.get("referrer-policy"), "no-referrer");
   assert.equal(page.headers.get("cache-control"), "no-store");
@@ -316,11 +326,11 @@ test("a card's link is a plain page: it shows that card as words, runs nothing, 
   assert.equal((await form("/c/made-up", "choice=0")).status, 404);
   assert.equal((await form(path, "choice=9")).status, 400);
   assert.equal((await form(path, "text=")).status, 400);
-  assert.match((await form(path, "choice=9")).text, /没有这个选项/, "a person is told in words, not JSON");
+  assert.match((await form(path, "choice=9")).text, /Такого варианта нет/, "a person is told in words, not JSON");
   const yes = await form(path, "choice=1");
   assert.deepEqual([yes.status, yes.headers.get("location")], [303, path]);
-  assert.deepEqual([stored(id).choice, stored(id).by], [1, "链接"]);
-  assert.ok((await call(path)).text.includes("你选了「乙&lt;i&gt;」"));
+  assert.deepEqual([stored(id).choice, stored(id).by], [1, "ссылка"]);
+  assert.ok((await call(path)).text.includes("Вы выбрали «Б&lt;i&gt;»"));
   assert.ok(!(await call(path)).text.includes("<form"), "nothing left to press");
   assert.equal((await form(path, "choice=0")).status, 303);
   assert.equal(stored(id).choice, 1, "only the first press counts");
@@ -330,7 +340,10 @@ test("a card's link is a plain page: it shows that card as words, runs nothing, 
 test("a card's link lasts a week: after that it neither answers nor shows the card", async () => {
   const days = (count: number) => Date.now() - count * 24 * 60 * 60_000;
   const made = (key: string, at: number) =>
-    createCard({ key, kind: "ask", title: "放了很久的问题", text: "放了很久的内容", options: ["甲", "乙"] }, at).card;
+    createCard(
+      { key, kind: "ask", title: "放了很久дляпроблема", text: "放了很久дляСодержание", options: ["А", "Б"] },
+      at,
+    ).card;
   const linkOf = (id: number) => `/c/${one<{ token: string }>("SELECT token FROM cards WHERE id = ?", [id])!.token}`;
 
   const recent = made("link-recent", days(6));
@@ -348,7 +361,9 @@ test("a card's link lasts a week: after that it neither answers nor shows the ca
 });
 
 test("with no channel taking links, a card's link doesn't open", async () => {
-  const { path } = await linkFor(65, { ask: [{ title: "问", text: "问", options: ["甲", "乙"], key: "no-links" }] });
+  const { path } = await linkFor(65, {
+    ask: [{ title: "Вопрос", text: "Вопрос", options: ["А", "Б"], key: "no-links" }],
+  });
   const fixture = process.env.AGENT_AUTOLOOP_RULES!;
   const rules = JSON.parse(readFileSync(fixture, "utf8"));
   delete rules.channels.plain.links;
@@ -365,25 +380,25 @@ test("with no channel taking links, a card's link doesn't open", async () => {
 
 test("a card's link takes words of your own, and a notice takes a line of its own", async () => {
   const asked = await linkFor(61, {
-    ask: [{ title: "别的想法", text: "选一个", options: ["甲", "乙"], key: "words" }],
+    ask: [{ title: "Другой ответ", text: "选Один", options: ["А", "Б"], key: "words" }],
   });
-  assert.equal((await form(asked.path, `text=${encodeURIComponent("都不要")}`)).status, 303);
-  assert.deepEqual([stored(asked.id).choice, stored(asked.id).answer], [null, "都不要"]);
-  assert.ok((await call(asked.path)).text.includes("你选了「都不要」"));
-  const told = await linkFor(62, { notice: [{ title: "留意一下", text: "磁盘快满了", key: "disk" }] });
+  assert.equal((await form(asked.path, `text=${encodeURIComponent("都不требуется")}`)).status, 303);
+  assert.deepEqual([stored(asked.id).choice, stored(asked.id).answer], [null, "都不требуется"]);
+  assert.ok((await call(asked.path)).text.includes(`Вы выбрали «${stored(asked.id).answer}»`));
+  const told = await linkFor(62, { notice: [{ title: "хранится意Один下", text: "磁盘Быстро满了", key: "disk" }] });
   const page = await call(told.path);
   assert.equal(page.text.split("<form").length - 1, 2);
-  assert.ok(page.text.includes("已处理"));
-  assert.ok(page.text.includes("记录并结案"), "a notice can be settled with a line of your own");
+  assert.ok(page.text.includes("Комментарий"));
+  assert.ok(page.text.includes("Записать и закрыть"), "a notice can be settled with a line of your own");
   assert.equal((await form(told.path, `text=${encodeURIComponent("清了 3GB 缓存")}`)).status, 303);
   assert.equal(stored(told.id).state, "closed");
   assert.equal(stored(told.id).answer, "清了 3GB 缓存", "the line is kept with the card");
-  assert.ok((await call(told.path)).text.includes("处理说明：清了 3GB 缓存"));
-  const silent = await linkFor(63, { notice: [{ title: "又是他", text: "群发广告", key: "ad" }] });
+  assert.ok((await call(told.path)).text.includes(`Комментарий: ${stored(told.id).answer}`));
+  const silent = await linkFor(63, { notice: [{ title: "Это снова он", text: "群Отправить广告", key: "ad" }] });
   assert.equal((await form(silent.path, "choice=0")).status, 303);
   assert.deepEqual([stored(silent.id).state, stored(silent.id).answer], ["closed", null]);
-  const long = await linkFor(64, { notice: [{ title: "太长", text: "说明太长", key: "long" }] });
-  assert.equal((await form(long.path, `text=${"字".repeat(4001)}`)).status, 400);
+  const long = await linkFor(64, { notice: [{ title: "Слишком долго", text: "说明Слишком долго", key: "long" }] });
+  assert.equal((await form(long.path, `text=${"\u5b57".repeat(4001)}`)).status, 400);
   assert.equal(stored(long.id).state, "open", "too long is refused, not cut short");
 });
 

@@ -95,7 +95,7 @@ test("a run with that card, stopped while it's going, closes the card when it ha
   assert.equal(job.run, id);
   it.act("cancel", id);
   assert.equal(failing(it, id)?.state, "open", "not stopped yet");
-  it.act("finish", job.run, job.token, { outcome: "cancelled", summary: "已停止" });
+  it.act("finish", job.run, job.token, { outcome: "cancelled", summary: "Остановлено" });
   assert.equal(failing(it, id)?.state, "closed");
   it.check();
 });
@@ -121,7 +121,7 @@ test("an answer comes back to the thread that asked, after the rule stopped runn
   const it = hub();
   it.act("ingest", "app", feedback);
   const job = it.act("claimNext", "w1", "c1");
-  const question = { title: "选哪个", text: "选一个", options: ["甲", "乙"], about: "接着做" };
+  const question = { title: "选哪", text: "选Один", options: ["А", "Б"], about: "接着делать" };
   it.act("finish", job.run, job.token, { outcome: "done", summary: "问了", session: "S", ask: [question] });
   const [card] = it.cards().filter((card) => card.kind === "ask");
   assert.equal(card.lane, "#1", "the fixture's rule runs in parallel");
@@ -134,7 +134,7 @@ test("an answer comes back to the thread that asked, after the rule stopped runn
     next.context.answers.map((answer: any) => answer.choice),
     [1],
   );
-  it.act("finish", next.run, next.token, { outcome: "done", summary: "做完了" });
+  it.act("finish", next.run, next.token, { outcome: "done", summary: "Закончено" });
   it.check();
 });
 
@@ -142,7 +142,7 @@ test("a due check comes back to its thread, after the rule stopped running in pa
   const it = hub();
   it.act("ingest", "app", feedback);
   const job = it.act("claimNext", "w1", "c1");
-  const later = { key: "看看", at: "2026-11-05T01:00:00Z", about: "到时候查" };
+  const later = { key: "看看", at: "2026-11-05T01:00:00Z", about: "Проверьте, когда придет время" };
   it.act("finish", job.run, job.token, { outcome: "done", summary: "约了", session: "S", later: [later] });
   it.act("rules", notParallel());
   it.pass(61);

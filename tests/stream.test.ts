@@ -30,13 +30,13 @@ test("web-standard handler streams facts with cursors and traces an entire run",
   const job = hub.claimNext("w1", "trace")!;
   const result = {
     outcome: "done",
-    resolve: [{ card: 999, reason: "越界" }],
-    ask: [{ title: "选一个", text: "内容", options: ["甲", "乙"] }],
+    resolve: [{ card: 999, reason: "выходит за допустимые пределы" }],
+    ask: [{ title: "选Один", text: "Содержание", options: ["А", "Б"] }],
   };
   const first = hub.finish(job.run, job.token, result);
   assert.deepEqual(hub.finish(job.run, job.token, result).rejected, first.rejected);
   const card = rows(hub.getView(), "cards").find((c) => c.run_id === job.run)!;
-  hub.answer(card.id, { choice: 0, by: "本人" });
+  hub.answer(card.id, { choice: 0, by: "владелец" });
   const facts = await (await call(`/v1/runs/${job.run}/why`)).json();
   for (const type of ["rules", "ingest", "claimNext", "finish", "answer"])
     assert.ok(
@@ -60,7 +60,7 @@ test("a projection failure rolls back both the receipt and the log", () => {
     "CREATE TEMP TRIGGER reject_card BEFORE INSERT ON projections WHEN NEW.collection='cards' BEGIN SELECT RAISE(ABORT,'disk failure'); END;",
   );
   assert.throws(
-    () => hub.finish(job.run, job.token, { outcome: "done", notice: [{ title: "通知", text: "内容" }] }),
+    () => hub.finish(job.run, job.token, { outcome: "done", notice: [{ title: "Уведомление", text: "Содержание" }] }),
     /disk failure/,
   );
   hub.db.exec("DROP TRIGGER reject_card");
@@ -75,7 +75,7 @@ test("why retains each rules version across failed and retried attempts", () => 
   const first = hub.claimNext("w2", "versions", now)!;
   hub.finish(first.run, first.token, { outcome: "failed" }, now + 1);
   const changed = structuredClone(before);
-  changed.rules[1].prompt = "变更后的规则";
+  changed.rules[1].prompt = "Правила после изменения";
   hub.execute("rules", [changed], now + 2);
   const second = hub.claimNext("w2", "retried", now + 300001)!;
   assert.equal(second.run, first.run);
@@ -108,7 +108,7 @@ test("cancelling a stream detaches the request abort listener", async () => {
 
 test("heartbeat card changes wake pending channel polls", async () => {
   const channel = hub.addKey("channel", "chat");
-  const id = hub.createCard({ key: "worker:w2:offline:test", kind: "notice", title: "离线", text: "内容" }).card;
+  const id = hub.createCard({ key: "worker:w2:offline:test", kind: "notice", title: "离线", text: "Содержание" }).card;
   for (;;) {
     const card = hub.nextCard("chat");
     if (!card) break;

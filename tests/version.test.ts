@@ -28,7 +28,7 @@ test("it prints this commit's release and the commit, with nothing installed", (
   );
   assert.equal(done.status, 0, done.stderr);
   const commit = git(root, "rev-parse", "HEAD").slice(0, 12);
-  assert.equal(done.stdout.trim(), `agent-autoloop ${releaseOf(root) ?? "未发布"}（提交 ${commit}）`);
+  assert.equal(done.stdout.trim(), `agent-autoloop ${releaseOf(root) ?? "Не опубликовано"}(Коммит ${commit})`);
   assert.ok(!existsSync(empty), "asking the version sets nothing up");
 });
 
@@ -41,7 +41,7 @@ test("the version is the tag on this commit, and only while it's on that commit"
   git(repo, "commit", "-q", "--allow-empty", "-m", "x");
   const head = git(repo, "rev-parse", "HEAD").slice(0, 12);
   assert.equal(releaseOf(repo), null);
-  assert.equal(versionLine(repo), `agent-autoloop 未发布（提交 ${head}）`);
+  assert.equal(versionLine(repo), `agent-autoloop Не опубликовано(Коммит ${head})`);
   assert.equal(versionName(repo), head, "what other programs are told still says which code this is");
 
   git(repo, "tag", "pre-public-delete-20261203");
@@ -52,7 +52,7 @@ test("the version is the tag on this commit, and only while it's on that commit"
   git(repo, "tag", "v1.2.0");
   git(repo, "tag", "v1.2.0-rc.2");
   assert.equal(releaseOf(repo), "v1.2.0", "the release, not the try-outs that became it");
-  assert.equal(versionLine(repo), `agent-autoloop v1.2.0（提交 ${head}）`);
+  assert.equal(versionLine(repo), `agent-autoloop v1.2.0(Коммит ${head})`);
   assert.equal(versionName(repo), "v1.2.0");
   assert.equal(releaseOf(join(repo, "vendored")), null, "a copy inside a repository isn't that repository's release");
 

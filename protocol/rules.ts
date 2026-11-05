@@ -7,7 +7,7 @@ import { SCHEDULE, type Rule, type Rules } from "../kernel/rules.ts";
 export class RulesError extends Error {
   readonly issues: string[];
   constructor(issues: string[]) {
-    super(`rules.json 有问题：\n${issues.join("\n")}`);
+    super(`rules.json Обнаружены проблемы:\n${issues.join("\n")}`);
     this.issues = issues;
   }
 }
@@ -16,9 +16,17 @@ const ACCESS = ["read", "edit", "full"];
 const TELLS = ["always", "needed", "never"];
 const ID = /^[a-z][a-z0-9-]*$/;
 const TYPE_PATTERN = /^(\*|[a-z][a-z0-9_.-]{0,63}(\.\*)?)$/;
-const ASK_FIRST = ["删数据", "停服", "花钱", "对外发消息", "改产品方向", "新建或轮换密钥", "修改权限"];
-const NOT_EMPTY = "不能为空";
-const ID_WORDS = "只能用小写字母、数字和 -";
+const ASK_FIRST = [
+  "Удаление данных",
+  "Остановка сервиса",
+  "расходы",
+  "Отправка сообщений во внешний мир",
+  "менять направление продукта",
+  "Создать или обновить ключ",
+  "Изменение полномочий",
+];
+const NOT_EMPTY = "Не может быть пустым";
+const ID_WORDS = "Только строчные буквы, цифры и -";
 
 type Check = (value: unknown) => boolean;
 type Field = [name: string, check: Check, problem: string, optional?: boolean];
@@ -48,14 +56,14 @@ function isZone(zone: unknown) {
 
 /** Each field present and well formed, and no others: a misspelt field would otherwise be silently ignored. */
 function checkFields(issues: string[], where: string, value: unknown, spec: Field[]) {
-  if (!isObject(value)) return void issues.push(`${where}要是一个对象`);
+  if (!isObject(value)) return void issues.push(`${where.trim()}: должно быть объектом`);
   for (const [name, check, problem, optional] of spec) {
     if (!(name in value)) {
-      if (!optional) issues.push(`${where}缺少 ${name}`);
-    } else if (!check(value[name])) issues.push(`${where}的 ${name} ${problem}`);
+      if (!optional) issues.push(`${where.trim()}: отсутствует ${name}`);
+    } else if (!check(value[name])) issues.push(`${where.trim()}: поле ${name} ${problem}`);
   }
   for (const name of Object.keys(value)) {
-    if (!spec.some(([known]) => known === name)) issues.push(`${where}有不认识的字段 ${name}`);
+    if (!spec.some(([known]) => known === name)) issues.push(`${where.trim()}: содержит неизвестное поле ${name}`);
   }
 }
 
@@ -63,47 +71,51 @@ const nameOf = (entry: unknown) => (isObject(entry) && typeof entry.name === "st
 
 function checkRule(issues: string[], rules: Rules, rule: Rule, names: Set<string>, now: number) {
   const name = nameOf(rule);
-  if (names.has(name)) issues.push(`规则名「${name}」重复了`);
+  if (names.has(name)) issues.push(`Имя правила «${name}» повторяется`);
   names.add(name);
-  const where = `规则「${name}」`;
+  const where = `Правило «${name}»`;
   const when = isObject(rule) ? rule.when : undefined;
   checkFields(issues, where, rule, [
     ["name", isText, NOT_EMPTY],
-    ["when", isObject, "要是一个对象"],
-    ["to", isKeyOf(rules.agents), `不是已登记的 Agent：${isObject(rule) ? rule.to : ""}`],
-    ["cwd", (value) => typeof value === "string" && /^(~\/|\/)/.test(value), "要是以 ~/ 或 / 开头的目录"],
+    ["when", isObject, "должно быть объектом"],
+    ["to", isKeyOf(rules.agents), `Не зарегистрирован Agent:${isObject(rule) ? rule.to : ""}`],
+    [
+      "cwd",
+      (value) => typeof value === "string" && /^(~\/|\/)/.test(value),
+      "должно быть путем, начинающимся с ~/ или /",
+    ],
     ["skill", isText, NOT_EMPTY, true],
     ["prompt", isText, NOT_EMPTY, true],
     ["group", isText, NOT_EMPTY, true],
-    ["parallel", isCount, "要是正整数", true],
-    ["resume", (value) => typeof value === "boolean", "只能是 true 或 false", true],
-    ["tell", (value) => TELLS.includes(value as string), `只能是 ${TELLS.join("、")}`, true],
-    ["emits", isObject, "要是一个对象", true],
+    ["parallel", isCount, "должно быть положительным целым числом", true],
+    ["resume", (value) => typeof value === "boolean", "Это может быть только true или false", true],
+    ["tell", (value) => TELLS.includes(value as string), `Это может быть только ${TELLS.join(", ")}`, true],
+    ["emits", isObject, "должно быть объектом", true],
   ]);
   if (isObject(when) && "source" in when) {
-    checkFields(issues, `${where}的 when `, when, [
-      ["source", isKeyOf(rules.sources), `不是已登记的来源：${when.source}`],
-      ["types", isTypes, "要是事件类型的列表，可以用 x.* 或 *"],
+    checkFields(issues, `${where.trim()}: поле when `, when, [
+      ["source", isKeyOf(rules.sources), `Незарегистрированный источник:${when.source}`],
+      ["types", isTypes, "должно быть списком типов событий; допускается x.* или *"],
     ]);
   } else if (isObject(when)) {
     if (isCron(when.cron) && nextRun(parseCron(when.cron as string)!, now, rules.timezone) === null) {
-      issues.push(`${where}的定时永远不会到来：${when.cron}`);
+      issues.push(`${where}расписание никогда не наступит:${when.cron}`);
     }
-    checkFields(issues, `${where}的 when `, when, [["cron", isCron, "不是有效的 cron"]]);
+    checkFields(issues, `${where.trim()}: поле when `, when, [["cron", isCron, "некорректное cron-выражение"]]);
   }
   if (!isObject(rule)) return;
   // A plain command needs no words: a script that polls something is an agent too.
   if (!rule.skill && !rule.prompt && rules.agents[rule.to]?.use !== "command") {
-    issues.push(`${where}的 skill 和 prompt 至少写一个`);
+    issues.push(`${where.trim()}: поле skill и prompt Укажите хотя бы один`);
   }
   // Here and not on the agent: only a rule makes it run, and one no rule uses has always been allowed to be unfinished.
   const agent = rules.agents[rule.to];
-  if (agent?.use === "acp" && !agent.command) issues.push(`${where}用的 Agent ${rule.to} 缺少 command`);
+  if (agent?.use === "acp" && !agent.command) issues.push(`${where}используется Agent ${rule.to} Отсутствует command`);
   if (isObject(rule.emits)) {
     const emittable: Check = (value) => value !== SCHEDULE && isKeyOf(rules.sources)(value);
-    checkFields(issues, `${where}的 emits `, rule.emits, [
-      ["source", emittable, `不是已登记的来源：${rule.emits.source}`],
-      ["types", isTypes, "要是事件类型的列表"],
+    checkFields(issues, `${where.trim()}: поле emits `, rule.emits, [
+      ["source", emittable, `Незарегистрированный источник:${rule.emits.source}`],
+      ["types", isTypes, "должно быть списком типов событий"],
     ]);
   }
   rule.group ??= rule.name;
@@ -115,17 +127,17 @@ export function parseRules(json: string, now: number, timezone: string): Rules {
   try {
     parsed = JSON.parse(json);
   } catch (error) {
-    throw new RulesError([`不是 JSON：${(error as Error).message}`]);
+    throw new RulesError([`Некорректный JSON:${(error as Error).message}`]);
   }
   const issues: string[] = [];
   checkFields(issues, "rules.json ", parsed, [
-    ["timezone", isZone, "不是有效的时区", true],
-    ["askFirst", isWords, "要是文字的列表", true],
-    ["sources", isObject, "要是一个对象"],
-    ["agents", isObject, "要是一个对象"],
-    ["channels", isObject, "要是一个对象", true],
-    ["rules", Array.isArray, "要是一个列表"],
-    ["elsewhere", Array.isArray, "要是一个列表", true],
+    ["timezone", isZone, "Неправильный часовой пояс.", true],
+    ["askFirst", isWords, "должно быть списком строк", true],
+    ["sources", isObject, "должно быть объектом"],
+    ["agents", isObject, "должно быть объектом"],
+    ["channels", isObject, "должно быть объектом", true],
+    ["rules", Array.isArray, "должно быть списком"],
+    ["elsewhere", Array.isArray, "должно быть списком", true],
   ]);
   if (issues.length) throw new RulesError(issues);
   const rules = parsed as Rules;
@@ -133,34 +145,40 @@ export function parseRules(json: string, now: number, timezone: string): Rules {
   rules.askFirst ??= ASK_FIRST;
   rules.channels ??= {};
   rules.elsewhere ??= [];
-  if (SCHEDULE in rules.sources) issues.push(`来源 ${SCHEDULE} 是保留的，定时用规则的 cron`);
+  if (SCHEDULE in rules.sources)
+    issues.push(`источник ${SCHEDULE} зарезервировано; для расписания используется правило cron`);
   for (const [id, source] of Object.entries(rules.sources)) {
-    if (!ID.test(id)) issues.push(`来源的编号${ID_WORDS}：${id}`);
-    checkFields(issues, `来源 ${id} `, source, [
+    if (!ID.test(id)) issues.push(`ID источника${ID_WORDS}:${id}`);
+    checkFields(issues, `источник ${id} `, source, [
       ["name", isText, NOT_EMPTY],
       ["adapter", isText, NOT_EMPTY, true],
     ]);
   }
-  rules.sources[SCHEDULE] = { name: "定时" };
+  rules.sources[SCHEDULE] = { name: "Расписание" };
   for (const [id, channel] of Object.entries(rules.channels)) {
-    if (!ID.test(id)) issues.push(`通道的编号${ID_WORDS}：${id}`);
-    checkFields(issues, `通道 ${id} `, channel, [
+    if (!ID.test(id)) issues.push(`ID канала${ID_WORDS}:${id}`);
+    checkFields(issues, `канал ${id} `, channel, [
       ["name", isText, NOT_EMPTY],
-      ["answerers", isWords, "要是文字的列表", true],
-      ["links", (value) => typeof value === "boolean", "要是 true 或 false", true],
+      ["answerers", isWords, "должно быть списком строк", true],
+      ["links", (value) => typeof value === "boolean", "должно быть true или false", true],
     ]);
   }
   for (const [id, agent] of Object.entries(rules.agents)) {
-    if (!ID.test(id)) issues.push(`Agent 的编号${ID_WORDS}：${id}`);
+    if (!ID.test(id)) issues.push(`Agent номер${ID_WORDS}:${id}`);
     checkFields(issues, `Agent ${id} `, agent, [
       ["name", isText, NOT_EMPTY],
       ["worker", isId, ID_WORDS],
       ["use", isId, ID_WORDS],
       ["model", isText, NOT_EMPTY, true],
       ["effort", isText, NOT_EMPTY, true],
-      ["access", (value) => ACCESS.includes(value as string), `只能是 ${ACCESS.join("、")}`, true],
-      ["command", isSomeWords, "要是命令行的列表", !isObject(agent) || agent.use !== "command"],
-      ["timeout", isCount, "要是正整数（分钟）", true],
+      ["access", (value) => ACCESS.includes(value as string), `Это может быть только ${ACCESS.join(", ")}`, true],
+      [
+        "command",
+        isSomeWords,
+        "должно быть массивом аргументов командной строки",
+        !isObject(agent) || agent.use !== "command",
+      ],
+      ["timeout", isCount, "должно быть положительным целым числом минут", true],
     ]);
     if (isObject(agent)) agent.access ??= "edit";
   }
@@ -169,18 +187,19 @@ export function parseRules(json: string, now: number, timezone: string): Rules {
   if (issues.length) throw new RulesError(issues);
   const limits = new Map<string, number | undefined>();
   for (const { group, parallel } of rules.rules) {
-    if (limits.has(group) && limits.get(group) !== parallel) issues.push(`组「${group}」里的规则 parallel 要一致`);
+    if (limits.has(group) && limits.get(group) !== parallel)
+      issues.push(`Группа «${group}»правила из parallel должны совпадать`);
     limits.set(group, parallel);
   }
   for (const task of rules.elsewhere) {
     const name = nameOf(task);
-    if (names.has(name)) issues.push(`定时任务「${name}」和别的规则或定时任务重名`);
+    if (names.has(name)) issues.push(`Запланированная задача «${name}»: имя повторяется в правиле или другом задании.`);
     names.add(name);
-    checkFields(issues, `定时任务「${name}」`, task, [
+    checkFields(issues, `Запланированная задача «${name}»`, task, [
       ["name", isText, NOT_EMPTY],
-      ["source", isKeyOf(rules.sources), "不是已登记的来源"],
-      ["to", isKeyOf(rules.agents), "不是已登记的 Agent"],
-      ["cron", isCron, "不是有效的 cron"],
+      ["source", isKeyOf(rules.sources), "Не зарегистрированный источник"],
+      ["to", isKeyOf(rules.agents), "Не зарегистрирован Agent"],
+      ["cron", isCron, "некорректное cron-выражение"],
       ["where", isText, NOT_EMPTY],
     ]);
   }

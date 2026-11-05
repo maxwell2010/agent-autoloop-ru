@@ -52,6 +52,6 @@ function visit(schema: any, item: any, path: string): string[] {
 }
 
 export function checkSchema(name: string, value: unknown): string[] {
-  if (!Object.hasOwn(schemas.$defs, name)) throw new Error(`没有这个协议类型：${name}`);
+  if (!Object.hasOwn(schemas.$defs, name)) throw new Error(`Неизвестный тип протокола:${name}`);
   return visit(schemas.$defs[name], value, name);
 }

@@ -38,8 +38,8 @@ test("status --json prints the same state the hub serves, and the plain output s
     [
       hub.parseRules(
         JSON.stringify({
-          sources: { local: { name: "本机" } },
-          agents: { helper: { name: "助手", worker: "this-machine", use: "command", command: ["true"] } },
+          sources: { local: { name: "локальный компьютер" } },
+          agents: { helper: { name: "Помощник", worker: "this-machine", use: "command", command: ["true"] } },
           channels: {},
           rules: [],
         }),
@@ -55,9 +55,9 @@ test("status --json prints the same state the hub serves, and the plain output s
   assert.ok(Array.isArray(state.cards));
   const human = await cli("status");
   assert.ok(!human.trim().startsWith("{"));
-  assert.match(human, /在跑|排队|等你/);
+  assert.match(human, /Бег|в очереди|Требуется ваше действие/);
 });
 
 test("an unknown flag is refused instead of ignored", async () => {
-  await assert.rejects(cli("status", "--wat"), /不认识的参数/);
+  await assert.rejects(cli("status", "--wat"), /Неизвестные параметры/);
 });

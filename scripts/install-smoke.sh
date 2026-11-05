@@ -62,13 +62,13 @@ done
 cat >"$work/agent.sh" <<'END'
 #!/bin/sh
 if grep -q 'card.answered' "$AGENT_AUTOLOOP_CONTEXT"; then
-  echo "你选了绿色，试跑通过"
+  echo "Вы выбрали зеленый цвет и прошли пробный запуск."
 else
   cat <<'ASK'
-问了一个问题
+Задан вопрос
 
 ```agent-autoloop
-{"ask":[{"title":"试跑：选一个颜色","text":"这是一次试跑，选哪个都行。","options":["蓝色","绿色"],"key":"try-color"}]}
+{"ask":[{"title":"Пробный запуск: выберите цвет","text":"Это пробный запуск; подойдет любой вариант.","options":["Синий","Зеленый"],"key":"try-color"}]}
 ```
 ASK
 fi
@@ -85,7 +85,7 @@ sh "$repo/install.sh" --no-service --command "$work/agent.sh" --port "$port" >"$
 cat "$work/install.out"
 [ -L "$HOME/.local/bin/agent-autoloop" ] || fail "install.sh didn't put the command in ~/.local/bin"
 [ "$(command -v agent-autoloop)" = "$HOME/.local/bin/agent-autoloop" ] || fail "agent-autoloop isn't what PATH finds"
-grep -q "先运行 agent-autoloop up" "$work/install.out" || fail "the next step printed isn't to start it"
+grep -q "Беги первым agent-autoloop up" "$work/install.out" || fail "the next step printed isn't to start it"
 
 commit=$(git -C "$repo" rev-parse HEAD | cut -c 1-12)
 agent-autoloop --version | grep -q "$commit" || fail "--version doesn't say $commit"
@@ -102,15 +102,15 @@ cat "$work/try.out"
 card=$(sed -n 's/.*agent-autoloop answer \([0-9][0-9]*\) .*/\1/p' "$work/try.out" | head -n 1)
 [ -n "$card" ] || fail "try didn't say how to answer"
 
-notified() { grep -q '试跑：选一个颜色' "$work/notified"; }
+notified() { grep -q 'Пробный запуск: выберите цвет' "$work/notified"; }
 wait_for "the question didn't reach the desktop channel" notified
 
 agent-autoloop answer "$card" 2
-finished() { agent-autoloop status | grep -q '试跑通过'; }
+finished() { agent-autoloop status | grep -q 'Пробный запуск пройден'; }
 wait_for "status never showed it finished" finished
 agent-autoloop status | tee "$work/status.out"
-grep -q '最近 7 天 2 轮' "$work/status.out" || fail "status doesn't count the two rounds"
-grep -q '● 桌面通知' "$work/status.out" || fail "status doesn't show the desktop channel online"
+grep -q 'Последние 7 дней 2 цикл.' "$work/status.out" || fail "status doesn't count the two rounds"
+grep -q '● Уведомления рабочего стола' "$work/status.out" || fail "status doesn't show the desktop channel online"
 
 agent-autoloop uninstall --yes </dev/null
 [ -f "$AGENT_AUTOLOOP_HOME/config.json" ] || fail "uninstall deleted the data"

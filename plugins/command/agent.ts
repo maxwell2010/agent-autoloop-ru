@@ -14,7 +14,7 @@ export default {
     ),
   read(stdout, code, stderr) {
     if (code === null) return {};
-    if (code !== 0) return { error: `退出码 ${code}：${tail(stderr || stdout) || "没留下原因"}` };
+    if (code !== 0) return { error: `код выхода ${code}:${tail(stderr || stdout) || "Причина отсутствует"}` };
     return { text: stdout };
   },
 } satisfies Adapter;

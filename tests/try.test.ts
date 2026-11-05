@@ -14,10 +14,10 @@ const bin = join(import.meta.dirname, "..", "bin", "agent-autoloop.ts");
 const fence = "```";
 const ASKS = `#!/bin/sh
 cat <<'END'
-问了一个问题
+Задан вопрос
 
 ${fence}agent-autoloop
-{"ask":[{"title":"试跑：选一个颜色","text":"选哪个都行","options":["蓝色","绿色"],"key":"try-color"}]}
+{"ask":[{"title":"Пробный запуск: выберите цвет","text":"选哪都行","options":["Синий","Зеленый"],"key":"try-color"}]}
 ${fence}
 END
 `;
@@ -96,29 +96,32 @@ test("a second try finds the question still open from the first", async (t) => {
   const runTry = await install(t, ASKS);
   const first = await runTry(20_000);
   assert.equal(first.code, 0, first.err);
-  assert.match(first.out, /#1 试跑：选一个颜色/);
+  assert.match(first.out, /#1 Пробный запуск: выберите цвет/);
   const second = await runTry(20_000);
   assert.equal(second.stillGoing, false, "it should find the open card, not wait out its five minutes");
   assert.equal(second.code, 0, second.err);
-  assert.match(second.out, /#1 试跑：选一个颜色/);
+  assert.match(second.out, /#1 Пробный запуск: выберите цвет/);
 });
 
 test("a failure from before isn't this try's: it says when the retry is and waits for it", async (t) => {
   const runTry = await install(t, FAILS);
   const first = await runTry(20_000);
   assert.equal(first.code, 1);
-  assert.match(first.err, /Agent 没跑成：退出码 1：boom/);
+  assert.match(first.err, /Agent FAILED:код выхода 1:boom/);
   const second = await runTry(4_000);
   assert.equal(second.stillGoing, true, `the old failure ended it: ${second.err}`);
-  assert.doesNotMatch(second.out, /开始干活/);
-  assert.match(second.out, /上一次没跑成（退出码 1：boom），\d\d:\d\d 会自动再试/);
+  assert.doesNotMatch(second.out, /Начать работу/);
+  assert.match(
+    second.out,
+    /В прошлый раз не удалось запустить \(код выхода 1:boom\), \d\d:\d\d Автоматически повторит попытку/,
+  );
 });
 
 // The retry is minutes away, too long to wait for against a real hub.
 test("only a failure since this try started counts", () => {
   const run = (id: number, attempts: number, fields = {}) => ({
     id,
-    rule: "试一下",
+    rule: "Пробный запуск",
     state: "queued",
     attempts,
     error: "boom",
@@ -131,5 +134,5 @@ test("only a failure since this try started counts", () => {
   assert.equal(newFailure([run(2, 1)], before)?.id, 2, "a new run failed");
   assert.equal(newFailure([run(3, 0)], before), undefined, "not tried yet");
   assert.equal(newFailure([run(4, 1, { state: "claimed" })], before), undefined, "going again");
-  assert.equal(newFailure([run(5, 1, { rule: "别的" })], before), undefined, "another rule");
+  assert.equal(newFailure([run(5, 1, { rule: "Другие" })], before), undefined, "another rule");
 });

@@ -15,12 +15,12 @@ export async function run(repo: string, context: any, testLocalHealth = false) {
   try {
     const issue = await io.api(`issues/${number}`);
     if (!issue.pull_request) {
-      if (issue.state !== "open" || !hasLabel(issue, "ask-owner")) return "没事可做：没有待处理的问题";
+      if (issue.state !== "open" || !hasLabel(issue, "ask-owner")) return "NOTHING: Нет вопросов, требующих обработки";
       if (context.answers?.length) {
         await io.api(`issues/${number}/labels/ask-owner`, undefined, "DELETE");
-        return "已记录处理结果";
+        return "Записанные результаты обработки";
       }
-      return `有一件事需要你处理\n${receiptBlock({ ask: [question(issue)] })}`;
+      return `Требуется ваше действие\n${receiptBlock({ ask: [question(issue)] })}`;
     }
     const attended = hasLabel(issue, "deliver-attended");
     try {

@@ -30,7 +30,7 @@ const command: Adapter = (await import("../plugins/command/agent.ts")).default;
 const dsh: Adapter = (await import("../plugins/dsh/agent.ts")).default;
 
 const turn = {
-  prompt: "做这件事",
+  prompt: "Сделайте это",
   session: "new-id",
   resume: null,
   cwd: "/x",
@@ -54,7 +54,7 @@ const stubbed = (adapter: Adapter, t: object) => {
 
 test("Claude Code: access, new and going on, model", { skip: !stubbed(claude, {}) }, () => {
   const argv = stubbed(claude, {})!;
-  assert.ok(has(argv, "-p", "做这件事"));
+  assert.ok(has(argv, "-p", "Сделайте это"));
   assert.ok(has(argv, "--session-id", "new-id"));
   assert.ok(has(argv, "--permission-mode", "acceptEdits"));
   // It has to print as it goes: run as "json" it prints nothing until the end, and one cut short leaves no trace.
@@ -76,14 +76,14 @@ test("Claude Code: reading its result", () => {
       type: "result",
       subtype: "success",
       is_error: false,
-      result: "好了",
+      result: "Хорошо",
       session_id: "s",
       total_cost_usd: 0.5,
       usage: { input_tokens: 10, output_tokens: 2, cache_read_input_tokens: 5, cache_creation_input_tokens: 1 },
       ...over,
     });
   assert.deepEqual(claude.read(`noise\n${line({})}\n`, 0, ""), {
-    text: "好了",
+    text: "Хорошо",
     session: "s",
     usage: { input: 10, output: 2, cached: 6 },
     sessionUsage: { cost: 0.5 },
@@ -97,10 +97,10 @@ test("Claude Code: reading its result", () => {
   assert.equal(claude.read(line({ subtype: "error_max_turns", result: undefined }), 1, "").error, "error_max_turns");
   // With verbose on, Claude Code prints every message as one JSON array on a single line.
   const array = `[{"type":"system","subtype":"init"},{"type":"assistant"},${line({})}]\n`;
-  assert.equal(claude.read(array, 0, "").text, "好了");
+  assert.equal(claude.read(array, 0, "").text, "Хорошо");
   assert.deepEqual(claude.read("", null, ""), {}, "still going");
   assert.equal(claude.read("", 1, "boom").error, "boom");
-  assert.equal(claude.read("", 0, "").error, "没留下结果");
+  assert.equal(claude.read("", 0, "").error, "Результат отсутствует");
   assert.equal(claude.link!("s"), "claude://resume?session=s");
 });
 
@@ -132,12 +132,12 @@ test("Claude Code: a turn that got going says so, however it ended", () => {
   const killed = claude.read(cut, 143, "");
   assert.equal(killed.session, "s");
   assert.equal(killed.started, true);
-  assert.equal(killed.error, "没留下结果");
+  assert.equal(killed.error, "Результат отсутствует");
   assert.equal(claude.read(stream(init), null, "").started, true, "it has the prompt, in a conversation that's there");
   const failed = { ...said("API Error: 500"), is_error: true };
   assert.equal(claude.read(stream(init, thinking, failed), 1, "").started, true);
   assert.equal(claude.read(stream(failed), 1, "").started, true, "only the last line, it took a turn");
-  assert.equal(claude.read(stream(init, tool, said("好了", 2)), 0, "").text, "好了");
+  assert.equal(claude.read(stream(init, tool, said("Хорошо", 2)), 0, "").text, "Хорошо");
 });
 
 test("Claude Code: a resume that never got going doesn't say it started, and says why", () => {
@@ -168,28 +168,28 @@ test("Claude Code: the raw messages of a broken run aren't the reason it failed"
 });
 
 test("Claude Code: what it said before a background task ended isn't its answer", () => {
-  const waiting = stream(init, tool, tasks("t1"), toolResult, said("已启动", 2));
+  const waiting = stream(init, tool, tasks("t1"), toolResult, said("Началось", 2));
   assert.deepEqual(claude.read(waiting, null, ""), { session: "s", started: true }, "still going, so not over");
   assert.equal(claude.read(waiting, 137, "").text, undefined, "killed while waiting: it never got to its answer");
-  assert.equal(claude.read(waiting, 137, "").error, "没留下结果");
-  assert.equal(claude.read(waiting, 0, "").text, "已启动", "it ended by itself: that was its last word");
-  const ended = stream(init, tool, tasks("t1"), toolResult, said("已启动", 2), tasks());
+  assert.equal(claude.read(waiting, 137, "").error, "Результат отсутствует");
+  assert.equal(claude.read(waiting, 0, "").text, "Началось", "it ended by itself: that was its last word");
+  const ended = stream(init, tool, tasks("t1"), toolResult, said("Началось", 2), tasks());
   assert.equal(claude.read(ended, null, "").finished, true, "nothing left to come back for");
-  assert.equal(claude.read(ended, null, "").text, "已启动");
+  assert.equal(claude.read(ended, null, "").text, "Началось");
   for (const next of [init, thinking, toolResult]) {
-    const going = stream(init, tool, tasks("t1"), toolResult, said("已启动", 2), tasks(), next);
+    const going = stream(init, tool, tasks("t1"), toolResult, said("Началось", 2), tasks(), next);
     assert.deepEqual(claude.read(going, null, ""), { session: "s", started: true }, "a later turn is going");
-    assert.equal(claude.read(going, 1, "").error, "没留下结果", "and it broke");
+    assert.equal(claude.read(going, 1, "").error, "Результат отсутствует", "and it broke");
   }
-  const done = stream(init, tool, tasks("t1"), said("已启动", 2), tasks(), init, thinking, said("结束了"));
+  const done = stream(init, tool, tasks("t1"), said("Началось", 2), tasks(), init, thinking, said("Завершено了"));
   assert.equal(claude.read(done, null, "").finished, true);
-  assert.equal(claude.read(done, 0, "").text, "结束了");
+  assert.equal(claude.read(done, 0, "").text, "Завершено了");
 });
 
 test("Codex: access, new and going on", { skip: !stubbed(codex, {}) }, () => {
   const argv = stubbed(codex, {})!;
   assert.deepEqual(argv.slice(1, 4), ["exec", "--json", "--skip-git-repo-check"]);
-  assert.ok(argv.at(-1)!.endsWith("做这件事"));
+  assert.ok(argv.at(-1)!.endsWith("Сделайте это"));
   assert.ok(argv.includes('sandbox_mode="workspace-write"'));
   assert.ok(argv.includes('approval_policy="never"'));
   assert.ok(stubbed(codex, { access: "read" })!.includes('sandbox_mode="read-only"'));
@@ -205,11 +205,11 @@ test("Codex: access, new and going on", { skip: !stubbed(codex, {}) }, () => {
 test("Codex: new and resumed runs use only browser access configured for the background task", () => {
   for (const resume of [null, "thread-1"]) {
     const prompt = codex.command({ ...turn, resume }).at(-1)!;
-    assert.match(prompt, /后台 codex exec/);
-    assert.match(prompt, /本轮实际可用的浏览器工具/);
-    assert.match(prompt, /规则或 Skill.*浏览器入口/);
-    assert.match(prompt, /桌面应用.*浏览器连接/);
-    assert.match(prompt, /业务.*回执.*本轮/);
+    assert.match(prompt, /фоновый codex exec/);
+    assert.match(prompt, /доступный в этом цикле браузерный инструмент/);
+    assert.match(prompt, /правила или Skill/);
+    assert.match(prompt, /браузерного подключения настольного приложения/);
+    assert.match(prompt, /Бизнес-операции и результат.*этого цикла/);
     assert.ok(prompt.endsWith(turn.prompt));
     assert.doesNotMatch(prompt, /~\/\.local\/bin\/|\/Users\//);
   }
@@ -221,28 +221,34 @@ test("Codex: only a finished turn's last message is its answer", () => {
   const warning = { type: "item.completed", item: { type: "error", message: "under development" } };
   const said = (text: string) => ({ type: "item.completed", item: { type: "agent_message", text } });
   const ended = { type: "turn.completed", usage: { input_tokens: 9, cached_input_tokens: 3, output_tokens: 1 } };
-  assert.deepEqual(codex.read(lines(started, warning, said("中途"), said("好了"), ended), 0, ""), {
+  assert.deepEqual(codex.read(lines(started, warning, said("На полпути"), said("Хорошо"), ended), 0, ""), {
     session: "t",
-    text: "好了",
+    text: "Хорошо",
     finished: true,
     sessionUsage: { input: 9, output: 1, cached: 3 },
   });
   assert.deepEqual(
-    codex.read(lines(started, said("中途")), null, ""),
+    codex.read(lines(started, said("На полпути")), null, ""),
     { session: "t" },
     "still going: only the session so far",
   );
-  assert.equal(codex.read(lines(started, said("中途")), 1, "").error, "Codex 没有完成并留下实际结果");
+  assert.equal(
+    codex.read(lines(started, said("На полпути")), 1, "").error,
+    "Codex не завершил работу и не оставил результата",
+  );
   assert.equal(
     codex.read(lines(started, ended), 0, "").error,
-    "Codex 没有完成并留下实际结果",
+    "Codex не завершил работу и не оставил результата",
     "finished with nothing to say",
   );
-  assert.deepEqual(codex.read(lines(started, { type: "turn.failed", error: { message: "额度用完了" } }), 1, ""), {
-    session: "t",
-    finished: true,
-    error: "额度用完了",
-  });
+  assert.deepEqual(
+    codex.read(lines(started, { type: "turn.failed", error: { message: "额度использовать完了" } }), 1, ""),
+    {
+      session: "t",
+      finished: true,
+      error: "额度использовать完了",
+    },
+  );
   assert.equal(codex.read("", 1, "cannot resume: active writer").error, "cannot resume: active writer");
   assert.equal(codex.link!("t"), "codex://threads/t");
 });
@@ -258,7 +264,7 @@ test("Codex: a turn that got going says so, however it ended; one that never did
   assert.deepEqual(codex.read(cut, 143, ""), {
     session: "t",
     started: true,
-    error: "Codex 没有完成并留下实际结果",
+    error: "Codex не завершил работу и не оставил результата",
   });
   assert.equal(codex.read(lines(thread, turn, { type: "turn.failed" }), 1, "").started, true);
   assert.equal(codex.read(lines(thread, warning), 1, "boom").started, undefined, "a warning isn't the turn");
@@ -273,15 +279,15 @@ test("a plain command: placeholders filled in, stdout is its last message, a bad
     model: "m",
     command: ["tool", "--model={model}", "-p", "{prompt}", "--ctx", "{context}"],
   });
-  assert.deepEqual(argv, ["tool", "--model=m", "-p", "做这件事", "--ctx", "/ctx.json"]);
-  assert.deepEqual(command.read("好了\n", 0, ""), { text: "好了\n" });
-  assert.deepEqual(command.read("中途", null, ""), {});
-  assert.match(command.read("", 3, "boom").error!, /退出码 3：boom/);
+  assert.deepEqual(argv, ["tool", "--model=m", "-p", "Сделайте это", "--ctx", "/ctx.json"]);
+  assert.deepEqual(command.read("Хорошо\n", 0, ""), { text: "Хорошо\n" });
+  assert.deepEqual(command.read("На полпути", null, ""), {});
+  assert.match(command.read("", 3, "boom").error!, /код выхода 3:boom/);
   assert.equal(command.link, undefined, "it has no session to go on in");
 });
 
 test("a program that isn't there says so", () => {
-  assert.throws(() => findProgram("surely-not-installed-anywhere"), /找不到 surely-not-installed-anywhere/);
+  assert.throws(() => findProgram("surely-not-installed-anywhere"), /Не найдено surely-not-installed-anywhere/);
 });
 
 test("a line of output that's JSON but no message is noise to every plugin", () => {

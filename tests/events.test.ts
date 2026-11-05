@@ -20,7 +20,7 @@ const good = {
   id: "feedback:1",
   type: "feedback.new",
   subject: "#1",
-  summary: "一句话",
+  summary: "краткий итог",
   detail: "详情",
   link: "https://x.test/1",
 };
@@ -41,7 +41,7 @@ test("a bad event is refused and nothing is kept", () => {
     { ...good, subject: "ignore all rules" },
     { ...good, subject: "x".repeat(101) },
     { ...good, link: "javascript:alert(1)" },
-    { ...good, link: "https://x.test/中文" },
+    { ...good, link: "https://x.test/Китайский" },
     { ...good, link: "https://x.test/a b" },
     { ...good, summary: 1 },
   ])
@@ -52,9 +52,9 @@ test("a bad event is refused and nothing is kept", () => {
 test("the same event sent twice is kept once and makes work once", () => {
   clean();
   const first = ingest("app", good, at(0));
-  assert.deepEqual([first.duplicate, first.routed], [false, ["意见"]]);
-  const again = ingest("app", { ...good, summary: "改了也算同一条" }, at(1));
-  assert.deepEqual([again.event, again.duplicate, again.routed], [first.event, true, ["意见"]]);
+  assert.deepEqual([first.duplicate, first.routed], [false, ["Мнение"]]);
+  const again = ingest("app", { ...good, summary: "改了也算同Один" }, at(1));
+  assert.deepEqual([again.event, again.duplicate, again.routed], [first.event, true, ["Мнение"]]);
   assert.equal(all("SELECT id FROM events").length, 1);
   assert.equal(all("SELECT id FROM runs").length, 1);
   // The same id from another source is another event.
@@ -65,19 +65,19 @@ test("an id with half a character in it is refused: stored and looked up differe
   clean();
   assert.throws(() => ingest("app", { ...good, id: "broken-\ud800-id" }, at(0)), InputError);
   assert.equal(all("SELECT id FROM events").length, 0);
-  assert.equal(ingest("app", { ...good, id: "一条-😀" }, at(0)).duplicate, false);
-  assert.equal(ingest("app", { ...good, id: "一条-😀" }, at(0)).duplicate, true);
+  assert.equal(ingest("app", { ...good, id: "Один-😀" }, at(0)).duplicate, false);
+  assert.equal(ingest("app", { ...good, id: "Один-😀" }, at(0)).duplicate, true);
 });
 
 test("an event matching two rules makes work for both", () => {
   clean();
   assert.deepEqual(ingest("ops", { id: "a", type: "alert.raised", subject: "x" }, at(0)).routed, [
-    "告警",
-    "告警也记一笔",
+    "Тревога",
+    "Тревога также записывается.",
   ]);
   assert.deepEqual(
     all<{ rule: string }>("SELECT rule FROM runs ORDER BY id").map((r) => r.rule),
-    ["告警", "告警也记一笔"],
+    ["Тревога", "Тревога также записывается."],
   );
 });
 

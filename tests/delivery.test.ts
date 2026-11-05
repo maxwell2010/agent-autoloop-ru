@@ -138,7 +138,7 @@ test("a missing label or closed PR launches nothing; forks are refused", async (
   }
   const { io, state } = fixture();
   state.pr.head.repo.full_name = "fork/app";
-  await assert.rejects(() => deliver("example/app", 1, io), /本仓库/);
+  await assert.rejects(() => deliver("example/app", 1, io), /этого репозитория/);
   assert.equal(state.reviewed, 0);
 });
 test("a PR pushed during review gets no attestation and is never merged", async () => {
@@ -147,7 +147,7 @@ test("a PR pushed during review gets no attestation and is never merged", async 
     state.pr.head.sha = "someone-else";
     return [];
   };
-  await assert.rejects(() => deliver("example/app", 1, io), /提交/);
+  await assert.rejects(() => deliver("example/app", 1, io), /Коммит/);
   assert.equal(state.merges, 0);
   assert.ok(!state.statuses.some((s: any) => s.context === "my-review"));
 });
@@ -242,7 +242,7 @@ test("a delivery withdrawn while main moves on stops without touching the branch
     state.pr.labels = [];
     return [];
   };
-  assert.equal((await deliver("example/app", 1, io)).summary, "交付标记已撤回");
+  assert.equal((await deliver("example/app", 1, io)).summary, "Маркировка поставки снята.");
   assert.equal(state.reviewed, 1);
   assert.equal(state.merges, 0);
   assert.ok(!state.writes.includes("pulls/1/update-branch"));
@@ -265,17 +265,17 @@ test("a delivery withdrawn during checks does not leave its status pending", asy
     if (path.startsWith("actions/runs/1/jobs")) state.pr.labels = [];
     return api(path, body, method);
   };
-  assert.equal((await deliver("example/app", 1, io)).summary, "交付标记已撤回");
+  assert.equal((await deliver("example/app", 1, io)).summary, "Маркировка поставки снята.");
   assert.equal(state.merges, 0);
   const last = state.statuses.filter((s: any) => s.context === "delivery").at(-1);
   assert.equal(last.state, "success");
-  assert.match(last.description, /撤回/);
-  assert.match(last.description, /未合并/);
+  assert.match(last.description, /отозван/);
+  assert.match(last.description, /не объединен/);
   assert.ok(!state.statuses.some((s: any) => s.context === "my-review"));
 });
 test("findings and review-only mode stop before merge", async () => {
   const first = fixture();
-  first.io.review = async () => [{ title: "数据会丢", text: "先修复" }];
+  first.io.review = async () => [{ title: "数据会丢", text: "Сначала отремонтируйте" }];
   const result = await deliver("example/app", 1, first.io);
   assert.equal(result.findings?.length, 1);
   assert.equal(first.state.merges, 0);
@@ -285,7 +285,7 @@ test("findings and review-only mode stop before merge", async () => {
   assert.equal(second.state.merges, 0);
 });
 const latest = (state: any, context: string) => state.statuses.filter((s: any) => s.context === context).at(-1);
-const problem = [{ title: "数据会丢", text: "先修复" }];
+const problem = [{ title: "数据会丢", text: "Сначала отремонтируйте" }];
 test("another event on a commit with findings ends the run: no second review, no new status", async () => {
   const { io, state } = fixture();
   io.review = async () => {
@@ -329,7 +329,7 @@ test("only findings stop the run: another failure on the commit does not", async
     path: "statuses/head",
     context: "delivery",
     state: "failure",
-    description: "完整检查没有通过",
+    description: "Полная проверка не удалась",
   });
   assert.equal((await deliver("example/app", 1, io)).merged, "merged");
   assert.equal(state.reviewed, 1);
@@ -494,7 +494,7 @@ test("a PR merged during review goes on to Ship and keeps what the review found"
 test("whatever stops a PR merged during review, the failure carries what the review found", async () => {
   const ways: [RegExp, (io: DeliveryIO, api: DeliveryIO["api"]) => void][] = [
     [
-      /发布没有通过/,
+      /релиз не прошел/,
       (io, api) => {
         io.api = async (path, body, method) =>
           path.startsWith("actions/workflows/ship.yml")
@@ -554,7 +554,7 @@ test("a merged PR without the label is left alone: no status, and no later relea
     path.startsWith("actions/workflows/ship.yml")
       ? { workflow_runs: [run(1, "merged", "completed", "failure")] }
       : api(path, body, method);
-  assert.equal((await deliver("example/app", 1, io)).summary, "没有待交付的标记");
+  assert.equal((await deliver("example/app", 1, io)).summary, "Нет меток доставки");
   assert.deepEqual(state.writes, []);
   assert.deepEqual(state.statuses, []);
 });
@@ -606,7 +606,7 @@ test("the run that going ready starts decides, passed or failed", async () => {
   assert.equal((await deliver("example/app", 1, passed.io)).merged, "merged");
   assert.deepEqual(passed.jobsOf, ["actions/runs/2/jobs?filter=latest&per_page=100"]);
   const failed = draftWithPassedRun(run(2, "head", "completed", "failure"));
-  await assert.rejects(() => deliver("example/app", 1, failed.io), /检查/);
+  await assert.rejects(() => deliver("example/app", 1, failed.io), /проверка/);
   assert.equal(failed.state.merges, 0);
 });
 test("a matrix job counts as the required job, every leg of it", async () => {
@@ -643,7 +643,7 @@ test("failed full checks never attest or merge and existing auto-merge is confir
     args[0].startsWith("actions/workflows/check")
       ? { workflow_runs: [{ ...run(1, "head", "completed", "failure"), event: "pull_request" }] }
       : api(...args);
-  await assert.rejects(() => deliver("example/app", 1, io), /检查/);
+  await assert.rejects(() => deliver("example/app", 1, io), /проверка/);
   assert.equal(state.pr.auto_merge, null);
   assert.equal(state.merges, 0);
   assert.ok(!state.statuses.some((s: any) => s.context === "my-review"));
@@ -659,7 +659,7 @@ test("auto-merge cancellation reads back dropped requests and refuses unknown st
   state.pr.auto_merge = {};
   io.disableAuto = async () => {};
   io.wait = async () => {};
-  await assert.rejects(() => disableAuto(1, io), /自动合并/);
+  await assert.rejects(() => disableAuto(1, io), /автоматического слияния/);
 });
 test("auto-merge read-back failure is retried but never treated as disabled", async () => {
   const { io } = fixture();
@@ -676,7 +676,7 @@ test("auto-merge read-back failure is retried but never treated as disabled", as
     reads++;
     throw new Error("HTTP 502");
   };
-  await assert.rejects(() => disableAuto(1, io), /无法确认自动合并/);
+  await assert.rejects(() => disableAuto(1, io), /Не удалось подтвердить отключение автоматического слияния/);
   assert.equal(reads, 3);
 });
 test("live health cannot hide incomplete or failed Ship", async () => {

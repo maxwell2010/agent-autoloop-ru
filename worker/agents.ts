@@ -75,7 +75,7 @@ export function findProgram(name: string, elsewhere: () => string[] = () => []) 
     found.set(name, onPath ?? elsewhere().find(existsSync) ?? null);
   }
   const program = found.get(name);
-  if (!program) throw new Error(`找不到 ${name}：先装好并登录`);
+  if (!program) throw new Error(`Не найдено ${name}:Сначала установите и войдите в систему`);
   return program;
 }
 

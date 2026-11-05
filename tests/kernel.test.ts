@@ -109,22 +109,22 @@ test("a queued run whose rule is gone stops and says so, and the rest of the que
   try {
     act("ingest", "app", { id: "gone", type: "feedback.new" });
     act("ingest", "ops", { id: "stays", type: "alert.raised" });
-    const [gone] = rows(view, "runs", { rule: "意见" });
-    const [stays] = rows(view, "runs", { rule: "告警" });
+    const [gone] = rows(view, "runs", { rule: "Мнение" });
+    const [stays] = rows(view, "runs", { rule: "Тревога" });
     const renamed = structuredClone(rules);
-    renamed.rules.find((rule: { name: string }) => rule.name === "意见")!.name = "新名字";
+    renamed.rules.find((rule: { name: string }) => rule.name === "Мнение")!.name = "новыйимя";
     act("rules", renamed);
     const stopped = view.get("runs", gone.id)!;
     assert.equal(stopped.state, "cancelled");
     assert.ok(stopped.finished_at);
-    assert.match(stopped.summary, /规则「意见」不在了/);
+    assert.match(stopped.summary, /Правило «Мнение» больше недоступно/);
     assert.equal(view.get("runs", stays.id)!.state, "queued");
     const open = rows(view, "cards", { state: "open" });
     assert.deepEqual(
       open.map((card) => card.key),
       [`run:${gone.id}:rule-gone`],
     );
-    assert.match(open[0].text, /规则「意见」不在了/);
+    assert.match(open[0].text, /Правило «Мнение» больше недоступно/);
     act("rules", renamed);
     assert.equal(rows(view, "cards", { state: "open" }).length, 1, "told once");
   } finally {
@@ -142,13 +142,13 @@ test("a run already going when its rule goes finishes normally, and if it fails 
     act("ingest", "app", { id: "held", type: "feedback.new" });
     const job = act("claimNext", "w1", "claim");
     const renamed = structuredClone(rules);
-    renamed.rules.find((rule: { name: string }) => rule.name === "意见")!.name = "新名字";
+    renamed.rules.find((rule: { name: string }) => rule.name === "Мнение")!.name = "новыйимя";
     act("rules", renamed);
     assert.equal(view.get("runs", job.run)!.state, "claimed");
-    act("finish", job.run, job.token, { outcome: "failed", error: "没跑成" });
+    act("finish", job.run, job.token, { outcome: "failed", error: "FAILED" });
     const stopped = view.get("runs", job.run)!;
     assert.equal(stopped.state, "cancelled");
-    assert.deepEqual([stopped.attempts, stopped.error, stopped.claim], [1, "没跑成", null]);
+    assert.deepEqual([stopped.attempts, stopped.error, stopped.claim], [1, "FAILED", null]);
     assert.equal(rows(view, "cards", { key: `run:${job.run}:rule-gone` }).length, 1);
   } finally {
     view.close();
@@ -165,9 +165,9 @@ test("a run stopped by its failed receipt keeps that receipt's usage, session an
     act("ingest", "app", { id: "held", type: "feedback.new" });
     const job = act("claimNext", "w1", "claim");
     const renamed = structuredClone(rules);
-    renamed.rules.find((rule: { name: string }) => rule.name === "意见")!.name = "新名字";
+    renamed.rules.find((rule: { name: string }) => rule.name === "Мнение")!.name = "новыйимя";
     act("rules", renamed);
-    const receipt = { outcome: "failed", error: "没跑成", session: "s1", usage: { input: 5 } };
+    const receipt = { outcome: "failed", error: "FAILED", session: "s1", usage: { input: 5 } };
     act("finish", job.run, job.token, receipt);
     const stopped = view.get("runs", job.run)!;
     assert.equal(stopped.state, "cancelled");
@@ -192,7 +192,7 @@ test("facts replay the whole receipt with no capability plaintext", () => {
   const job = act("claimNext", "w1", "claim");
   act("finish", job.run, job.token, {
     outcome: "done",
-    ask: [{ title: "选一个", text: "内容", options: ["甲", "乙"] }],
+    ask: [{ title: "选Один", text: "Содержание", options: ["А", "Б"] }],
   });
   assert.deepEqual(snapshot(evolve(empty(), log)), snapshot(view));
   assert.ok(!JSON.stringify(log).includes(job.token));
@@ -227,12 +227,12 @@ test("a schedule whose rule is gone or no longer scheduled stops coming due", ()
       .filter((due) => due.kind === "cron")
       .map((due) => due.key)
       .sort();
-  assert.deepEqual(schedules(), ["巡检", "早报"].sort());
-  const withoutMorning = rules.rules.filter((rule) => rule.name !== "早报");
+  assert.deepEqual(schedules(), ["Осмотр", "Утренний обзор"].sort());
+  const withoutMorning = rules.rules.filter((rule) => rule.name !== "Утренний обзор");
   act("rules", [{ ...rules, rules: withoutMorning }], 2000);
-  assert.deepEqual(schedules(), ["巡检"]);
+  assert.deepEqual(schedules(), ["Осмотр"]);
   const unscheduled = withoutMorning.map((rule) =>
-    rule.name === "巡检" ? { ...rule, when: { source: "app", types: ["poll.done"] } } : rule,
+    rule.name === "Осмотр" ? { ...rule, when: { source: "app", types: ["poll.done"] } } : rule,
   );
   act("rules", [{ ...rules, rules: unscheduled }], 3000);
   assert.deepEqual(schedules(), []);
@@ -248,7 +248,7 @@ test("a card's resend comes due at its time, and stops being due once that's pas
     v = evolve(v, d.facts);
     return d.value;
   };
-  const { card } = act("tell", ["k", "应用", "周报"], at(0));
+  const { card } = act("tell", ["k", "Применение", "Еженедельный отчет"], at(0));
   const resendAt = (id = card) => rows(v, "due").find((due) => due.kind === "delivery" && due.key === `${id}:chat`)?.at;
   // Taken and not heard of again: a channel waiting for the next card wakes when this one can go again. The channel may be
   // gone by then, so the deadline can't stay behind.
@@ -259,10 +259,10 @@ test("a card's resend comes due at its time, and stops being due once that's pas
   const tries = [1, 3, 7, 15, 25, 35, 45, 55];
   for (const [n, minute] of tries.entries()) {
     const { version } = act("nextCard", ["chat"], at(minute));
-    act("failed", ["chat", card, version, "挂了"], at(minute));
+    act("failed", ["chat", card, version, "Повесить трубку"], at(minute));
     assert.equal(resendAt(), n + 1 < tries.length ? at(tries[n + 1]) : undefined, `after the try at ${minute}`);
   }
-  const { card: sent } = act("tell", ["k2", "应用", "月报"], at(60));
+  const { card: sent } = act("tell", ["k2", "Применение", "月报"], at(60));
   const { version } = act("nextCard", ["chat"], at(60));
   assert.equal(resendAt(sent), at(61));
   act("delivered", ["chat", sent, version, "om_1"], at(60));
@@ -322,7 +322,7 @@ test("the card about a worker not connecting, once closed, stays closed until th
   act("tick", [], 600001);
   assert.equal(cards().length, 1);
   assert.deepEqual(dueBy(Infinity), [], "told, so nothing is left to come due");
-  act("answer", [cards()[0].id, { by: "本人" }], 600002);
+  act("answer", [cards()[0].id, { by: "владелец" }], 600002);
   assert.deepEqual(dueBy(Infinity), [], "nothing comes due to bring it back");
   act("tick", [], 700000);
   assert.equal(cards().length, 1, "told once for this work");
@@ -341,7 +341,7 @@ test("the card about a worker that has never connected, once closed, stays close
   assert.equal(dueBy(600001).length, 1);
   act("tick", [], 600001);
   assert.equal(cards().length, 1);
-  act("answer", [cards()[0].id, { by: "本人" }], 600002);
+  act("answer", [cards()[0].id, { by: "владелец" }], 600002);
   assert.deepEqual(dueBy(Infinity), []);
   act("tick", [], 700000);
   assert.equal(cards().length, 1);
@@ -354,7 +354,7 @@ test("work that comes after the card was closed is told, whether or not the work
     if (seen) act("heartbeat", ["w1", []], 0);
     act("ingest", ["app", { id: "x", type: "feedback.new" }], 0);
     act("tick", [], 600001);
-    act("answer", [cards()[0].id, { by: "本人" }], 600002);
+    act("answer", [cards()[0].id, { by: "владелец" }], 600002);
     act("cancel", [waiting()[0].id], 700000);
     act("tick", [], 700000);
     assert.equal(cards().length, 1, "nothing is waiting");
@@ -367,7 +367,7 @@ test("work that comes after the card was closed is told, whether or not the work
     act("tick", [], whenDue);
     assert.equal(cards().length, 2);
     assert.equal(cards()[1].state, "open");
-    assert.match(cards()[1].text, /1 件任务/);
+    assert.match(cards()[1].text, /в очереди или в работе: 1|1 задач ожидают/);
     assert.deepEqual(dueBy(Infinity), [], "told, so nothing is left to come due");
   }
 });
@@ -377,7 +377,7 @@ test("more for the work the owner already closed the card on isn't news", () => 
   act("heartbeat", ["w1", []], 0);
   act("ingest", ["app", { id: "x", type: "feedback.new" }], 0);
   act("tick", [], 600001);
-  act("answer", [cards()[0].id, { by: "本人" }], 600002);
+  act("answer", [cards()[0].id, { by: "владелец" }], 600002);
   act("ingest", ["app", { id: "y", type: "feedback.new" }], 700000);
   assert.deepEqual(dueBy(Infinity), []);
   act("tick", [], 700000);
@@ -464,7 +464,7 @@ test("source IDs cannot collide with the events generated by answers or timers",
     job.token,
     {
       outcome: "done",
-      ask: [{ title: "选择", text: "内容", options: ["甲", "乙"] }],
+      ask: [{ title: "Выберите", text: "Содержание", options: ["А", "Б"] }],
       later: [{ key: "check", at: "1970-01-01T00:00:02Z", about: "核实" }],
     },
   ]);

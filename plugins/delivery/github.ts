@@ -22,7 +22,7 @@ export function gh(args: string[], input?: object) {
 }
 
 export function github(repo: string) {
-  if (!REPO.test(repo)) throw new Error("仓库要写成 owner/name");
+  if (!REPO.test(repo)) throw new Error("Склад следует записать как owner/name");
   return async (path: string, body?: any, method = body === undefined ? "GET" : "POST") => {
     const ready = /^pulls\/(\d+)\/ready$/.exec(path);
     if (ready) {
@@ -38,7 +38,7 @@ export function github(repo: string) {
 }
 
 export function pages(repo: string, path: string): any[] {
-  if (!REPO.test(repo)) throw new Error("仓库要写成 owner/name");
+  if (!REPO.test(repo)) throw new Error("Склад следует записать как owner/name");
   return JSON.parse(gh(["api", `repos/${repo}/${path}`, "--paginate", "--slurp"])).flat();
 }
 
@@ -70,7 +70,7 @@ export function createIO(repo: string, folder: string): DeliveryIO {
         return;
       }
       const result = await api(`pulls/${pr.number}/merge`, { sha: pr.head.sha, merge_method: "squash" }, "PUT");
-      if (!result.merged) throw new Error("GitHub 没有接受合并");
+      if (!result.merged) throw new Error("GitHub Слияние не принято");
     },
     async disableAuto(number) {
       gh(["pr", "merge", String(number), "--repo", repo, "--disable-auto"]);
@@ -97,7 +97,8 @@ export function createIO(repo: string, folder: string): DeliveryIO {
     },
     live: liveRelease,
     async wait() {
-      if (Date.now() - started > LONGEST_WAIT) throw new Error("等待超过半小时，保留远端状态，稍后继续核实");
+      if (Date.now() - started > LONGEST_WAIT)
+        throw new Error("Ожидание превысило полчаса; удаленное состояние сохранено, проверка продолжится позже");
       await setTimeout(5000);
     },
   };

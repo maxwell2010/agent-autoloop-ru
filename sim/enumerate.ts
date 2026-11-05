@@ -16,9 +16,9 @@ export function enumerate() {
     world.call("createCard", {
       key: "question",
       kind: "ask",
-      title: "选一个",
-      text: "内容",
-      options: ["甲", "乙"],
+      title: "Выберите один",
+      text: "Содержание",
+      options: ["А", "Б"],
       rule: "one",
       lane: "#1",
       grp: "shared",
@@ -34,7 +34,7 @@ export function enumerate() {
         if (id) world.finish(id);
         else world.call("tick");
       } else if (n === 6) world.call("answer", 1, { choice: 0 });
-      else world.call("resolve", 1, "核实完成", "本人");
+      else world.call("resolve", 1, "Проверка завершена", "владелец");
     }
     world.recover();
     transitions += world.transitions;

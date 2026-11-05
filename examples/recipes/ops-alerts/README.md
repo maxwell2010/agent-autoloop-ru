@@ -1,18 +1,22 @@
-# 跟进线上报错
+<a id="section-1"></a>
+# Отслеживание онлайн-отчетов об ошибках
 
-## 解决什么
-收到报错后对照本地代码查原因，需要重启就发卡片问你；示例重启脚本只打印文字。
+<a id="section-3"></a>
+## Что решить
+После получения ошибки проверьте причину по местному коду. Если вам нужно перезагрузить компьютер, я пришлю вам карточку с просьбой; пример сценария перезапуска печатает только текст.
 
-## 怎么启用
-把 `SKILL.md` 复制到 `~/.codex/skills/ops-alerts/`；Claude Code 用 `~/.claude/skills/ops-alerts/`，把 `restart.sh` 放到服务代码目录。
-把 `rules.json` 并进 `~/.agent-autoloop/rules.json`，包括 `askFirst`；运行 `agent-autoloop check`，再用 `agent-autoloop key new source shop` 取得 `$SHOP_KEY`。
-报错系统用自己的来源密钥发事件：
+<a id="section-6"></a>
+## Как включить
+Скопировать `SKILL.md` в `~/.codex/skills/ops-alerts/`; Клод Код использует `~/.claude/skills/ops-alerts/` и помещает `restart.sh` в каталог сервисного кода.
+Объединение `rules.json` с `~/.agent-autoloop/rules.json`, включая `askFirst`; запустите `agent-autoloop check`, а затем используйте `agent-autoloop key new source shop`, чтобы получить `$SHOP_KEY`.
+Система сообщения об ошибках использует собственный исходный ключ для отправки событий:
 ```bash
-curl -fsS http://127.0.0.1:3350/v1/events -H "Authorization: Bearer $SHOP_KEY" -H 'Content-Type: application/json' -d '{"id":"checkout-20261104-0310","type":"alert.error","subject":"checkout","summary":"结账报错","detail":"TypeError: price is undefined at src/cart.ts:42"}'
+curl -fsS http://127.0.0.1:3350/v1/events -H "Authorization: Bearer $SHOP_KEY" -H 'Content-Type: application/json' -d '{"id":"checkout-20261104-0310","type":"alert.error","subject":"checkout","summary":"Ошибка оформления заказа","detail":"TypeError: price is undefined at src/cart.ts:42"}'
 ```
 
-## 要改哪几处
-- 两处 `worker`、`cwd` 换成接单电脑和代码目录；`use` 选 `codex` 或 `claude`。
-- 权限：`read`。只读代码和事件附带的调用栈，不需要联网；Claude 的 plan 是工具审批规则，不是系统沙箱，见[权限说明](../../../docs/plugins.md#access-实际能做什么)。
-- `restart.sh` 换成固定的重启及健康检查命令；跨电脑发送前先按[配置手册](../../../skills/agent-autoloop/SKILL.md#放到服务器加电脑)设置地址。
-- 不给 `shop-fix` 建外部来源密钥。重启脚本不受 `access` 限制，是否已获同意由 Skill 核对，不能当成强制审批。
+<a id="section-14"></a>
+## Что следует изменить?
+- В двух местах `worker` и `cwd` заменены компьютерами приема заказов и каталогами кодов; для `use` выберите `codex` или `claude`.
+- Права доступа: `read`. Код только для чтения и стек вызовов, прикрепленный к событию, не требуют подключения к Интернету; План Клода - это правило утверждения инструмента, а не системная изолированная программная среда, см. [Описание разрешения](../../../docs/plugins.md#section-105).
+- `restart.sh` заменен на фиксированные команды перезапуска и проверки работоспособности; нажмите [Руководство по настройке](../../../skills/agent-autoloop/SKILL.md#section-154), чтобы установить адрес перед отправкой между компьютерами.
+- Не создавайте внешний исходный ключ для `shop-fix`. Сценарий перезапуска не ограничен `access`. Будет ли оно одобрено, будет проверено Skill и не может рассматриваться как обязательное одобрение.

@@ -100,7 +100,10 @@ export function mutate() {
     symlinkSync(join(root, "node_modules"), join(folder, "node_modules"));
     const baseline = run();
     assert.equal(baseline.status, 0, baseline.stdout + baseline.stderr);
-    assert.ok(Number(/# tests (\d+)/.exec(baseline.stdout)?.[1]) > 50, "基线必须确实执行行为测试");
+    assert.ok(
+      Number(/# tests (\d+)/.exec(baseline.stdout)?.[1]) > 50,
+      "Базовый уровень должен фактически выполнять поведенческое тестирование.",
+    );
     const mutations = edits.map(([name, file, before, after]) => ({
       name,
       file,
@@ -129,7 +132,7 @@ export function mutate() {
           assert.ok(!result.error, `${mutation.name}: ${result.error}`);
           killed++;
         }
-        console.log(`${mutation.name}: ${result.status === 0 ? "漏过" : "抓到"}`);
+        console.log(`${mutation.name}: ${result.status === 0 ? "пропущена" : "обнаружена"}`);
       } finally {
         writeFileSync(file, original);
       }

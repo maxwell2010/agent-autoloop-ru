@@ -39,7 +39,7 @@ test("an empty or cut-short master key stops the hub and says how to fix it, lea
     const started = start(name, key);
     assert.notEqual(started.status, 0, name);
     assert.match(started.stderr, /master\.key/, name);
-    assert.match(started.stderr, /备份/, name);
+    assert.match(started.stderr, /резервной копии/, name);
     assert.equal(started.file(), key, `${name}: not replaced behind the owner's back`);
   }
 });

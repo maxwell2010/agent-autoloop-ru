@@ -142,7 +142,7 @@ test("U+2028 and U+2029 in a request are part of the line", async () => {
     res.end(JSON.stringify({ ok: true }));
   });
   try {
-    const text = "第一行 第二行 第三行";
+    const text = "номерОдин行 номерДва行 номертри行";
     mcp.send({ id: 2, method: "tools/call", params: { name: "tell", arguments: { key: "k", text } } });
     assert.equal((await mcp.answered(2)).result.isError, undefined);
     assert.deepEqual(JSON.parse(told), { key: "k", text });

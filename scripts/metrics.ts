@@ -52,8 +52,8 @@ export async function timed(count: number, budgetMs: number, action: (index: num
 }
 
 export function checkPolls(count: { active: number; peak: number }, completed: number) {
-  assert.equal(count.active, 1000, "必须同时有 1000 个长轮询正在等待");
-  assert.equal(completed, 1000, "必须有 1000 个成功响应");
+  assert.equal(count.active, 1000, "Должно быть одновременно 1000 Ждет длинный опрос");
+  assert.equal(completed, 1000, "Должно быть 1000 Успешные ответы");
 }
 
 export function checkBudget(m: {
@@ -64,10 +64,13 @@ export function checkBudget(m: {
   busy: { heartbeatP99Ms: number };
   simulationStepsPerSecond: number;
 }) {
-  assert.ok(m.coldMs <= 150, `冷启动 ${m.coldMs} ms 超过 150 ms`);
+  assert.ok(m.coldMs <= 150, `Холодный старт ${m.coldMs} ms превышает 150 ms`);
   // The unchanged Node 24 reference baseline crosses 60 MB; the measured peak is 60.394 MB.
-  assert.ok(m.idleRssMB <= 60.4, `空闲 RSS ${m.idleRssMB} MB 超过 60.4 MB`);
-  assert.ok(m.durableEventsPerSecond >= 2000, `落盘写入 ${m.durableEventsPerSecond}/s 低于 2000/s`);
-  assert.ok(m.eventToClaimP99Ms <= 10, `派活 p99 ${m.eventToClaimP99Ms} ms 超过 10 ms`);
-  assert.ok(m.busy.heartbeatP99Ms <= 10, `排队很深时心跳 p99 ${m.busy.heartbeatP99Ms} ms 超过 10 ms`);
+  assert.ok(m.idleRssMB <= 60.4, `без нагрузки RSS ${m.idleRssMB} MB превышает 60.4 MB`);
+  assert.ok(m.durableEventsPerSecond >= 2000, `Запись на диск ${m.durableEventsPerSecond}/s Ниже, чем 2000/s`);
+  assert.ok(m.eventToClaimP99Ms <= 10, `Назначение работы p99 ${m.eventToClaimP99Ms} ms превышает 10 ms`);
+  assert.ok(
+    m.busy.heartbeatP99Ms <= 10,
+    `Heartbeat при большой очереди p99 ${m.busy.heartbeatP99Ms} ms превышает 10 ms`,
+  );
 }

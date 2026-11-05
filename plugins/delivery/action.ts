@@ -15,7 +15,7 @@ export function decideShip(
 if (import.meta.main) {
   const root = process.cwd();
   const target = process.env.INPUT_TARGET || process.env.GITHUB_SHA;
-  if (!target || !/^[a-f0-9]{40}$/.test(target)) throw new Error("发布目标要是完整提交编号");
+  if (!target || !/^[a-f0-9]{40}$/.test(target)) throw new Error("Если целью выпуска является полный номер заявки");
   git(root, "fetch", "origin", "main");
   const main = git(root, "rev-parse", "origin/main");
   const config = readMainSettings(root, process.env.INPUT_TEST_LOCAL_HEALTH === "true", target);

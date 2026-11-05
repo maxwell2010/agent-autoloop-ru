@@ -113,7 +113,7 @@ test("a run that failed, and a group that can't be looked at, is reported withou
     await new Promise((resolve) => setTimeout(resolve, 20));
   }
   assert.equal(results.length, 1, "it was held back");
-  assert.match(results[0].error, /退出码 3：boom/);
+  assert.match(results[0].error, /код выхода 3:boom/);
 });
 
 test("a run that cannot be looked up is not reported as finished", async () => {

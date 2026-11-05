@@ -2,7 +2,8 @@
 // event of its rule meanwhile: so the same run can be this try's, and only attempts tell an old failure from a new one.
 export type TryRun = { id: number; rule: string; state: string; attempts: number; error: string; notBefore: string };
 
-const failed = (run: TryRun) => run.rule === "试一下" && run.state === "queued" && run.attempts > 0;
+const failed = (run: TryRun) =>
+  ["Пробный запуск", "\u8bd5\u4e00\u4e0b"].includes(run.rule) && run.state === "queued" && run.attempts > 0;
 
 /** A run still waiting for its retry as this try starts. */
 export const waitingRetry = (runs: TryRun[]) => runs.find(failed);

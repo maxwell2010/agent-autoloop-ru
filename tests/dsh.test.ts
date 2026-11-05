@@ -46,7 +46,7 @@ const dsh: Adapter = (await import("../plugins/dsh/agent.ts")).default;
 const check = dsh.check!;
 
 const turn = {
-  prompt: "做这件事",
+  prompt: "Сделайте это",
   session: "new-id",
   resume: null,
   cwd: "/x",
@@ -61,7 +61,7 @@ test("DSH: access is the permission preset every time, nothing waits for approva
   assert.deepEqual(argv.slice(0, 3), [program, "headless", "--json"]);
   assert.deepEqual(
     argv.slice(3),
-    ["--permission-mode", "workspace-write", ...policy, "做这件事"],
+    ["--permission-mode", "workspace-write", ...policy, "Сделайте это"],
     "a new session takes no id: dsh makes its own and reports it",
   );
   for (const [access, preset] of [
@@ -78,7 +78,7 @@ test("DSH: access is the permission preset every time, nothing waits for approva
     ...policy,
     "--session-id",
     "session-1",
-    "做这件事",
+    "Сделайте это",
   ]);
 });
 
@@ -93,15 +93,15 @@ test("DSH: a completed turn's final text is its answer, with every step's tokens
   const reading = dsh.read(
     lines(
       opened,
-      { type: "thinking", text: "想一想" },
+      { type: "thinking", text: "Подумайте об этом" },
       { type: "status", phase: "step_start" },
       step({ inputTokens: 7500, outputTokens: 2, cacheReadTokens: 5120, cacheWriteTokens: 0, totalTokens: 12622 }),
-      { type: "text", text: "中途" },
+      { type: "text", text: "На полпути" },
       { type: "tool_call", callId: "1", tool: "read", input: {} },
       { type: "tool_result", callId: "1", status: "completed", result: "资料" },
       step({ inputTokens: 10, outputTokens: 4, cacheReadTokens: 1 }),
       turnEnded(completed),
-      final("好了", completed),
+      final("Хорошо", completed),
     ),
     0,
     "",
@@ -111,13 +111,13 @@ test("DSH: a completed turn's final text is its answer, with every step's tokens
     usage: { input: 7510, output: 6, cached: 5121 },
     started: true,
     finished: true,
-    text: "好了",
+    text: "Хорошо",
   });
 });
 
 test("DSH: a turn that's still going has no answer and no error", () => {
   const reading = dsh.read(
-    lines(opened, step({ inputTokens: 7, outputTokens: 1, cacheReadTokens: 2 }), { type: "text", text: "中途" }),
+    lines(opened, step({ inputTokens: 7, outputTokens: 1, cacheReadTokens: 2 }), { type: "text", text: "На полпути" }),
     null,
     "",
   );
@@ -129,26 +129,26 @@ test("DSH: a turn that's still going has no answer and no error", () => {
     started: true,
   });
   // A turn has ended, but the run waits on its background work, which may start another: it isn't over until `final`.
-  assert.deepEqual(dsh.read(lines(opened, turnEnded(completed), { type: "text", text: "中途" }), null, ""), {
+  assert.deepEqual(dsh.read(lines(opened, turnEnded(completed), { type: "text", text: "На полпути" }), null, ""), {
     session: "session-1",
     started: true,
   });
   // `final` with no reason: the last turn never closed.
-  const unclosed = dsh.read(lines(opened, final("好了", null)), 1, "");
+  const unclosed = dsh.read(lines(opened, final("Хорошо", null)), 1, "");
   assert.equal(unclosed.text, undefined);
-  assert.equal(unclosed.error, "DSH 没跑完这一轮");
+  assert.equal(unclosed.error, "DSH Цикл не завершен");
 });
 
 test("DSH: why the turn ended is the reason it failed", () => {
   for (const [reason, error] of [
-    [{ kind: "error", error: { message: "额度用完了" } }, "额度用完了"],
-    [{ kind: "error" }, "DSH 没跑完这一轮"],
-    [{ kind: "aborted" }, "这一轮被中止了"],
-    [{ kind: "blocked" }, "这一轮被卡住了，没有完成"],
-    [{ kind: "max-tokens" }, "这一轮用完了输出上限"],
-    [{ kind: "interrupted" }, "DSH 没跑完这一轮"],
+    [{ kind: "error", error: { message: "额度использовать完了" } }, "额度использовать完了"],
+    [{ kind: "error" }, "DSH Цикл не завершен"],
+    [{ kind: "aborted" }, "Этот цикл прерван"],
+    [{ kind: "blocked" }, "Этот цикл заблокирован и не завершен"],
+    [{ kind: "max-tokens" }, "Достигнут предел вывода этого цикла"],
+    [{ kind: "interrupted" }, "DSH Цикл не завершен"],
   ] as const) {
-    assert.deepEqual(dsh.read(lines(opened, turnEnded(reason), final("好了", reason)), 1, ""), {
+    assert.deepEqual(dsh.read(lines(opened, turnEnded(reason), final("Хорошо", reason)), 1, ""), {
       session: "session-1",
       started: true,
       finished: true,
@@ -158,20 +158,20 @@ test("DSH: why the turn ended is the reason it failed", () => {
   const empty = dsh.read(lines(opened, final("  ", completed)), 0, "");
   assert.equal(empty.finished, true);
   assert.equal(empty.text, undefined, "a blank message isn't an answer");
-  assert.equal(empty.error, "DSH 没有完成并留下实际结果");
+  assert.equal(empty.error, "DSH не завершил работу и не оставил результата");
 });
 
 test("DSH: a run that ended with no final event falls back to its exit", () => {
-  assert.equal(dsh.read("", 3, "cannot start").error, "退出码 3：cannot start");
-  assert.equal(dsh.read("", 3, "").error, "退出码 3：没留下原因");
+  assert.equal(dsh.read("", 3, "cannot start").error, "код выхода 3:cannot start");
+  assert.equal(dsh.read("", 3, "").error, "код выхода 3:Причина отсутствует");
   assert.equal(dsh.read("", 0, "boom").error, "boom");
-  assert.equal(dsh.read("", 0, "").error, "DSH 没有完成并留下实际结果");
+  assert.equal(dsh.read("", 0, "").error, "DSH не завершил работу и не оставил результата");
   assert.deepEqual(dsh.read("", null, "still starting"), {}, "running, so nothing to report yet");
 });
 
 test("DSH: a mistake only reported on stdout is the reason it gives", () => {
   const refused = JSON.stringify({ type: "error", message: "unknown option '--permission-mode'" });
-  assert.equal(dsh.read(refused, 1, "").error, "退出码 1：unknown option '--permission-mode'");
+  assert.equal(dsh.read(refused, 1, "").error, "код выхода 1:unknown option '--permission-mode'");
 });
 
 test("DSH: a line of output that's JSON but no event is noise", () => {
@@ -181,10 +181,10 @@ test("DSH: a line of output that's JSON but no event is noise", () => {
 });
 
 test("DSH: check passes when the program runs, and says what to do when it doesn't", () => {
-  assert.match(check()!, /^DSH 用不了：运行 dsh headless "hi" 看看（/);
+  assert.match(check()!, /^DSH недоступно; выполните dsh headless "hi" Проверьте \(/);
   process.env.DSH_TEST_USABLE = "old";
   try {
-    assert.match(check()!, /版本太旧/);
+    assert.match(check()!, /Версия слишком старая/);
     process.env.DSH_TEST_USABLE = "1";
     assert.equal(check(), null);
   } finally {
@@ -207,5 +207,5 @@ test("DSH: check says what to do when dsh isn't installed", () => {
     },
   );
   assert.equal(checked.status, 0, checked.stderr);
-  assert.match(checked.stdout, /^DSH 用不了：.*找不到 dsh/);
+  assert.match(checked.stdout, /^DSH недоступно;.*Не найдено dsh/);
 });

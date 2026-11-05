@@ -55,11 +55,11 @@ async function until<T>(what: string, look: () => Promise<T | undefined> | T | u
     if (seen) return seen;
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  throw new Error(`等不到：${what}`);
+  throw new Error(`等不Прибытие:${what}`);
 }
 
 const turn = {
-  prompt: "做这件事",
+  prompt: "Сделайте это",
   session: "new-id",
   resume: null,
   cwd: "/x",
@@ -72,9 +72,9 @@ test("hello-agent: starts a session or goes on in one, and reads any output with
   const said = (argv: string[]) => JSON.parse(argv.at(-1)!);
   assert.equal(said(helloAgent.command(turn)).session, "new-id");
   assert.equal(said(helloAgent.command({ ...turn, resume: "old-id" })).session, "old-id");
-  assert.match(said(helloAgent.command(turn)).text, /收到了 4 字的提示词，权限 edit/);
+  assert.match(said(helloAgent.command(turn)).text, /Получено 12 слово подсказка слово, авторитет edit/);
   assert.deepEqual(helloAgent.read('{"partial', null, ""), {}, "still running");
-  assert.deepEqual(helloAgent.read('{"session":"s","text":"好了"}\n', 0, ""), { session: "s", text: "好了" });
+  assert.deepEqual(helloAgent.read('{"session":"s","text":"Хорошо"}\n', 0, ""), { session: "s", text: "Хорошо" });
   assert.ok(helloAgent.read("not json", 0, "").error);
   assert.equal(helloAgent.read("", 2, "boom").error, "boom");
   assert.ok(helloAgent.read("", 2, "").error);
@@ -83,9 +83,17 @@ test("hello-agent: starts a session or goes on in one, and reads any output with
 test("hello-channel: writes a new card, reports it, and leaves a card it has already written alone", async () => {
   const file = join(scratch, "unit-cards.txt");
   const stop = new AbortController();
-  const card = { id: 5, version: 1, ref: null, kind: "ask", state: "open", title: "要不要删" };
+  const card = { id: 5, version: 1, ref: null, kind: "ask", state: "open", title: "требуется不требуетсяУдалить" };
   const queue = [
-    { ...card, text: "占了 10 GB", options: ["删", "留着"], recommend: 1, choice: null, answer: null, result: null },
+    {
+      ...card,
+      text: "Занято 10 GB",
+      options: ["Удалить", "хранится着"],
+      recommend: 1,
+      choice: null,
+      answer: null,
+      result: null,
+    },
     {
       ...card,
       version: 2,
@@ -111,9 +119,9 @@ test("hello-channel: writes a new card, reports it, and leaves a card it has alr
   };
   await helloChannel({ hub, options: { file }, log: () => {}, signal: stop.signal } as unknown as ChannelContext);
   const written = readFileSync(file, "utf8");
-  assert.match(written, /要不要删/);
-  assert.match(written, /1\. 删/);
-  assert.equal(written.match(/要不要删/g)?.length, 1, "an update isn't written again");
+  assert.match(written, /требуется不требуетсяУдалить/);
+  assert.match(written, /1\. Удалить/);
+  assert.equal(written.match(/требуется不требуетсяУдалить/g)?.length, 1, "an update isn't written again");
   assert.deepEqual(reported, [
     [5, 1, "file-5"],
     [5, 2, "already"],
@@ -185,7 +193,7 @@ test("agent-autoloop add from a git repository, then all three run through a rea
   for (const [name, file] of plugins) {
     const added = agentAutoloop(["add", repository(name, file)], home);
     assert.equal(added.status, 0, added.stderr);
-    assert.ok(existsSync(join(home, "plugins", name, file)), `${name} 没装到加载器找的地方`);
+    assert.ok(existsSync(join(home, "plugins", name, file)), `${name} 没装ПрибытиеЗагрузка器找для地方`);
   }
   const work = mkdtempSync(join(scratch, "work-"));
   writeFileSync(
@@ -193,14 +201,14 @@ test("agent-autoloop add from a git repository, then all three run through a rea
     JSON.stringify({
       sources: { shop: { name: "shop", adapter: "hello-source" } },
       agents: { hello: { name: "Hello", worker: "mac-mini", use: "hello-agent", access: "read" } },
-      channels: { cards: { name: "文件" } },
+      channels: { cards: { name: "файл" } },
       rules: [
         {
           name: "订单",
           when: { source: "shop", types: ["order.*"] },
           to: "hello",
           cwd: work,
-          prompt: "处理这个订单。",
+          prompt: "Обработайте этот заказ.",
           tell: "always",
         },
       ],
@@ -226,7 +234,7 @@ test("agent-autoloop add from a git repository, then all three run through a rea
   });
   const stream = new AbortController();
   try {
-    await until("中台启动", () =>
+    await until("Запуск сервиса", () =>
       fetch(`${url}/healthz`)
         .then((up) => up.ok)
         .catch(() => false),
@@ -238,13 +246,17 @@ test("agent-autoloop add from a git repository, then all three run through a rea
     const accepted = await post(sign("s3cret", body));
     assert.equal(accepted.status, 200);
     assert.deepEqual((await accepted.json()).events[0].routed, ["订单"]);
-    const run = await until("这一轮做完", async () => {
+    const run = await until("这Одинцикл.делать完", async () => {
       const state = await (await fetch(`${url}/v1/state`, { headers: owner })).json();
       return state.runs.find((run: { state: string }) => run.state === "done");
     });
-    assert.match(run.summary, /收到了 \d+ 字的提示词，权限 read/, "the rule's access reaches the plugin");
+    assert.match(
+      run.summary,
+      /Получено \d+ слово подсказка слово, авторитет read/,
+      "the rule's access reaches the plugin",
+    );
     assert.ok(run.session, "the session it printed is kept");
-    await until("卡片写进文件", () => existsSync(cards) && readFileSync(cards, "utf8").includes(run.summary));
+    await until("Карта записана в файл", () => existsSync(cards) && readFileSync(cards, "utf8").includes(run.summary));
     const log = await fetch(`${url}/v1/stream?after=0`, { headers: owner, signal: stream.signal });
     const reader = log.body!.getReader();
     const decoder = new TextDecoder();
@@ -264,7 +276,7 @@ test("agent-autoloop add from a git repository, then all three run through a rea
 async function runBlock(heading: string, oldPort: number) {
   const tutorial = readFileSync(join(ROOT, "docs", "plugins.md"), "utf8");
   const block = new RegExp(`## ${heading}[\\s\\S]*?\`\`\`bash\\n([\\s\\S]*?)\`\`\``).exec(tutorial)?.[1];
-  assert.ok(block, `docs/plugins.md 里“${heading}”下面要有一段命令`);
+  assert.ok(block, `docs/plugins.md внутри“${heading}”Ниже будет команда`);
   const dir = mkdtempSync(join(scratch, "block-"));
   const bin = join(dir, "bin");
   mkdirSync(bin);
@@ -290,13 +302,13 @@ async function runBlock(heading: string, oldPort: number) {
 }
 
 test("the tutorial's first block runs all three examples as written", async () => {
-  const { code, out } = await runBlock("先跑起来", 3399);
+  const { code, out } = await runBlock("Первый запуск", 3399);
   assert.equal(code, 0, out);
   assert.match(out, /agent-autoloop add from a git repository/);
 });
 
 test("the tutorial's conformance block passes as written", async () => {
-  const { code, out } = await runBlock("一致性测试", 3398);
+  const { code, out } = await runBlock("Проверка соответствия протоколу", 3398);
   assert.equal(code, 0, out);
   assert.match(out, /pass [1-9]/);
 });

@@ -1,20 +1,28 @@
 {
   "timezone": "Asia/Shanghai",
-  "askFirst": ["删数据", "停服", "花钱", "对外发消息", "改产品方向", "新建或轮换密钥", "修改权限"],
+  "askFirst": [
+    "Удаление данных",
+    "Остановка сервиса",
+    "расходы",
+    "Отправка сообщений во внешний мир",
+    "менять направление продукта",
+    "Создать или обновить ключ",
+    "Изменение полномочий"
+  ],
   "sources": {
     "website-watch": {
-      "name": "网站巡检"
+      "name": "Мониторинг сайта"
     }
   },
   "agents": {
     "website-check": {
-      "name": "网站检查脚本",
+      "name": "Скрипт проверки сайта",
       "worker": "my-computer",
       "use": "command",
       "command": ["node", "{cwd}/check.ts", "{cwd}/site.json"]
     },
     "website-agent": {
-      "name": "网站维护 Agent",
+      "name": "Обслуживание сайта Agent",
       "worker": "my-computer",
       "use": "codex",
       "access": "read"
@@ -22,7 +30,7 @@
   },
   "rules": [
     {
-      "name": "检查网站",
+      "name": "Проверить сайт",
       "when": {
         "cron": "*/5 * * * *"
       },
@@ -36,7 +44,7 @@
       }
     },
     {
-      "name": "排查网站异常",
+      "name": "Проверка отклонений на веб-сайте",
       "when": {
         "source": "website-watch",
         "types": ["site.down", "site.recovered"]
@@ -49,7 +57,7 @@
   ],
   "channels": {
     "feishu": {
-      "name": "飞书",
+      "name": "Feishu",
       "answerers": ["ou_REPLACE_ME"]
     }
   }

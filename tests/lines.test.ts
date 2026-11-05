@@ -22,17 +22,22 @@ async function read(...chunks: Buffer[]) {
 }
 
 test("only a newline ends a line", async () => {
-  const text = '{"text":"第一行 第二行 第三行\r"}\n\n{"a":1}\n';
-  assert.deepEqual(await read(Buffer.from(text)), ['{"text":"第一行 第二行 第三行\r"}', "", '{"a":1}', "<end>"]);
+  const text = '{"text":"номерОдин行 номерДва行 номертри行\r"}\n\n{"a":1}\n';
+  assert.deepEqual(await read(Buffer.from(text)), [
+    '{"text":"номерОдин行 номерДва行 номертри行\r"}',
+    "",
+    '{"a":1}',
+    "<end>",
+  ]);
 });
 
 test("a line and a character that reads split come back whole", async () => {
-  const bytes = Buffer.from("第一行 \n第二行\n");
+  const bytes = Buffer.from("номерОдин行 \nномерДва行\n");
   const parts = [...bytes].map((byte) => Buffer.from([byte]));
-  assert.deepEqual(await read(...parts), ["第一行 ", "第二行", "<end>"]);
+  assert.deepEqual(await read(...parts), ["номерОдин行 ", "номерДва行", "<end>"]);
 });
 
 test("a last line with no newline still comes, before the end", async () => {
-  assert.deepEqual(await read(Buffer.from("一\n二")), ["一", "二", "<end>"]);
+  assert.deepEqual(await read(Buffer.from("Один\nДва")), ["Один", "Два", "<end>"]);
   assert.deepEqual(await read(), ["<end>"]);
 });

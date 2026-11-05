@@ -23,7 +23,7 @@ const jsPattern = (pattern: string) => pattern.replace("(?P<sha>", "(?<sha>");
 
 export function settings(value: any, testLocalHealth = false): Settings {
   const bad = () => {
-    throw new Error("ops/delivery.json 的设置不正确");
+    throw new Error("ops/delivery.json настройки некорректны");
   };
   if (!value || !/^[\w.-]+\/[\w.-]+$/.test(value.repo ?? "") || !isPaths(value.internal)) bad();
   if (Object.keys(value).some((key) => !SETTINGS_KEYS.includes(key))) bad();

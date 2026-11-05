@@ -67,8 +67,8 @@ for (const name of NAMES) {
     const { agents } = readRules(name);
     const real = Object.values<{ use: string; access: string }>(agents).filter((agent) => agent.use !== "command");
     assert.equal(real.length, 1);
-    const stated = /权限：`(read|edit|full)`/.exec(readDoc(name));
-    assert.ok(stated, "README 要写明权限");
+    const stated = /Права доступа:\s*`(read|edit|full)`/.exec(readDoc(name));
+    assert.ok(stated, "README требуетсянаписать明权限");
     assert.equal(stated[1], real[0].access);
   });
 }
@@ -80,7 +80,7 @@ test("agent-autoloop check refuses a recipe that was changed for the worse", () 
   writeFileSync(file, JSON.stringify(broken));
   const checked = check(file);
   assert.notEqual(checked.status, 0);
-  assert.match(checked.stderr, /不是已登记的 Agent/);
+  assert.match(checked.stderr, /Не зарегистрирован Agent/);
 });
 
 async function freePort() {
@@ -111,13 +111,13 @@ test("ops-alerts: the curl in the README reaches the rule, and that key can't se
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
     const curl = /```bash\n(curl [\s\S]*?)```/.exec(readDoc("ops-alerts"))?.[1];
-    assert.ok(curl, "README 里要有一条 curl");
+    assert.ok(curl, "README внутритребуется有Один curl");
     const sent = spawnSync("sh", ["-c", curl.replaceAll("http://127.0.0.1:3350", url)], {
       env: { ...cleanEnv(), SHOP_KEY: key },
       encoding: "utf8",
     });
     assert.equal(sent.status, 0, sent.stderr);
-    assert.deepEqual(JSON.parse(sent.stdout).routed, ["查线上报错"]);
+    assert.deepEqual(JSON.parse(sent.stdout).routed, ["Расследование ошибок production"]);
     const restart = await fetch(`${url}/v1/events`, {
       method: "POST",
       headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
@@ -152,7 +152,7 @@ function watch(args: string[]) {
       body: 'line one\nline two with a "quote" and a back\\slash\n\ttabbed',
     },
     { number: 13, title: "No body", url: "https://example.com/issues/13", body: "" },
-    { number: 14, title: "Long", url: "https://example.com/issues/14", body: "字".repeat(5000) },
+    { number: 14, title: "Long", url: "https://example.com/issues/14", body: "\u5b57".repeat(5000) },
   ];
   writeFileSync(join(dir, "issues.json"), JSON.stringify(issues));
   const done = spawnSync("sh", [join(ROOT, "examples", "watch-github-issues.sh"), ...args], {

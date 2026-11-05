@@ -17,7 +17,7 @@ const log = (who: string) => (line: string) => console.log(`${new Date().toISOSt
 function lock() {
   const running = runningUp();
   // Its own number is what was left behind: pid 1 every time in a container, and a matter of luck after a restart.
-  if (running !== null && running !== process.pid) throw new Error(`已经在跑了（进程 ${running}）`);
+  if (running !== null && running !== process.pid) throw new Error(`Уже запущен (процесс ${running})`);
   const file = path.join(HOME, "up.pid");
   writeFileSync(file, String(process.pid));
   return () => {
@@ -80,7 +80,9 @@ export async function up() {
     const { serve } = await import("./http.ts");
     const say = log("hub");
     if (!["127.0.0.1", "localhost", "::1"].includes(host)) {
-      say(`${host} 不是本机回环地址，中台会向这个地址所在的网络开放；前面要有 HTTPS 反向代理`);
+      say(
+        `${host} Это не локальный адрес обратной связи. Сервис будет открыта для сети, в которой расположен этот адрес; должно быть HTTPS Обратный прокси`,
+      );
     }
     const server = serve(port, host, { commit: commitOf() });
     server.on("listening", () => say(`listening on ${config.hub!.listen}`));

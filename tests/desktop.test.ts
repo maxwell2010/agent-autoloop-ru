@@ -18,12 +18,12 @@ import type { Card } from "../host/channels.ts";
 const dir = mkdtempSync(join(tmpdir(), "agent-autoloop-desktop-"));
 const rulesFile = join(dir, "rules.json");
 const rulesWith = (channels: object) => ({
-  sources: { local: { name: "本机" } },
+  sources: { local: { name: "локальный компьютер" } },
   agents: { agent: { name: "Agent", worker: "this-one", use: "command", command: ["true"] } },
   channels,
   rules: [],
 });
-writeFileSync(rulesFile, JSON.stringify(rulesWith({ desktop: { name: "桌面通知" } })));
+writeFileSync(rulesFile, JSON.stringify(rulesWith({ desktop: { name: "Уведомления рабочего стола" } })));
 const home = setup("desktop", rulesFile);
 const realPath = process.env.PATH;
 const realDisplay = process.env.DISPLAY;
@@ -37,8 +37,8 @@ after(() => {
 const { loadPlugin } = await import("../host/plugins.ts");
 const { default: desktop, notifyCommand } = await import("../plugins/desktop/channel.ts");
 
-const TITLE = "Agent 问你一个问题";
-const WORDS = "运行 agent-autoloop status 查看";
+const TITLE = "Agent Задать вопрос";
+const WORDS = "Выполните agent-autoloop status Просмотреть";
 const body = (title: string) => `${title}\n${WORDS}`;
 const base: Card = {
   id: 5,
@@ -46,9 +46,9 @@ const base: Card = {
   ref: null,
   kind: "ask",
   state: "open",
-  title: "要不要删",
-  text: "占了 10 GB",
-  options: ["删", "留着"],
+  title: "требуется不требуетсяУдалить",
+  text: "Занято 10 GB",
+  options: ["Удалить", "хранится着"],
   recommend: null,
   choice: null,
   answer: null,
@@ -121,7 +121,7 @@ test("a new card notifies once with its title; an update only reports", async ()
   const fake = standIns();
   const { reports } = await deliver([base, { ...base, version: 2, ref: "shown-5", state: "decided", choice: 1 }]);
   assert.equal(fake.calls().length, 1);
-  assert.deepEqual(fake.calls()[0].slice(-2), [TITLE, body("要不要删")]);
+  assert.deepEqual(fake.calls()[0].slice(-2), [TITLE, body("требуется不требуетсяУдалить")]);
   assert.deepEqual(reports, [
     ["delivered", 5, 1, "shown-5"],
     ["delivered", 5, 2, "shown-5"],
@@ -232,11 +232,11 @@ test("init turns it on in both files, with a key of its own", () => {
   assert.equal(done.status, 0, done.stderr);
   const rules = JSON.parse(readFileSync(join(place, "rules.json"), "utf8"));
   const config = JSON.parse(readFileSync(join(place, "config.json"), "utf8"));
-  assert.deepEqual(rules.channels, { desktop: { name: "桌面通知" } });
+  assert.deepEqual(rules.channels, { desktop: { name: "Уведомления рабочего стола" } });
   assert.deepEqual(Object.keys(config.channels), ["desktop"]);
   assert.ok(config.channels.desktop.key.length > 20);
   assert.match(program(env, "key", "list").stdout, /^channel desktop /m);
-  assert.match(done.stdout, /桌面通知/);
+  assert.match(done.stdout, /уведомления рабочего стола/);
 });
 
 test("a rules file already there stays as it was, and no channel is added beside it", () => {
@@ -274,22 +274,22 @@ test("doctor says what reaches you: only this computer, or nothing yet, or no wo
         execFile(process.execPath, args, { env, encoding: "utf8" }, (_error, stdout) => resolve(stdout));
       });
     };
-    const alone = await hint({ desktop: { name: "桌面通知" } });
-    assert.match(alone, /只接了桌面通知/);
-    assert.doesNotMatch(alone, /还没接通道/);
+    const alone = await hint({ desktop: { name: "Уведомления рабочего стола" } });
+    assert.match(alone, /Подключены только уведомления рабочего стола/);
+    assert.doesNotMatch(alone, /Канал еще не подключен/);
     const none = await hint({});
-    assert.match(none, /还没接通道/);
-    assert.doesNotMatch(none, /只接了桌面通知/);
-    const more = await hint({ desktop: { name: "桌面通知" }, feishu: { name: "飞书" } });
-    assert.doesNotMatch(more, /只接了桌面通知|还没接通道/);
-    assert.match(more, /飞书没写 answerers：这个通道里谁都能回答卡片/);
-    assert.doesNotMatch(more, /桌面通知没写 answerers/, "nobody answers from a notification");
+    assert.match(none, /Канал еще не подключен/);
+    assert.doesNotMatch(none, /Подключены только уведомления рабочего стола/);
+    const more = await hint({ desktop: { name: "Уведомления рабочего стола" }, feishu: { name: "Feishu" } });
+    assert.doesNotMatch(more, /Подключены только уведомления рабочего стола|Канал еще не подключен/);
+    assert.match(more, /FeishuНе указано answerers:Любой пользователь этого канала сможет отвечать на карточки/);
+    assert.doesNotMatch(more, /Уведомления рабочего столаНе указано answerers/, "nobody answers from a notification");
     const limited = await hint({
-      desktop: { name: "桌面通知" },
-      feishu: { name: "飞书", answerers: ["ou_me"] },
+      desktop: { name: "Уведомления рабочего стола" },
+      feishu: { name: "Feishu", answerers: ["ou_me"] },
       webhook: { name: "钉钉", links: true },
     });
-    assert.doesNotMatch(limited, /没写 answerers/, "someone named, or a link only its holder has");
+    assert.doesNotMatch(limited, /Не указано answerers/, "someone named, or a link only its holder has");
   } finally {
     server.closeAllConnections();
     server.close();

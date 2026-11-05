@@ -29,9 +29,9 @@ const base: Card = {
   ref: null,
   kind: "ask",
   state: "open",
-  title: "要不要删",
-  text: "占了 10 GB",
-  options: ["删", "留着"],
+  title: "требуется不требуетсяУдалить",
+  text: "Занято 10 GB",
+  options: ["Удалить", "хранится着"],
   recommend: 1,
   choice: null,
   answer: null,
@@ -46,12 +46,18 @@ test("a card shows its options while it's open, and what became of it after", ()
   assert.deepEqual(blocks[1].behaviors[0].value, { card: 5, choice: 1 });
   assert.equal(blocks[1].border_color, "blue", "what's recommended stands out");
   const said = (card: Card) => JSON.stringify(render(card).body.elements);
-  assert.match(said({ ...base, state: "decided", choice: 1 }), /你选了「留着」，已记录/);
+  assert.match(said({ ...base, state: "decided", choice: 1 }), /Вы выбрали «хранится着», Записано, ожидает обработки./);
   assert.ok(!said({ ...base, state: "decided", choice: 1 }).includes("callback"));
-  assert.match(said({ ...base, state: "done", choice: 0, result: "删了" }), /你选了「删」。已执行：删了/);
-  assert.match(said({ ...base, state: "decided", answer: "归档" }), /你选了「归档」/);
-  assert.match(said({ ...base, state: "closed", result: "问题自己好了" }), /不用决定了：问题自己好了/);
-  assert.match(said({ ...base, kind: "notice", state: "closed", options: [], result: "已处理" }), /已处理/);
+  assert.match(
+    said({ ...base, state: "done", choice: 0, result: "удалено" }),
+    /Вы выбрали «Удалить». Выполнено: удалено/,
+  );
+  assert.match(said({ ...base, state: "decided", answer: "Архив" }), /Вы выбрали «Архив»/);
+  assert.match(
+    said({ ...base, state: "closed", result: "проблема自己Хорошо" }),
+    /Нет необходимости решать:проблема自己Хорошо/,
+  );
+  assert.match(said({ ...base, kind: "notice", state: "closed", options: [], result: "Обработано" }), /Обработано/);
   const noticeOpen = JSON.stringify(render({ ...base, kind: "notice", options: [] }).body.elements);
   assert.ok(noticeOpen.includes('"tag":"form"'), "a notice can take a line of your own");
   assert.ok(noticeOpen.includes("handling_note_submit_5"), "the submit button carries the card's number");
@@ -61,10 +67,12 @@ test("a card shows its options while it's open, and what became of it after", ()
     "the way a Feishu 2.0 card marks a form's submit button",
   );
   assert.match(
-    said({ ...base, kind: "notice", state: "closed", options: [], result: "已处理", answer: "清了 3GB" }),
-    /处理说明：清了 3GB/,
+    said({ ...base, kind: "notice", state: "closed", options: [], result: "Обработано", answer: "Освобождено 3GB" }),
+    /Комментарий: Освобождено 3GB/,
   );
-  assert.ok(!said({ ...base, kind: "notice", state: "closed", options: [], result: "已处理" }).includes("处理说明"));
+  assert.ok(
+    !said({ ...base, kind: "notice", state: "closed", options: [], result: "Обработано" }).includes("Комментарий"),
+  );
 });
 
 test("feishu CLI calls leave the HTTP loop available", async () => {
@@ -222,7 +230,7 @@ test("feishu: U+2028 and U+2029 in a handling note don't lose the click", async 
     `#!/bin/sh
 case "$*" in
   *"event consume"*)
-    echo '{"action_name":"handling_note_submit_8","action_value":"","form_value":"{\\"note\\":\\"第一行 第二行 第三行\\"}","operator_id":"ou_me","message_id":"om_8"}'
+    echo '{"action_name":"handling_note_submit_8","action_value":"","form_value":"{\\"note\\":\\"номерОдин行 номерДва行 номертри行\\"}","operator_id":"ou_me","message_id":"om_8"}'
     exec sleep 30 ;;
   *) cat > /dev/null; echo '{"ok":true,"data":{"message_id":"om_8"}}' ;;
 esac
@@ -247,7 +255,7 @@ esac
     },
   };
   await feishu({ hub: hub as any, options: { user: "ou_me", lark }, log: () => {}, signal: stop.signal });
-  assert.deepEqual(answers, [[8, { choice: 0, by: "ou_me", ref: "om_8", text: "第一行 第二行 第三行" }]]);
+  assert.deepEqual(answers, [[8, { choice: 0, by: "ou_me", ref: "om_8", text: "номерОдин行 номерДва行 номертри行" }]]);
 });
 
 test("feishu: a form submit carries the handling note, and the button's name finds its card", async () => {
@@ -260,7 +268,7 @@ test("feishu: a form submit carries the handling note, and the button's name fin
 echo "$*" >> "${log}"
 case "$*" in
   *"event consume"*)
-    echo '{"action_name":"handling_note_submit_7","action_tag":"button","action_value":"","form_value":"{\\"note\\":\\"已回他，下周发视频\\"}","operator_id":"ou_me","message_id":"om_7"}'
+    echo '{"action_name":"handling_note_submit_7","action_tag":"button","action_value":"","form_value":"{\\"note\\":\\"Уже ответил ему, пришлю видео на следующей неделе\\"}","operator_id":"ou_me","message_id":"om_7"}'
     echo '{"action_name":"handling_note_submit_7","action_value":"{\\"card\\":7,\\"choice\\":0}","operator_id":"ou_me","message_id":"om_7"}'
     exec sleep 30 ;;
   *) cat > /dev/null; echo '{"ok":true,"data":{"message_id":"om_7"}}' ;;
@@ -293,7 +301,7 @@ esac
   assert.deepEqual(
     calls.filter((c) => c[0] === "answer"),
     [
-      ["answer", 7, { choice: 0, by: "ou_me", ref: "om_7", text: "已回他，下周发视频" }],
+      ["answer", 7, { choice: 0, by: "ou_me", ref: "om_7", text: "Уже ответил ему, пришлю видео на следующей неделе" }],
       ["answer", 7, { choice: 0, by: "ou_me", ref: "om_7" }],
     ],
     "a submitted note and a plain click both count, the click with no empty text",
@@ -351,8 +359,8 @@ test("a webhook channel posts words and the link once, and has nothing to do for
   });
   target.close();
   assert.equal(seen.length, 2);
-  assert.equal(seen[0].text.content, `${base.title}\n\n${literal}\n\n1. 删\n2. 留着\n\n${base.link}`);
-  assert.match(seen[0].text.content, /要不要删[\s\S]*1\. 删[\s\S]*https:\/\/hub\.test\/c\/x/);
+  assert.equal(seen[0].text.content, `${base.title}\n\n${literal}\n\n1. Удалить\n2. хранится着\n\n${base.link}`);
+  assert.match(seen[0].text.content, /требуется不требуетсяУдалить[\s\S]*1\. Удалить[\s\S]*https:\/\/hub\.test\/c\/x/);
   assert.deepEqual(calls, [
     ["delivered", 5, 1, "sent-5"],
     ["delivered", 5, 2, "sent-5"],

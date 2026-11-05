@@ -62,8 +62,8 @@ export function simulate(seed = 0x5eed, steps = 200000) {
           outcome: fail ? "failed" : "done",
           ...(!fail && rng(4) === 0
             ? {
-                ask: [{ title: "选择", text: "内容", options: ["甲", "乙"], key: `card-${r.id}` }],
-                later: [{ key: `timer-${r.id}`, at: new Date(world.now + 60000).toISOString(), about: "复查" }],
+                ask: [{ title: "Выберите", text: "Содержание", options: ["А", "Б"], key: `card-${r.id}` }],
+                later: [{ key: `timer-${r.id}`, at: new Date(world.now + 60000).toISOString(), about: "Обзор" }],
               }
             : {}),
         };
@@ -90,7 +90,7 @@ export function simulate(seed = 0x5eed, steps = 200000) {
         faults.channel++;
         const card = world.call("nextCard", "chat");
         if (card) {
-          if (rng(2)) world.call("failed", "chat", card.id, card.version, "模拟断线");
+          if (rng(2)) world.call("failed", "chat", card.id, card.version, "Разрыв соединения при симуляции");
           else {
             world.call("delivered", "chat", card.id, card.version, `message-${card.id}`);
             if (card.state === "open")
@@ -108,7 +108,7 @@ export function simulate(seed = 0x5eed, steps = 200000) {
         } else world.alarm();
       }
     } catch (error) {
-      throw new Error(`种子 ${seed}，第 ${step} 步；node sim/random.ts ${seed} ${step + 1}`, { cause: error });
+      throw new Error(`seed ${seed}, номер ${step} шаг;node sim/random.ts ${seed} ${step + 1}`, { cause: error });
     }
   }
   completed += world.recover();

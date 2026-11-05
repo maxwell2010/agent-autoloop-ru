@@ -69,7 +69,7 @@ type Draft = Given & { view: View; changes: Change[] };
 
 export function decide(view: View, input: Input, now: number, env: Environment): { facts: Fact[]; value: any } {
   const { type, args } = input;
-  if (!Object.hasOwn(HANDLERS, type)) throw new InputError(`不认识的输入：${type}`);
+  if (!Object.hasOwn(HANDLERS, type)) throw new InputError(`Нераспознанный ввод:${type}`);
   const rules = configuration(view);
   const draft: Draft = { view: view.fork(), seq: view.seq + 1, type, now, at: iso(now), env, rules, changes: [] };
   const value = HANDLERS[type](draft, ...args);
@@ -151,7 +151,7 @@ const closeStopped = (draft: Draft, run: number, result: string) =>
   closeOpen(draft, (key) => key === `run:${run}:failing` || key === `run:${run}:unknown`, result);
 
 const closeOffline = (draft: Draft, worker: string) =>
-  closeOpen(draft, (key) => key.startsWith(`worker:${worker}:offline:`), "连上了");
+  closeOpen(draft, (key) => key.startsWith(`worker:${worker}:offline:`), "Подключено");
 
 /** Whether a new stamp would tell nothing this one doesn't. One in the future means a clock was set back: it gets redone. */
 function justSeen({ now }: Draft, row?: Row) {
@@ -221,8 +221,8 @@ function ingest(draft: Draft, source: string, given: unknown) {
   const routed = matched.map((rule) => rule.name);
   const id = recordEvent(draft, source, event, routed);
   if (tooDeep) {
-    const words = `同一条处理链已超过 ${MAX_HOPS} 层，后续事件已记录，没有继续派发。`;
-    notify(draft, `hops:${source}:${event.id}`, "事件循环已停止", words, { once: true });
+    const words = `Та же самая цепочка обработки превысила ${MAX_HOPS} На уровне последующие события были записаны и не распространяются.`;
+    notify(draft, `hops:${source}:${event.id}`, "Цикл событий остановлен.", words, { once: true });
   }
   for (const rule of matched) enqueue(draft, rule, id, rule.parallel ? event.subject : "");
   return { event: id, duplicate: false, routed };
@@ -231,7 +231,8 @@ function ingest(draft: Draft, source: string, given: unknown) {
 function heldRun(draft: Draft, id: number, token: string, states: string[]) {
   const run = draft.view.get("runs", id);
   const issued = run && states.includes(run.state) && run.issued !== null;
-  if (!issued || credential(draft.env, "run", id, run.issued) !== token) throw new AuthError("这件活不归这个令牌");
+  if (!issued || credential(draft.env, "run", id, run.issued) !== token)
+    throw new AuthError("Токен не дает доступа к этой задаче");
   return run;
 }
 
@@ -260,7 +261,7 @@ function sweep(draft: Draft) {
       for (const run of rows(draft.view, "runs", { state: "claimed" }).filter(inDoubt)) {
         put(draft, "runs", run.id, { state: "unknown" });
         const agent = configuration(draft.view, run.rules_version).agents[run.agent].name;
-        const words = `交给 ${agent} 后超过 5 分钟没有回音，不确定做没做完；后续新任务照常处理。`;
+        const words = `Исполнитель ${agent} не отвечает более 5 минут. Состояние работы неизвестно; новые задачи продолжат обрабатываться.`;
         notify(draft, `run:${run.id}:unknown`, run.rule, words, threadOf(run));
       }
     }
@@ -272,10 +273,12 @@ function sweep(draft: Draft) {
     const minutes = Math.floor(since / MINUTE);
     const neverSeen = lastSeen === undefined;
     const situation = neverSeen
-      ? `${worker} 一直没连上中台，有 ${waiting.length} 件任务等了 ${minutes} 分钟没人接`
-      : `${worker} 已经 ${minutes} 分钟没连上中台，有 ${waiting.length} 件任务在排队或在跑`;
-    const check = neverSeen ? "有没有开机联网" : "是不是关机、休眠或断网了";
-    notify(draft, key, "接单程序没连上", `${situation}（请看一眼那台电脑${check}）。`);
+      ? `Исполнитель ${worker} еще не подключался к сервису; ${waiting.length} задач ожидают ${minutes} мин.`
+      : `Исполнитель ${worker} не подключается к сервису ${minutes} мин.; в очереди или в работе: ${waiting.length}.`;
+    const check = neverSeen
+      ? "Проверьте, включен ли компьютер и подключен ли он к сети"
+      : "Проверьте питание, спящий режим и сетевое подключение.";
+    notify(draft, key, "Исполнитель не подключен", `${situation} ${check}`);
   }
 }
 
@@ -314,8 +317,8 @@ function stopRun(draft: Draft, run: Row, why: string, summary: string, words: st
 }
 
 const ruleGone = (run: Row): [string, string] => [
-  `规则「${run.rule}」不在了，不再派发`,
-  `规则「${run.rule}」不在了（删掉或改名了），排着的这一轮不再派发。还要做的话重新触发这件事。`,
+  `Правило «${run.rule}» больше недоступно; назначение прекращено`,
+  `Правило «${run.rule}» больше недоступно (удалено или переименовано). Цикл в очереди не будет назначен; при необходимости создайте новую задачу.`,
 ];
 
 /** A run that didn't get through waits to try again, and takes along whatever came in for the same thing meanwhile. */
@@ -323,11 +326,12 @@ function retryLater(draft: Draft, run: Row, result: Result) {
   const { id } = run;
   const attempts = run.attempts + 1;
   const notBefore = draft.now + Math.min(5 * MINUTE * 2 ** (attempts - 1), 60 * MINUTE);
-  const error = (result.error ?? "").trim().replace(/[。.]+$/, "") || "没说原因";
+  const error = (result.error ?? "").trim().replace(/[。.]+$/, "") || "Причина не указана";
   const unclaimed = nulls("claim", "claimed_at", "seen_at", "cancel_at");
   const rejected: Rejected[] = [];
   for (const what of ["ask", "resolve", "later", "events"] as const) {
-    for (const _ of result[what] ?? []) rejected.push({ what, reason: "没跑成的一轮只能发通知" });
+    for (const _ of result[what] ?? [])
+      rejected.push({ what, reason: "Неудачный цикл может отправлять только уведомления" });
   }
   for (const notice of result.notice ?? []) cardFromReceipt(draft, run, "notice", notice);
   const failure = { attempts, error, ...unclaimed };
@@ -338,8 +342,8 @@ function retryLater(draft: Draft, run: Row, result: Result) {
   }
   if (attempts >= MAX_ATTEMPTS) {
     // Runs queued for this thread stay apart: they came in since, and get their own count and their own go.
-    const summary = `连续 ${MAX_ATTEMPTS} 次没跑成，不再自动重试`;
-    const words = `连续 ${MAX_ATTEMPTS} 次自动处理没跑完（卡在：${error}），不再自动重试。解决后重新触发这件事，它会从头开始。`;
+    const summary = `подряд ${MAX_ATTEMPTS} неудач; автоматические повторы прекращены`;
+    const words = `подряд ${MAX_ATTEMPTS} попыток не завершены (этап:${error}), Больше никаких автоматических повторных попыток. Перезапустите задачу после ее решения, и она начнется с нуля.`;
     put(draft, "runs", id, failure);
     stopRun(draft, run, "stopped", summary, words);
     return rejected;
@@ -358,8 +362,8 @@ function retryLater(draft: Draft, run: Row, result: Result) {
   }
   if (!result.notice?.some((notice) => !notice.fyi) && attempts === 3) {
     const clock = { timeZone: draft.rules.timezone, hour: "2-digit", minute: "2-digit", hourCycle: "h23" } as const;
-    const time = new Intl.DateTimeFormat("zh-CN", clock).format(notBefore);
-    const words = `连续 3 次自动处理没跑完（卡在：${error}），${time} 会自动再试。`;
+    const time = new Intl.DateTimeFormat("ru-RU", clock).format(notBefore);
+    const words = `подряд 3 попыток не завершены (этап:${error}), ${time} Автоматически повторит попытку.`;
     notify(draft, `run:${id}:failing`, run.rule, words, threadOf(run));
   }
   assignQueued(draft, draft.view.get("runs", id)!);
@@ -389,8 +393,8 @@ function applyReceipt(draft: Draft, run: Row, result: Result) {
   const summary = result.summary ?? "";
   const rejected: Rejected[] = [];
   put(draft, "runs", id, { state: result.outcome, finished_at: draft.at, summary, error: null, cancel_at: null });
-  closeOpen(draft, (key) => key === `run:${id}:failing`, "后来跑成了");
-  closeOpen(draft, (key) => key === `run:${id}:unknown`, "结果回来了");
+  closeOpen(draft, (key) => key === `run:${id}:failing`, "Повторный запуск завершился успешно");
+  closeOpen(draft, (key) => key === `run:${id}:unknown`, "Получен результат");
   const eventIds = eventsOf(draft.view, id).map((event) => event.id);
   const isAnswered = (card: Row) => card.state === "decided" && eventIds.includes(card.answer_event);
   for (const card of rows(draft.view, "cards", { answer_event: eventIds, state: "decided" }).filter(isAnswered)) {
@@ -398,8 +402,8 @@ function applyReceipt(draft: Draft, run: Row, result: Result) {
   }
   for (const item of result.resolve ?? []) {
     const card = openInScope(draft.view, run).find((card) => card.id === item.card);
-    if (card) closeCard(draft, card, item.reason.trim(), `第 ${id} 轮`);
-    else rejected.push({ card: item.card, reason: "不在本轮核对范围" });
+    if (card) closeCard(draft, card, item.reason.trim(), `номер ${id} цикл.`);
+    else rejected.push({ card: item.card, reason: "Не входит в рамки данного цикла проверки." });
   }
   for (const ask of result.ask ?? []) cardFromReceipt(draft, run, "ask", ask);
   for (const notice of result.notice ?? []) cardFromReceipt(draft, run, "notice", notice);
@@ -411,7 +415,7 @@ function applyReceipt(draft: Draft, run: Row, result: Result) {
   for (const event of result.events ?? []) {
     if (rule?.emits && typeMatches(rule.emits.types, event.type)) {
       ingest(draft, rule.emits.source, { ...event, hops: hopsOf(draft, run) + 1 });
-    } else rejected.push({ what: "events", reason: `规则「${run.rule}」没有写可以发 ${event.type}` });
+    } else rejected.push({ what: "events", reason: `Правило «${run.rule}»Не разрешено отправлять ${event.type}` });
   }
   return rejected;
 }
@@ -421,7 +425,7 @@ function finish(draft: Draft, id: number, token: string, given: unknown) {
   const prior = draft.view.get("runs", id);
   // The same execution handing in again means the answer got lost: it gets the same answer, and nothing happens twice.
   if (prior && prior.last_issued !== null && credential(draft.env, "run", id, prior.last_issued) === token) {
-    if (prior.last_result !== hash) throw new Conflict("这一次执行已经交过不一样的结果");
+    if (prior.last_result !== hash) throw new Conflict("Для этой попытки уже отправлен другой результат");
     return { rejected: JSON.parse(prior.last_answer ?? "[]"), duplicate: true };
   }
   const run = heldRun(draft, id, token, ["claimed", "unknown"]);
@@ -440,7 +444,7 @@ function finish(draft: Draft, id: number, token: string, given: unknown) {
       summary: result.summary ?? "",
       cancel_at: null,
     });
-    closeStopped(draft, id, "已停止");
+    closeStopped(draft, id, "Остановлено");
   } else if (result.outcome === "failed") rejected = retryLater(draft, run, result);
   else rejected = applyReceipt(draft, run, result);
   put(draft, "runs", id, { last_answer: JSON.stringify(rejected) });
@@ -449,33 +453,37 @@ function finish(draft: Draft, id: number, token: string, given: unknown) {
 
 function answer(draft: Draft, id: number, given: Row) {
   const card = draft.view.get("cards", id);
-  if (!card) throw new NotFound("没有这张卡片");
+  if (!card) throw new NotFound("Карточка не найдена");
   if (given.channel !== undefined) {
     const allowed = draft.rules.channels[given.channel]?.answerers;
-    if (allowed && !allowed.includes(given.by ?? "")) throw new AuthError("这个人不能回答这张卡片");
+    if (allowed && !allowed.includes(given.by ?? ""))
+      throw new AuthError("Этот пользователь не может ответить на карточку");
     const delivery = draft.view.get("deliveries", `${id}:${given.channel}`);
-    if (!delivery?.ref || delivery.ref !== given.ref) throw new AuthError("不是发出去的那条消息");
+    if (!delivery?.ref || delivery.ref !== given.ref) throw new AuthError("Не отправлено сообщение");
   }
   if (card.state !== "open") return { changed: false, state: card.state };
   if (given.by !== undefined && (typeof given.by !== "string" || [...given.by].length > ANSWER_BY)) {
-    throw new InputError(`回答人最多 ${ANSWER_BY} 字`);
+    throw new InputError(`Большинство людей ответили ${ANSWER_BY} слово`);
   }
   if (given.ref !== undefined && (typeof given.ref !== "string" || [...given.ref].length > ANSWER_REF)) {
-    throw new InputError(`消息编号最多 ${ANSWER_REF} 字`);
+    throw new InputError(`ID сообщения может содержать не более ${ANSWER_REF} слово`);
   }
   if (card.kind === "notice") {
-    if (given.text !== undefined && typeof given.text !== "string") throw new InputError("处理说明要是文字");
+    if (given.text !== undefined && typeof given.text !== "string")
+      throw new InputError("Если описание обработки представляет собой текст");
     const note = given.text?.trim() || null;
-    if (note !== null && [...note].length > ANSWER_TEXT) throw new InputError(`处理说明最多 ${ANSWER_TEXT} 字`);
-    closeCard(draft, card, "已处理", given.by ?? null, note);
+    if (note !== null && [...note].length > ANSWER_TEXT)
+      throw new InputError(`Инструкции обработки являются наиболее ${ANSWER_TEXT} слово`);
+    closeCard(draft, card, "Обработано", given.by ?? null, note);
     return { changed: true, state: "closed" };
   }
-  if (given.text !== undefined && typeof given.text !== "string") throw new InputError("回答要是文字");
+  if (given.text !== undefined && typeof given.text !== "string") throw new InputError("Если ответ текстовый");
   const text = given.text?.trim() || null;
-  if (text !== null && [...text].length > ANSWER_TEXT) throw new InputError(`回答最多 ${ANSWER_TEXT} 字`);
+  if (text !== null && [...text].length > ANSWER_TEXT)
+    throw new InputError(`Больше всего ответов ${ANSWER_TEXT} слово`);
   const optionCount = JSON.parse(card.options).length;
   const inRange = Number.isInteger(given.choice) && given.choice >= 0 && given.choice < optionCount;
-  if (given.choice === undefined ? !text : !inRange) throw new InputError("没有这个选项");
+  if (given.choice === undefined ? !text : !inRange) throw new InputError("Такого варианта нет");
   const rule = card.rule ? ruleNamed(draft, card.rule) : undefined;
   const { lane: subject, title: summary, hops = 0 } = card;
   const event = { id: `card:${id}`, type: "card.answered", subject, summary, hops };
@@ -549,9 +557,15 @@ const HANDLERS: Record<string, (draft: Draft, ...args: any[]) => unknown> = {
       if (named.has(run.rule)) assignQueued(draft, run);
       else stopRun(draft, run, "rule-gone", ...ruleGone(run));
     }
-    closeOpen(draft, (key) => key.startsWith("rules:"), "改好了");
+    closeOpen(draft, (key) => key.startsWith("rules:"), "Исправлено");
   },
-  rulesError: (draft, problem) => notify(draft, `rules:${digest(problem)}`, "rules.json 写错了，还在用旧规则", problem),
+  rulesError: (draft, problem) =>
+    notify(
+      draft,
+      `rules:${digest(problem)}`,
+      "rules.json Неправильное написание, все еще по старым правилам.",
+      problem,
+    ),
   key: (draft, kind, name, hash) =>
     void put(draft, "keys", `${kind}:${name}`, { kind, name, hash, created_at: draft.at }),
   removeKey: (draft, kind, name) => {
@@ -592,7 +606,7 @@ const HANDLERS: Record<string, (draft: Draft, ...args: any[]) => unknown> = {
     const { session, link } = given ?? {};
     for (const [field, value] of Object.entries({ session, link })) {
       if (value !== undefined && (typeof value !== "string" || value.length > 500)) {
-        throw new InputError(`${field} 要是 500 字以内的文字`);
+        throw new InputError(`${field} должно быть 500 Текст внутри слов`);
       }
     }
     const run = heldRun(draft, id, token, ["claimed"]);
@@ -601,16 +615,16 @@ const HANDLERS: Record<string, (draft: Draft, ...args: any[]) => unknown> = {
   finish,
   cancel(draft, id) {
     const run = draft.view.get("runs", id);
-    if (!run) throw new NotFound("没有这一轮");
+    if (!run) throw new NotFound("Такого цикла нет");
     if (run.state === "queued") {
       put(draft, "runs", id, { state: "cancelled", finished_at: draft.at });
-      closeStopped(draft, id, "已停止");
+      closeStopped(draft, id, "Остановлено");
     } else if (run.state === "claimed") put(draft, "runs", id, { cancel_at: draft.at });
-    else throw new InputError("这一轮已经结束了");
+    else throw new InputError("Этот цикл уже завершен");
   },
   resolve(draft, id, reason, by) {
     const card = draft.view.get("cards", id);
-    if (!card) throw new NotFound("没有这张卡片");
+    if (!card) throw new NotFound("Карточка не найдена");
     if (card.state !== "open") return false;
     closeCard(draft, card, reason, by);
     return true;
@@ -618,9 +632,9 @@ const HANDLERS: Record<string, (draft: Draft, ...args: any[]) => unknown> = {
   answer,
   nextCard,
   delivered(draft, channel, id, version, ref) {
-    if (!draft.view.get("cards", id)) throw new NotFound("没有这张卡片");
+    if (!draft.view.get("cards", id)) throw new NotFound("Карточка не найдена");
     if (ref !== null && (typeof ref !== "string" || [...ref].length > DELIVERY_REF)) {
-      throw new InputError(`消息编号最多 ${DELIVERY_REF} 字`);
+      throw new InputError(`ID сообщения может содержать не более ${DELIVERY_REF} слово`);
     }
     const delivery = draft.view.get("deliveries", `${id}:${channel}`) ?? NOT_DELIVERED;
     const sent = { version: Math.max(delivery.version, version), ref: delivery.ref ?? ref };
@@ -629,7 +643,7 @@ const HANDLERS: Record<string, (draft: Draft, ...args: any[]) => unknown> = {
   failed(draft, channel, id, version, error) {
     const card = draft.view.get("cards", id);
     const delivery = draft.view.get("deliveries", `${id}:${channel}`);
-    if (!card || !delivery) throw new NotFound("这张卡片没有交给这个通道");
+    if (!card || !delivery) throw new NotFound("Карточка не назначена этому каналу");
     const firstTry = delivery.first_try_at ? Date.parse(delivery.first_try_at) : draft.now;
     const next =
       version < card.version

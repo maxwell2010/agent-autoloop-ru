@@ -41,23 +41,23 @@ test("a schedule fires once when it's due, as an event of its own rule", () => {
   tick(at(4));
   assert.deepEqual(ticks(), []);
   tick(at(5));
-  assert.deepEqual(ticks(), ["巡检@2026-10-18T02:05:00.000Z"]);
+  assert.deepEqual(ticks(), ["Осмотр@2026-10-18T02:05:00.000Z"]);
   tick(at(5.5));
   assert.equal(ticks().length, 1);
   const job = claim("w1", at(6))!;
-  assert.equal(job.rule.name, "巡检");
+  assert.equal(job.rule.name, "Осмотр");
   assert.deepEqual(
     job.context.events.map((e) => [e.source, e.sourceName, e.type]),
-    [["schedule", "定时", "schedule.tick"]],
+    [["schedule", "Выбор времени", "schedule.tick"]],
   );
-  assert.deepEqual(JSON.parse(one<{ routed: string }>("SELECT routed FROM events")!.routed), ["巡检"]);
+  assert.deepEqual(JSON.parse(one<{ routed: string }>("SELECT routed FROM events")!.routed), ["Осмотр"]);
 });
 
 test("a hub asleep through several owes only the latest", () => {
   clean();
   tick(at(0));
   tick(at(37));
-  assert.deepEqual(ticks(), ["巡检@2026-10-18T02:35:00.000Z"]);
+  assert.deepEqual(ticks(), ["Осмотр@2026-10-18T02:35:00.000Z"]);
   tick(at(38));
   assert.equal(ticks().length, 1);
   tick(at(40));
@@ -75,7 +75,7 @@ test("a schedule that changes starts counting from the change", () => {
   tick(at(119));
   assert.deepEqual(ticks(), []);
   tick(at(120));
-  assert.deepEqual(ticks(), ["巡检@2026-10-18T04:00:00.000Z"]);
+  assert.deepEqual(ticks(), ["Осмотр@2026-10-18T04:00:00.000Z"]);
   changed.rules[4].when.cron = "*/5 * * * *";
   writeFileSync(rulesFile, JSON.stringify(changed));
   tick(at(121));
@@ -89,7 +89,12 @@ test("a run's look-again fires once at its time, on its thread, in its session, 
   finish(
     job.run,
     job.token,
-    { outcome: "done", later: [{ key: "recheck", at: new Date(at(60)).toISOString(), about: "看原站恢复了没有" }] },
+    {
+      outcome: "done",
+      later: [
+        { key: "recheck", at: new Date(at(60)).toISOString(), about: "看Исходный сайт восстановлен.отсутствует" },
+      ],
+    },
     at(1),
   );
   keepWorkersHere(at(59));
@@ -100,10 +105,10 @@ test("a run's look-again fires once at its time, on its thread, in its session, 
   tick(at(60.5));
   // 11:00 is also when the five-minutely rule comes due, on the same worker.
   const poll = claim("w1", at(61))!;
-  assert.equal(poll.rule.name, "巡检");
+  assert.equal(poll.rule.name, "Осмотр");
   finish(poll.run, poll.token, { outcome: "nothing" }, at(61));
   const next = claim("w1", at(61))!;
-  assert.equal(next.rule.name, "意见");
+  assert.equal(next.rule.name, "Мнение");
   assert.equal(next.session, "s-1");
   assert.deepEqual(
     next.context.events.map((e) => [e.type, e.subject]),
@@ -111,12 +116,15 @@ test("a run's look-again fires once at its time, on its thread, in its session, 
   );
   assert.deepEqual(
     next.context.timers.map((t) => [t.key, t.about]),
-    [["recheck", "看原站恢复了没有"]],
+    [["recheck", "看Исходный сайт восстановлен.отсутствует"]],
   );
   finish(
     next.run,
     next.token,
-    { outcome: "nothing", later: [{ key: "recheck", at: new Date(at(120)).toISOString(), about: "再看一次" }] },
+    {
+      outcome: "nothing",
+      later: [{ key: "recheck", at: new Date(at(120)).toISOString(), about: "Посмотрите еще раз" }],
+    },
     at(62),
   );
   assert.equal(
@@ -135,13 +143,13 @@ test("the same key moves a timer; another thread has its own; a run sees what's 
     finish(job.run, job.token, { outcome: "done", later }, now);
     return seen;
   };
-  end(1, at(0), [{ key: "k", at: new Date(at(100)).toISOString(), about: "第一次" }]);
+  end(1, at(0), [{ key: "k", at: new Date(at(100)).toISOString(), about: "номерОднажды" }]);
   const seen = end(1, at(1), [{ key: "k", at: new Date(at(200)).toISOString(), about: "改了" }]);
   assert.deepEqual(
     seen.map((t) => [t.key, t.about]),
-    [["k", "第一次"]],
+    [["k", "номерОднажды"]],
   );
-  end(2, at(2), [{ key: "k", at: new Date(at(300)).toISOString(), about: "别的事项" }]);
+  end(2, at(2), [{ key: "k", at: new Date(at(300)).toISOString(), about: "Прочие вопросы" }]);
   assert.deepEqual(
     all<{ lane: string; about: string; at: string }>("SELECT lane, about FROM timers ORDER BY id").map((t) => [
       t.lane,
@@ -149,7 +157,7 @@ test("the same key moves a timer; another thread has its own; a run sees what's 
     ]),
     [
       ["#1", "改了"],
-      ["#2", "别的事项"],
+      ["#2", "Прочие вопросы"],
     ],
   );
   end(1, at(3), [{ key: "k", cancel: true }]);
@@ -165,9 +173,9 @@ test("cancelling a look-again that isn't waiting changes nothing, and the rest o
   const job = claim("w1", at(0))!;
   const later = [
     { key: "never-set", cancel: true },
-    { key: "kept", at: new Date(at(100)).toISOString(), about: "再看" },
+    { key: "kept", at: new Date(at(100)).toISOString(), about: "Посмотрите еще раз" },
   ];
-  assert.deepEqual(finish(job.run, job.token, { outcome: "done", summary: "好了", later }, at(1)).rejected, []);
+  assert.deepEqual(finish(job.run, job.token, { outcome: "done", summary: "Хорошо", later }, at(1)).rejected, []);
   assert.equal(one<{ state: string }>("SELECT state FROM runs WHERE id = ?", [job.run])!.state, "done");
   assert.deepEqual(
     all<{ key: string }>("SELECT key FROM timers").map((t) => t.key),
@@ -179,17 +187,19 @@ test("a look-again coming due after its rule has gone is kept on record, starts 
   clean();
   ingest("app", { id: "1", type: "feedback.new", subject: "#1" }, at(0));
   const job = claim("w1", at(0))!;
-  const later = [{ key: "recheck", at: new Date(at(60)).toISOString(), about: "看原站恢复了没有" }];
+  const later = [
+    { key: "recheck", at: new Date(at(60)).toISOString(), about: "看Исходный сайт восстановлен.отсутствует" },
+  ];
   finish(job.run, job.token, { outcome: "done", later }, at(1));
   const before = getView().get("config", "rules")!.value;
-  const rules = before.rules.filter((rule: { name: string }) => rule.name !== "意见");
+  const rules = before.rules.filter((rule: { name: string }) => rule.name !== "Мнение");
   execute("rules", [{ ...before, rules }], at(2));
   try {
     tick(at(60));
     const event = one<{ routed: string }>("SELECT routed FROM events WHERE type = 'timer.due'")!;
     assert.deepEqual(JSON.parse(event.routed), []);
     assert.deepEqual(all("SELECT id FROM timers WHERE event_id IS NULL"), [], "it doesn't come due again");
-    assert.deepEqual(all("SELECT id FROM runs WHERE rule = '意见' AND state = 'queued'"), []);
+    assert.deepEqual(all("SELECT id FROM runs WHERE rule = 'Мнение' AND state = 'queued'"), []);
   } finally {
     execute("rules", [before], at(61));
   }
@@ -199,17 +209,17 @@ test("a clock set back doesn't run the same scheduled moment twice, even with th
   clean();
   tick(at(0));
   tick(at(5));
-  assert.deepEqual(ticks(), ["巡检@2026-10-18T02:05:00.000Z"]);
+  assert.deepEqual(ticks(), ["Осмотр@2026-10-18T02:05:00.000Z"]);
   const before = getView().get("config", "rules")!.value;
   const rules = before.rules.map((rule: { name: string }) =>
-    rule.name === "巡检" ? { ...rule, when: { cron: "5 10 * * *" } } : rule,
+    rule.name === "Осмотр" ? { ...rule, when: { cron: "5 10 * * *" } } : rule,
   );
   // Back at 10:02, a schedule that also reads 10:05 starts counting from there.
   execute("rules", [{ ...before, rules }], at(2));
   try {
     tick(at(2));
     tick(at(5));
-    assert.deepEqual(ticks(), ["巡检@2026-10-18T02:05:00.000Z"]);
+    assert.deepEqual(ticks(), ["Осмотр@2026-10-18T02:05:00.000Z"]);
   } finally {
     execute("rules", [before], at(6));
   }
@@ -243,7 +253,7 @@ test("a rules file that goes away keeps the hub going, says so once, and the car
   tick(at(1));
   const cards = () => all<{ text: string; state: string }>("SELECT text, state FROM cards");
   assert.equal(cards().length, 1);
-  assert.match(cards()[0].text, /找不到/);
+  assert.match(cards()[0].text, /Не найдено/);
   assert.equal(cards()[0].state, "open");
   renameSync(away, rulesFile);
   tick(at(2));
@@ -258,7 +268,7 @@ test("a card closed while the rules file is still gone stays closed, and going a
   try {
     tick(at(0));
     assert.equal(cards().length, 1);
-    execute("answer", [cards()[0].id, { by: "本人" }], at(1));
+    execute("answer", [cards()[0].id, { by: "владелец" }], at(1));
     tick(at(2));
     assert.equal(cards().length, 1, "the owner has heard");
     renameSync(away, rulesFile);

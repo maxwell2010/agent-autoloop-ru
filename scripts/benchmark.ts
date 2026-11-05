@@ -42,11 +42,11 @@ if (process.argv.includes("--server")) {
   // What a read of the rules costs goes with their size, and the fixture is much smaller than a real rules file.
   const padRules = () => {
     const extra = Array.from({ length: 15 }, (_, i) => ({
-      name: `规则 ${i}`,
+      name: `правила ${i}`,
       when: { source: "ops", types: [`padding.${i}`] },
       to: "a1",
       cwd: "~/x",
-      prompt: "按手册做。".repeat(20),
+      prompt: "Следуйте руководству.".repeat(20),
     }));
     execute("rules", [parseRules(JSON.stringify({ ...fixture, rules: [...fixture.rules, ...extra] }))]);
   };
@@ -137,7 +137,7 @@ if (process.argv.includes("--server")) {
           if (done(await ask())) return;
           await new Promise((resolve) => setTimeout(resolve, 10));
         }
-        assert.fail("长轮询没有到位");
+        assert.fail("Длительный опрос не запущен");
       };
       const queued = Number(process.env.BENCH_QUEUE ?? 5000);
       const { rulesBytes } = await ask({ padRules: true });
@@ -152,7 +152,7 @@ if (process.argv.includes("--server")) {
       const before = await ask({ queue: queued });
       const heartbeats = await timed(200, 20_000, () => request("/v1/work?wait=0&capacity=0&claim=beat", "worker"));
       const after = await ask();
-      assert.ok(after.queued >= queued, "排队必须真的在");
+      assert.ok(after.queued >= queued, "Очередь должна действительно находиться в");
       abort.abort();
       const responses = await Promise.all(waiting);
       assert.ok(responses.every((r) => r.status === "fulfilled" || r.reason.name === "AbortError"));

@@ -62,7 +62,7 @@ const answers = (table: object) => {
 const issue = (number: number, fields: object = {}) => ({
   number,
   state: "open",
-  title: "需要决定",
+  title: "требуется决定",
   body: "请决定",
   html_url: `https://github.com/example/app/issues/${number}`,
   labels: [{ name: "ask-owner" }],
@@ -72,12 +72,12 @@ const about = (number: number) => ({ events: [{ subject: `example/app#${number}`
 
 test("an owner question with backticks reaches the hub whole", async () => {
   const title = "```标题";
-  answers({ "repos/example/app/issues/5": issue(5, { title, body: "还有\n```\n没收尾的代码块" }) });
+  answers({ "repos/example/app/issues/5": issue(5, { title, body: "还有\n```\n没收尾дляКодовый блок" }) });
   const { problem, receipt } = readMessage(await run("example/app", about(5)));
   assert.equal(problem, undefined);
   const [card] = (receipt as any).ask;
   assert.equal(card.title, title);
-  assert.match(card.text, /没收尾的代码块/);
+  assert.match(card.text, /没收尾дляКодовый блок/);
 });
 
 const remote = join(root, "remote");
@@ -99,7 +99,7 @@ function publish(name: string, words: string) {
 mkdirSync(join(remote, "docs"), { recursive: true });
 git("init", "-q", "-b", "main");
 writeFileSync(join(remote, "app.ts"), "1");
-writeFileSync(join(remote, "AGENTS.md"), "## 审查要点\n要点\n");
+writeFileSync(join(remote, "AGENTS.md"), "## Точки обзора\nтребуется点\n");
 const live = publish("docs/a.md", "first");
 const docsOnly = publish("docs/a.md", "second");
 const code = publish("app.ts", "2");
@@ -133,7 +133,7 @@ test("a failure on an ordinary issue is reported as it happened", async () => {
     "repos/example/app/issues/5": issue(5),
     "repos/example/app/issues/5/labels/ask-owner": { fail: "permission denied" },
   });
-  const answered = { ...about(5), answers: [{ text: "已处理" }] };
+  const answered = { ...about(5), answers: [{ text: "Обработано" }] };
   await assert.rejects(() => run("example/app", answered), /permission denied/);
   assert.ok(!readFileSync(calls, "utf8").includes("pulls/5"));
 });
@@ -145,7 +145,7 @@ test("a failed delivery still marks the commit it stopped on", async () => {
     "repos/example/app/pulls/7": pr,
     "repos/example/app/statuses/abc": {},
   });
-  await assert.rejects(() => run("example/app", about(7)), /本仓库/);
+  await assert.rejects(() => run("example/app", about(7)), /этого репозитория/);
   assert.match(readFileSync(calls, "utf8"), /statuses\/abc --method POST/);
 });
 test("an item whose label record can't be read does not hold up the others", async () => {
@@ -225,7 +225,7 @@ const delivering = (pr: object) => ({
   [settingsPath]: settingsFile,
   [`repos/example/app/compare/${live}...${code}`]: { status: "ahead" },
 });
-const dataLoss = [{ title: "数据会丢", text: "先修复" }];
+const dataLoss = [{ title: "数据会丢", text: "Сначала отремонтируйте" }];
 
 test("a failed round in between does not open a commit with findings to another review", async () => {
   startOver();
@@ -237,14 +237,14 @@ test("a failed round in between does not open a commit with findings to another 
   // The settings can't be read this time, and the failure goes on the delivery status over what the review wrote there.
   answers({ ...delivering(openPr), [settingsPath]: { fail: "HTTP 502" } });
   await assert.rejects(() => run("example/app", about(8), true), /HTTP 502/);
-  assert.doesNotMatch(lastStatus("delivery").description, /审查发现问题/);
+  assert.doesNotMatch(lastStatus("delivery").description, /Просмотр обнаруженных проблем/);
   // A review now would miss the problem, and nothing else would stand between it and the merge.
   reviewFinds([]);
   answers(delivering(openPr));
   const third = await run("example/app", about(8), true).catch((error) => error.message);
   assert.equal(timesReviewed(), 1);
   assert.equal(lastStatus("my-review").state, "failure");
-  assert.match(third, /推新提交/);
+  assert.match(third, /новый коммит/);
 });
 
 const merged = { ...openPr, state: "closed", merged_at: "now", merge_commit_sha: code };
@@ -261,13 +261,13 @@ test("a release failing after a PR was merged during review still hands on the f
   const { result, problem } = resultFrom(readMessage(await run("example/app", about(8), true)), {});
   assert.equal(problem, undefined);
   assert.equal(result.outcome, "failed");
-  assert.match(result.error!, /发布没有通过/);
+  assert.match(result.error!, /релиз не прошел/);
   const [card] = result.notice!;
-  assert.match(card.title, /已合并/);
+  assert.match(card.title, /объединенных изменений/);
   assert.match(card.text, /数据会丢/);
   assert.equal(lastStatus("delivery").state, "failure");
   // The next round doesn't review, so it has nothing to say twice.
-  await assert.rejects(() => run("example/app", about(8), true), /发布没有通过/);
+  await assert.rejects(() => run("example/app", about(8), true), /релиз не прошел/);
   assert.equal(timesReviewed(), 1);
 });
 test("GitHub failing while that failure is written down does not lose the findings either", async () => {
@@ -281,7 +281,7 @@ test("GitHub failing while that failure is written down does not lose the findin
 test("a failed release with nothing found stays a plain failure", async () => {
   startOver();
   answers(failedShip);
-  await assert.rejects(() => run("example/app", about(8), true), /发布没有通过/);
+  await assert.rejects(() => run("example/app", about(8), true), /релиз не прошел/);
   assert.equal(lastStatus("delivery").state, "failure");
   assert.equal(timesReviewed(), 0);
 });

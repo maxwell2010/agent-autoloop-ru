@@ -172,7 +172,7 @@ test("a worker gone with a run in hand keeps the run, is told of once about ten 
     assert.equal(wentInDoubt(hub, run), undefined, "gone isn't lost: it may still be working");
     const cards = rows(hub.view, "cards");
     assert.equal(cards.length, 1);
-    assert.equal(cards[0].title, "接单程序没连上");
+    assert.equal(cards[0].title, "Исполнитель не подключен");
     const told = Date.parse(cards[0].created_at);
     assert.ok(told > last + OFFLINE - LAG, `told ${told - last} ms after the last ask`);
     assert.ok(told <= last + OFFLINE + 1, `told ${told - last} ms after the last ask`);
@@ -356,7 +356,7 @@ test("polling the doors over and over writes nothing, while a cancel and a new j
   const ask = (query: string) => call(`/v1/work?wait=0&claim=door&${query}`, keys.w2);
   await call("/v1/events", keys.ops, { id: "door:1", type: "alert.raised", subject: "door" });
   const { job } = await ask("capacity=1");
-  assert.equal(job.rule.name, "告警");
+  assert.equal(job.rule.name, "Тревога");
 
   seen = beenSeen();
   for (let n = 0; n < 10; n++) {
@@ -367,7 +367,7 @@ test("polling the doors over and over writes nothing, while a cancel and a new j
   await call(`/v1/runs/${job.run}/result`, job.token, { outcome: "cancelled" });
   await call("/v1/events", keys.ops, { id: "door:2", type: "alert.raised", subject: "door" });
   const next = await call("/v1/work?wait=0&claim=door-2&capacity=1", keys.w2);
-  assert.equal(next.job.rule.name, "告警");
+  assert.equal(next.job.rule.name, "Тревога");
   assert.notEqual(next.job.run, job.run);
   assert.equal(beenSeen(), seen, "a worker asking with a run in hand");
 });

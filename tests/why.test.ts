@@ -35,12 +35,12 @@ const cli = async (...args: string[]) =>
 const start = Date.parse("2026-11-03T00:00:00Z");
 const config = hub.parseRules(
   JSON.stringify({
-    sources: { shop: { name: "商店" } },
-    agents: { helper: { name: "助手", worker: "mac-mini", use: "command", command: ["true"] } },
+    sources: { shop: { name: "Магазин" } },
+    agents: { helper: { name: "Помощник", worker: "mac-mini", use: "command", command: ["true"] } },
     channels: {},
     rules: [
       {
-        name: "处理订单",
+        name: "Обработка заказов",
         when: { source: "shop", types: ["order.created"] },
         to: "helper",
         cwd: "/tmp",
@@ -64,16 +64,23 @@ test("why prints the real event, rules version, worker, session, receipt, answer
     job.token,
     {
       outcome: "done",
-      summary: "等你选择发货方式",
-      ask: [{ title: "怎么发货？", text: "两种方式都能送达。", options: ["快递", "自提"], key: "shipping" }],
-      notice: [{ title: "订单已核对", text: "库存充足" }],
+      summary: "Требуется ваше действиеВыберитеОтправить货方式",
+      ask: [
+        {
+          title: "Как доставить товар?",
+          text: "Оба способа могут быть реализованы.",
+          options: ["Экспресс-доставка", "自提"],
+          key: "shipping",
+        },
+      ],
+      notice: [{ title: "订单已核对", text: "Достаточный запас" }],
       later: [{ key: "stock", at: "2026-11-04T00:00:00Z", about: "核对库存" }],
       events: [{ id: "checked-42", type: "order.done", subject: "order-42" }],
     },
     start + 4000,
   );
   const card = rows(hub.getView(), "cards").find((c) => c.run_id === job.run && c.kind === "ask")!;
-  hub.answer(card.id, { choice: 1, by: "本人" }, start + 5000);
+  hub.answer(card.id, { choice: 1, by: "владелец" }, start + 5000);
   const continued = hub.claimNext("mac-mini", "second", start + 6000)!;
   const output = await cli("why", String(job.run));
   for (const words of [
@@ -81,19 +88,19 @@ test("why prints the real event, rules version, worker, session, receipt, answer
     "shop",
     "order.created",
     "order-42",
-    "规则版本",
+    "Версия правил",
     "mac-mini",
-    "开始",
-    "结束",
+    "Начало обработки",
+    "Завершено",
     "https://example.com/sessions/example",
-    "等你选择发货方式",
-    "怎么发货？",
+    "Требуется ваше действиеВыберитеОтправить货方式",
+    "Как доставить товар?",
     "自提",
-    "本人",
+    "владелец",
     "订单已核对",
     "核对库存",
     "order.done",
-    `回答后继续：第 ${continued.run} 轮`,
+    `Продолжение после ответа: цикл ${continued.run} цикл.`,
   ])
     assert.ok(output.includes(words), words + "\n" + output);
   assert.ok(!output.includes("private-rule-instructions"));
@@ -101,7 +108,7 @@ test("why prints the real event, rules version, worker, session, receipt, answer
   assert.ok(!output.trim().startsWith("["));
   assert.ok(!output.includes("https://example.com/sessions/pending"));
   assert.deepEqual(JSON.parse(await cli("why", String(job.run), "--json")), hub.why(job.run));
-  hub.finish(continued.run, continued.token, { outcome: "done", summary: "已安排自提" }, start + 7000);
+  hub.finish(continued.run, continued.token, { outcome: "done", summary: "Оформлен самовывоз." }, start + 7000);
 });
 test("why retains failed attempts and uses each attempt's rules version without printing the rules", async () => {
   hub.ingest("shop", { id: "retry", type: "order.created", subject: "retry" }, start + 10000);
@@ -117,7 +124,7 @@ test("why retains failed attempts and uses each attempt's rules version without 
   hub.claimNext("mac-mini", "retry-2", start + 312000);
   const output = await cli("why", String(first.run));
   assert.ok(output.includes("连接断开"));
-  assert.ok(output.includes(`规则版本 #${before}`));
-  assert.ok(output.includes(`规则版本 #${afterVersion}`));
+  assert.ok(output.includes(`Версия правил #${before}`));
+  assert.ok(output.includes(`Версия правил #${afterVersion}`));
   assert.ok(!output.includes("private-instructions"));
 });

@@ -14,7 +14,7 @@ import { join } from "node:path";
 import { settings } from "../plugins/delivery/project.ts";
 test("a review must explicitly report a valid findings list", () => {
   assert.deepEqual(parseReview('{"findings":[]}'), []);
-  assert.equal(parseReview('{"findings":[{"title":"错误","text":"这里会丢数据"}]}').length, 1);
+  assert.equal(parseReview('{"findings":[{"title":"错误","text":"这внутри会丢数据"}]}').length, 1);
   for (const text of ["", "Reviewer failed", "{}", '{"findings":null}', '{"findings":[{}]}'])
     assert.throws(() => parseReview(text));
 });
@@ -42,7 +42,7 @@ test("review uses main's points and a text-only snapshot; ordinary internal docs
       return git("rev-parse", "HEAD");
     };
     git("init", "-q", "-b", "main");
-    writeFileSync(join(repo, "AGENTS.md"), "## 审查要点\nmain-points\n");
+    writeFileSync(join(repo, "AGENTS.md"), "## Точки обзора\nmain-points\n");
     writeFileSync(join(repo, "app.ts"), "throw new Error('must not execute');");
     const main = commit();
     const reviewer = join(root, "reviewer.mjs");
@@ -60,7 +60,7 @@ test("review uses main's points and a text-only snapshot; ordinary internal docs
     const docs = commit();
     assert.deepEqual(await reviewSnapshot(repo, snap, main, docs, s), []);
     assert.ok(!existsSync(called));
-    writeFileSync(join(repo, "AGENTS.md"), "## 审查要点\nbranch-points\n");
+    writeFileSync(join(repo, "AGENTS.md"), "## Точки обзора\nbranch-points\n");
     writeFileSync(join(repo, "app.ts"), "throw new Error('changed');");
     const head = commit();
     assert.deepEqual(await reviewSnapshot(repo, snap, main, head, s), []);
@@ -90,7 +90,7 @@ function project() {
     return git("rev-parse", "HEAD");
   };
   git("init", "-q", "-b", "main");
-  writeFileSync(join(repo, "AGENTS.md"), "## 审查要点\nmain-points\n");
+  writeFileSync(join(repo, "AGENTS.md"), "## Точки обзора\nmain-points\n");
   writeFileSync(join(repo, "app.ts"), "export const version = 1;\n");
   const main = commit();
   const config = settings({
@@ -128,7 +128,7 @@ test("a branch with an octopus merge is reported, not reviewed without what the 
   assert.equal(p.git("rev-list", "--parents", "-n1", head).split(" ").length, 4);
   const findings = await p.review(head);
   assert.equal(findings.length, 1);
-  assert.match(findings[0].title, /章鱼合并/);
+  assert.match(findings[0].title, /слияние осьминога/);
   assert.ok(!p.reviewed());
 });
 test("an ordinary merge still goes to the reviewer", async () => {
@@ -170,8 +170,8 @@ test("a diff too big to read comes back as a readable finding, not a failed run"
   writeFileSync(join(p.repo, "big.bin"), OVER_THE_LIMIT);
   const findings = await p.review(p.commit());
   assert.equal(findings.length, 1);
-  assert.match(findings[0].title, /太大/);
-  assert.match(findings[0].text, /二进制/);
+  assert.match(findings[0].title, /слишком большой/);
+  assert.match(findings[0].text, /двоичные/);
   assert.ok(!p.reviewed());
 });
 test("deleting it in a later commit does not help, as the finding says", async () => {
@@ -180,7 +180,7 @@ test("deleting it in a later commit does not help, as the finding says", async (
   p.commit();
   rmSync(join(p.repo, "big.bin"));
   const findings = await p.review(p.commit());
-  assert.match(findings[0].text, /删除不够/);
+  assert.match(findings[0].text, /позже будет недостаточно/);
 });
 test("a document too big to read still skips the model, without a finding", async () => {
   using p = project();

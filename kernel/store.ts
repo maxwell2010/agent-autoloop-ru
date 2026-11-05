@@ -35,7 +35,7 @@ export function openView(db: DatabaseSync, format: string) {
 export function commit(db: DatabaseSync, view: View, produce: () => Fact[]): View {
   return transaction(db, () => {
     const latest = Number(statement(db, "SELECT COALESCE(MAX(seq),0) AS seq FROM facts").get()!.seq);
-    if (latest !== view.seq) throw new Conflict("日志已变化，请重读后再提交");
+    if (latest !== view.seq) throw new Conflict("Журнал изменился; перечитайте его перед отправкой");
     const facts = produce();
     if (!facts.length) return view;
     const insert = statement(db, "INSERT INTO facts(seq,fact) VALUES (?,?)");

@@ -39,7 +39,7 @@ async function child(file: string) {
     const job = act("claimNext", "w1", `claim-${n}`);
     act("finish", job.run, job.token, {
       outcome: "done",
-      notice: [{ title: "完成", text: String(n), key: String(n) }],
+      notice: [{ title: "Завершено", text: String(n), key: String(n) }],
     });
     await new Promise((resolve) => setImmediate(resolve));
   }
@@ -87,7 +87,7 @@ export async function crashCheck(count = 1000, seed = 0xc0ffee) {
         for (const seq of acks)
           assert.ok(
             log.some((f) => f.seq === seq),
-            `确认过的事实丢了：${i}/${seq}`,
+            `Подтвержденные факты потеряны:${i}/${seq}`,
           );
         acknowledged += acks.size;
         unacknowledged += log.filter((f) => !acks.has(f.seq)).length;
@@ -121,7 +121,7 @@ export async function crashCheck(count = 1000, seed = 0xc0ffee) {
         db.close();
         for (const suffix of ["", "-wal", "-shm"]) rmSync(file + suffix, { force: true });
       }
-      if (count >= 100 && kills % 100 === 0) console.log(`已完成 ${kills}/${count} 次 SIGKILL`);
+      if (count >= 100 && kills % 100 === 0) console.log(`Завершено ${kills}/${count} раз SIGKILL`);
     }
     return { seed, kills, acknowledged, unacknowledged };
   } finally {

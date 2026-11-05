@@ -1,10 +1,10 @@
 {
   "name": "agent-autoloop",
-  "description": "Let Agents follow up on work and ask when they need your judgment.",
+  "description": "Фоновая обработка задач CLI-агентами с решениями владельца",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KKKKhazix/agent-autoloop.git"
+    "url": "git+https://github.com/maxwell2010/agent-autoloop-ru.git"
   },
   "private": true,
   "type": "module",
@@ -23,7 +23,8 @@
     "test:sim": "node --disable-warning=ExperimentalWarning sim/random.ts 24301 20000",
     "test:deep": "node --disable-warning=ExperimentalWarning --test --test-concurrency=1 sim/*.test.ts",
     "test:nightly": "npm run test:deep && node --disable-warning=ExperimentalWarning scripts/benchmark.ts --check",
-    "benchmark": "node --disable-warning=ExperimentalWarning scripts/benchmark.ts --check"
+    "benchmark": "node --disable-warning=ExperimentalWarning scripts/benchmark.ts --check",
+    "check:ru": "node scripts/check-russian.ts"
   },
   "devDependencies": {
     "@types/node": "26.6.4",

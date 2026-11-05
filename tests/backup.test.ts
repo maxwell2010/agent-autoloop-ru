@@ -73,7 +73,7 @@ test("a real hub's data, backed up while it runs, comes back whole under its own
   const { n } = hub.one<{ n: number }>("SELECT COUNT(*) AS n FROM facts")!;
   assert.ok(n > 0);
   assert.equal(rows(join(target, "hub.db")), n);
-  await assert.rejects(backup(home, target), /不是空的/);
+  await assert.rejects(backup(home, target), /не пуст/);
 
   const other = folder();
   await restore(other, target);
@@ -153,19 +153,19 @@ test("a restore refuses a backup whose key or database is broken", async () => {
   withWal(brokenKey);
   writeFileSync(join(brokenKey, "master.key"), "short");
   const target = folder();
-  await assert.rejects(restore(target, brokenKey), /master\.key 坏了/);
+  await assert.rejects(restore(target, brokenKey), /master\.key Сломанный/);
 
   const brokenDatabase = folder();
   writeFileSync(join(brokenDatabase, "hub.db"), "this isn't a database, not even close to one".repeat(100));
   writeFileSync(join(brokenDatabase, "master.key"), key);
-  await assert.rejects(restore(target, brokenDatabase), /读不出来/);
+  await assert.rejects(restore(target, brokenDatabase), /Не удалось прочитать/);
   assert.deepEqual(readdirSync(target), [], "nothing was touched");
 });
 
 test("a restore refuses while anything has the database open, and only then", async () => {
   const good = folder();
   withWal(good);
-  await assert.rejects(restore(home, good), /中台还在跑/, "a hub in this process");
+  await assert.rejects(restore(home, good), /Сервис все еще работает/, "a hub in this process");
 
   const target = folder();
   withWal(target);
@@ -186,7 +186,7 @@ test("a restore refuses while anything has the database open, and only then", as
   await once(holder.stdout, "data");
   try {
     // Another process, idle between requests, that left no number anywhere: how a hub embedded in something else looks.
-    await assert.rejects(restore(target, good), /中台还在跑/);
+    await assert.rejects(restore(target, good), /Сервис все еще работает/);
     assert.equal(rows(join(target, "hub.db")), 3, "nothing was touched");
   } finally {
     holder.kill("SIGKILL");
@@ -217,14 +217,14 @@ test("the commands write where they're told and ask before replacing anything", 
       { env: { ...process.env, AGENT_AUTOLOOP_HOME: machine } },
     );
   const target = join(folder(), "snapshot");
-  assert.match((await cli("backup", target)).stdout, /备份好了/);
+  assert.match((await cli("backup", target)).stdout, /Резервное копирование выполнено/);
   assert.ok(existsSync(join(target, "hub.db")));
-  await assert.rejects(cli("backup", target), /不是空的/);
-  await assert.rejects(cli("backup", "--wat"), /不认识的参数/);
+  await assert.rejects(cli("backup", target), /не пуст/);
+  await assert.rejects(cli("backup", "--wat"), /Неизвестные параметры/);
 
   await assert.rejects(cli("restore", target), /--yes/);
-  await assert.rejects(cli("restore"), /用法/);
-  assert.match((await cli("restore", target, "--yes")).stdout, /恢复好了/);
+  await assert.rejects(cli("restore"), /Использование/);
+  assert.match((await cli("restore", target, "--yes")).stdout, /Восстановлено/);
 });
 
 async function backupOfHub() {

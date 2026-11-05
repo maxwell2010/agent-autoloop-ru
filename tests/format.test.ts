@@ -48,7 +48,7 @@ function start() {
 function formatWith(file: string, before: string, after: string) {
   const path = join(code, file);
   const original = readFileSync(path, "utf8");
-  assert.ok(original.includes(before), `${file} 里找不到：${before}`);
+  assert.ok(original.includes(before), `${file} внутриНе найдено:${before}`);
   writeFileSync(path, original.replace(before, after));
   try {
     return start();

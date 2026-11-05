@@ -23,7 +23,7 @@ export type UnitOptions = {
 };
 
 const systemdItem = (text: string, escapeDollar = false) => {
-  if (/[\u0000-\u001f\u007f]/u.test(text)) throw new Error("systemd unit 的值不能包含控制字符");
+  if (/[\u0000-\u001f\u007f]/u.test(text)) throw new Error("systemd unit не может содержать управляющие символы");
   let escaped = text.replaceAll("\\", "\\\\").replaceAll('"', '\\"').replaceAll("%", "%%");
   if (escapeDollar) escaped = escaped.replaceAll("$", () => "$$");
   return `"${escaped}"`;
@@ -58,7 +58,7 @@ export function unit(options: UnitOptions = { home: HOME, executable: process.ex
     .map((part) => systemdItem(part, true))
     .join(" ");
   return `[Unit]
-Description=Agent 自动化中台
+Description=Agent Сервис автоматизации
 
 [Service]
 Environment=${environment}
@@ -153,5 +153,7 @@ export function systemUnit() {
 export function restartService() {
   if (serviceRunning()) return void installService();
   const name = systemUnit();
-  return name ? `这台电脑用的是系统级服务，运行 systemctl restart ${name} 才会用上新版。` : undefined;
+  return name
+    ? `Здесь используется служба системного уровня; выполните systemctl restart ${name} Только после этого будет использоваться новая версия.`
+    : undefined;
 }

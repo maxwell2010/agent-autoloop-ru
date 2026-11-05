@@ -68,22 +68,22 @@ writeFileSync(
   `#!/bin/sh
 # Asks on its first go; with an answer in the context file, finishes. Asked to, it only says something.
 if grep -q 'card.answered' "$AGENT_AUTOLOOP_CONTEXT"; then
-  echo "你选了绿色，做完了"
+  echo "Вы выбрали зеленый и все готово"
 elif grep -q 'hello.notice' "$AGENT_AUTOLOOP_CONTEXT"; then
   cat <<'END'
-说了一声
+说了Один声
 
 ${fence}agent-autoloop
-{"notice":[{"title":"留意一下","text":"磁盘快满了","key":"disk"}]}
+{"notice":[{"title":"хранится意Один下","text":"磁盘Быстро满了","key":"disk"}]}
 ${fence}
 END
 else
   pwd > "${home}/where.txt"
   cat <<'END'
-问了一个问题
+Задан вопрос
 
 ${fence}agent-autoloop
-{"ask":[{"title":"试跑：选一个颜色","text":"选哪个都行","options":["蓝色","绿色"],"recommend":1,"key":"color"}]}
+{"ask":[{"title":"Пробный запуск: выберите цвет","text":"选哪都行","options":["Синий","Зеленый"],"recommend":1,"key":"color"}]}
 ${fence}
 END
 fi
@@ -133,11 +133,11 @@ test("one machine, one command: an event, a question, an answer, the work done",
   assert.equal((await (await get("/healthz")).json()).ok, true);
   const second = cli("up");
   assert.equal(second.status, 1);
-  assert.match(second.stderr, /已经在跑了/);
+  assert.match(second.stderr, /Уже запущен/);
 
-  const emitted = cli("emit", "hello.world", "--subject", "x-1", "--summary", "你好");
+  const emitted = cli("emit", "hello.world", "--subject", "x-1", "--summary", "Привет");
   assert.equal(emitted.status, 0, emitted.stderr);
-  assert.match(emitted.stdout, /交给了：试一下/);
+  assert.match(emitted.stdout, /Передано:Пробный запуск/);
 
   const config = JSON.parse(readFileSync(join(home, "config.json"), "utf8"));
   const state = async () => (await get("/v1/state", { authorization: `Bearer ${config.owner}` })).json();
@@ -151,12 +151,12 @@ test("one machine, one command: an event, a question, an answer, the work done",
   };
   const asking = await until((s) => s.cards.length === 1);
   const card = asking.cards[0];
-  assert.equal(card.title, "试跑：选一个颜色");
+  assert.equal(card.title, "Пробный запуск: выберите цвет");
   assert.ok(readFileSync(join(home, "where.txt"), "utf8").includes("work"));
   const waiting = cli("status");
-  assert.match(waiting.stdout, /等你 1/);
-  assert.match(waiting.stdout, new RegExp(`#${card.id} 试跑：选一个颜色`));
-  assert.match(waiting.stdout, /2\. 绿色（推荐）/);
+  assert.match(waiting.stdout, /Требуется ваше действие 1/);
+  assert.match(waiting.stdout, new RegExp(`#${card.id} Пробный запуск: выберите цвет`));
+  assert.match(waiting.stdout, /2\. Зеленый\(рекомендуется\)/);
   assert.match(waiting.stdout, new RegExp(`agent-autoloop answer ${card.id} `));
 
   // The notifier runs on its own, and a card answered before it gets there isn't shown at all.
@@ -165,43 +165,43 @@ test("one machine, one command: an event, a question, an answer, the work done",
   const answered = cli("answer", String(card.id), "2");
   assert.equal(answered.status, 0, answered.stderr);
   const finished = await until((s) =>
-    s.runs.some((r: any) => r.summary === "你选了绿色，做完了" && r.state === "done"),
+    s.runs.some((r: any) => r.summary === "Вы выбрали зеленый и все готово" && r.state === "done"),
   );
   assert.equal(finished.cards.length, 0);
   assert.equal(finished.recentCards[0].state, "done");
-  assert.equal(finished.recentCards[0].result, "你选了绿色，做完了");
-  assert.equal(finished.recentCards[0].by, "本人");
+  assert.equal(finished.recentCards[0].result, "Вы выбрали зеленый и все готово");
+  assert.equal(finished.recentCards[0].by, "владелец");
   assert.deepEqual(
     notifications(),
-    ["试跑：选一个颜色", "运行 agent-autoloop status 查看"],
+    ["Пробный запуск: выберите цвет", "Выполните agent-autoloop status Просмотреть"],
     "once, and not for the answer",
   );
-  assert.match(cli("answer", String(card.id), "1").stdout, /已经/);
+  assert.match(cli("answer", String(card.id), "1").stdout, /уже обработана/);
 
   const status = cli("status");
-  assert.match(status.stdout, /在跑 0 · 排队 0 · 今天做完 2 · 等你 0/);
-  assert.match(status.stdout, /你选了绿色，做完了/);
+  assert.match(status.stdout, /Выполняется 0 · в очереди 0 · Завершено сегодня 2 · Требуется ваше действие 0/);
+  assert.match(status.stdout, /Вы выбрали зеленый и все готово/);
   const told = spawnSync(process.execPath, ["--disable-warning=ExperimentalWarning", bin, "tell", "note-1"], {
     env,
     encoding: "utf8",
-    input: "告诉你一声\n",
+    input: "Расскажу тебе\n",
   });
-  assert.match(told.stdout, /说了/);
-  assert.match(cli("status").stdout, /告诉你一声/);
+  assert.match(told.stdout, /Отправлено/);
+  assert.match(cli("status").stdout, /Расскажу тебе/);
   cli("emit", "hello.notice");
   const noticed = await until((s) => s.cards.some((c: any) => c.kind === "notice"));
   const notice = noticed.cards.find((c: any) => c.kind === "notice");
-  assert.match(cli("status").stdout, new RegExp(`处理完了：agent-autoloop answer ${notice.id}`));
-  assert.match(cli("answer", String(notice.id)).stdout, /结案了/);
+  assert.match(cli("status").stdout, new RegExp(`Обработано:agent-autoloop answer ${notice.id}`));
+  assert.match(cli("answer", String(notice.id)).stdout, /Карточка закрыта/);
 
   // Nobody at a terminal, as when an Agent is installing it: `try` says what's being asked and how to answer, and doesn't wait.
   const tried = cli("try");
   assert.equal(tried.status, 0, tried.stderr);
-  assert.match(tried.stdout, /试跑：选一个颜色/);
+  assert.match(tried.stdout, /Пробный запуск: выберите цвет/);
   const id = /agent-autoloop answer (\d+) /.exec(tried.stdout)![1];
-  const resolved = cli("resolve", id, "不试了");
-  assert.match(resolved.stdout, /结案了/);
-  assert.equal((await state()).recentCards.find((c: any) => c.id === Number(id)).result, "不试了");
+  const resolved = cli("resolve", id, "Больше никаких попыток");
+  assert.match(resolved.stdout, /Карточка закрыта/);
+  assert.equal((await state()).recentCards.find((c: any) => c.id === Number(id)).result, "Больше никаких попыток");
   assert.equal(cli("resolve", id).status, 1, "a result has to be written");
   assert.equal((await get("/")).status, 404);
 });

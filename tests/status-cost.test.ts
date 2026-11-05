@@ -52,8 +52,8 @@ test("today is the rules' day; each figure says how many rounds didn't report it
   ];
   assert.equal(
     spendLine(runs, now, "Asia/Shanghai"),
-    "今天 3 轮 · 1.1 万 Token（1 轮没上报） · $0.50（2 轮没上报）" +
-      "    最近 7 天 5 轮 · 2.1 万 Token（1 轮没上报） · $1.50（2 轮没上报）",
+    "Сегодня 3 цикл. · 11,2 тыс. Token(1 цикл. без данных) · $0.50(2 цикл. без данных)" +
+      "    Последние 7 дней 5 цикл. · 21,2 тыс. Token(1 цикл. без данных) · $1.50(2 цикл. без данных)",
   );
 });
 
@@ -61,9 +61,9 @@ test("nothing reported is said to be nothing reported, not zero; nothing run is 
   const quiet = [ended("2026-11-03T01:00:00Z", null), ended("2026-11-03T01:30:00Z", {})];
   assert.equal(
     spendLine(quiet, now, "Asia/Shanghai"),
-    "今天 2 轮 · Token 没上报 · 费用没上报    最近 7 天 2 轮 · Token 没上报 · 费用没上报",
+    "Сегодня 2 цикл. · Token не сообщено · Стоимость не сообщена    Последние 7 дней 2 цикл. · Token не сообщено · Стоимость не сообщена",
   );
-  assert.equal(spendLine([], now, "Asia/Shanghai"), "今天 0 轮    最近 7 天 0 轮");
+  assert.equal(spendLine([], now, "Asia/Shanghai"), "Сегодня 0 цикл.    Последние 7 дней 0 цикл.");
 });
 
 test("only rounds that ended count: not one still going, one waiting to try again, or one stopped before it started", () => {
@@ -77,7 +77,7 @@ test("only rounds that ended count: not one still going, one waiting to try agai
   ];
   assert.equal(
     spendLine(runs, now, "Asia/Shanghai"),
-    "今天 1 轮 · 10 Token · 费用没上报    最近 7 天 1 轮 · 10 Token · 费用没上报",
+    "Сегодня 1 цикл. · 10 Token · Стоимость не сообщена    Последние 7 дней 1 цикл. · 10 Token · Стоимость не сообщена",
   );
 });
 
@@ -103,7 +103,7 @@ test("status includes runs beyond the first page, including old runs that finish
   const round = (id: string, at: number, usage: object) => {
     hub.ingest("app", { id, type: "feedback.new", subject: id }, at);
     const job = hub.claimNext("w1", `claim-${id}`, at)!;
-    hub.finish(job.run, job.token, { outcome: "done", summary: "好了", usage }, at);
+    hub.finish(job.run, job.token, { outcome: "done", summary: "Хорошо", usage }, at);
   };
   // Its worker never comes: from nine days ago on it's "active", so it shows at the tail of the first page.
   hub.ingest("ops", { id: "stuck", type: "alert.raised", subject: "stuck" }, clock - 9 * DAY);
@@ -117,8 +117,8 @@ test("status includes runs beyond the first page, including old runs that finish
     { env: process.env },
   );
   const lines = stdout.split("\n");
-  assert.match(lines[0], /^在跑 /);
-  assert.equal(lines[1], "今天 1 轮 · 100 Token · $1.00    最近 7 天 66 轮 · 750 Token · $1.65");
+  assert.match(lines[0], /^Бег /);
+  assert.equal(lines[1], "Сегодня 1 цикл. · 100 Token · $1.00    Последние 7 дней 66 цикл. · 750 Token · $1.65");
 
   for (const table of ["run_events", "runs", "events", "seen", "cards", "deliveries", "timers"] as const)
     hub.fixtureClear(table);
@@ -131,5 +131,8 @@ test("status includes runs beyond the first page, including old runs that finish
     ["--disable-warning=ExperimentalWarning", join(import.meta.dirname, "../bin/agent-autoloop.ts"), "status"],
     { env: process.env },
   );
-  assert.equal(recent.stdout.split("\n")[1], "今天 1 轮 · 1000 Token · $9.00    最近 7 天 1 轮 · 1000 Token · $9.00");
+  assert.equal(
+    recent.stdout.split("\n")[1],
+    "Сегодня 1 цикл. · 1 тыс. Token · $9.00    Последние 7 дней 1 цикл. · 1 тыс. Token · $9.00",
+  );
 });

@@ -24,19 +24,34 @@ const cli = async (...args: string[]) =>
 
 test("explain lists rules, agents, channels and next runs, but no prompt or skill text", () => {
   const lines = explainRules(fixture, at(0), "UTC").join("\n");
-  for (const words of ["意见", "feedback.*", "a1", "权限 edit", "chat", "回答人 me", "每天 09:00", "下次", "巡检"])
+  for (const words of [
+    "Мнение",
+    "feedback.*",
+    "a1",
+    "права edit",
+    "chat",
+    "Ответчик me",
+    "каждый день 09:00",
+    "В следующий раз",
+    "Осмотр",
+  ])
     assert.ok(lines.includes(words), words + "\n" + lines);
-  for (const privateText of ["按手册做。", "处理告警。", "记下来。", "写早报。"])
+  for (const privateText of [
+    "Следуйте руководству.",
+    "Обработка сигналов тревоги.",
+    "记下来. ",
+    "Напишите утреннюю газету.",
+  ])
     assert.ok(!lines.includes(privateText), privateText);
 });
 
 test("explain says which rules go on in the last round's session", () => {
-  assert.ok(!explainRules(fixture, at(0), "UTC").join("\n").includes("接着上一轮的会话"));
+  assert.ok(!explainRules(fixture, at(0), "UTC").join("\n").includes("продолжить сессию прошлого цикла"));
   const given = JSON.parse(fixture);
   given.rules[0].resume = true;
   const lines = explainRules(JSON.stringify(given), at(0), "UTC");
   assert.ok(
-    lines.some((line) => line.includes("feedback.*") && line.includes("接着上一轮的会话")),
+    lines.some((line) => line.includes("feedback.*") && line.includes("продолжить сессию прошлого цикла")),
     lines.join("\n"),
   );
 });
@@ -44,11 +59,14 @@ test("explain says which rules go on in the last round's session", () => {
 test("a dry run says which rules would take the event, and doesn't need a hub", () => {
   assert.match(
     previewEvent(fixture, "app", { id: "1", type: "feedback.new", subject: "#1" }, at(0), "UTC").join("\n"),
-    /意见 → a1/,
+    /Мнение → a1/,
   );
   const alerts = previewEvent(fixture, "ops", { id: "2", type: "alert.raised" }, at(0), "UTC").join("\n");
-  assert.ok(alerts.includes("告警 → a2") && alerts.includes("告警也记一笔 → a1"), alerts);
-  assert.match(previewEvent(fixture, "app", { id: "3", type: "else.new" }, at(0), "UTC").join("\n"), /没有规则接/);
+  assert.ok(alerts.includes("Тревога → a2") && alerts.includes("Тревога также записывается. → a1"), alerts);
+  assert.match(
+    previewEvent(fixture, "app", { id: "3", type: "else.new" }, at(0), "UTC").join("\n"),
+    /Для события нет правила/,
+  );
   assert.throws(() => previewEvent(fixture, "app", { id: "4", type: "not a type" }, at(0), "UTC"), InputError);
 });
 
@@ -57,10 +75,10 @@ test("the commands read the local rules file and refuse an unknown subcommand", 
     join(home, "config.json"),
     JSON.stringify({ url: "http://127.0.0.1:1", source: { name: "app", key: "test-only" } }),
   );
-  assert.match(await cli("rules", "explain"), /意见/);
+  assert.match(await cli("rules", "explain"), /Мнение/);
   const preview = await cli("emit", "feedback.new", "--dry-run", "--subject", "#1");
-  assert.match(preview, /预演/);
-  assert.match(preview, /意见 → a1/);
-  await assert.rejects(cli("rules", "nope"), /用法/);
+  assert.match(preview, /Предварительный просмотр/);
+  assert.match(preview, /Мнение → a1/);
+  await assert.rejects(cli("rules", "nope"), /Использование/);
   await assert.rejects(cli("emit", "feedback.new", "--dry-run", "--key", "another-source"), /--key/);
 });

@@ -26,5 +26,7 @@ export async function poll(repo: string) {
 
 if (import.meta.main) {
   const events = await poll(process.argv[2]);
-  console.log(`看过了，${events.length} 件待处理\n\`\`\`agent-autoloop\n${JSON.stringify({ events })}\n\`\`\``);
+  console.log(
+    `Проверено,${events.length} Детали, подлежащие обработке\n\`\`\`agent-autoloop\n${JSON.stringify({ events })}\n\`\`\``,
+  );
 }

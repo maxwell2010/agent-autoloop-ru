@@ -104,7 +104,7 @@ async function answers(port: number) {
 async function until(done: () => boolean | Promise<boolean>, what: string, patience = 20_000) {
   const end = Date.now() + patience;
   while (!(await done())) {
-    if (Date.now() > end) assert.fail(`等不到：${what}`);
+    if (Date.now() > end) assert.fail(`等不Прибытие:${what}`);
     await new Promise((resolve) => setTimeout(resolve, 50));
   }
 }
@@ -125,7 +125,7 @@ test("an agent plugin that can't read what it printed fails that run, and the hu
     }
   });
   const up = it.up();
-  await until(() => answers(it.port), "中台应答");
+  await until(() => answers(it.port), "Сервис отвечает");
   assert.equal(it.cli("emit", "try.start", "--subject", "#1").status, 0);
   const owner = () => JSON.parse(readFileSync(join(it.home, "config.json"), "utf8")).owner as string;
   const firstRun = async () => {
@@ -135,9 +135,9 @@ test("an agent plugin that can't read what it printed fails that run, and the hu
     }).catch(() => null);
     return response?.ok ? (await response.json()).runs.at(-1) : undefined;
   };
-  await until(async () => alive(up) === false || (await firstRun())?.attempts === 1, "这一轮算没跑成");
+  await until(async () => alive(up) === false || (await firstRun())?.attempts === 1, "这Одинцикл.算FAILED");
   assert.equal(alive(up), true, it.said());
-  assert.match((await firstRun()).error, /读不懂/);
+  assert.match((await firstRun()).error, /Не удалось разобрать/);
   assert.equal(await answers(it.port), true);
 });
 
@@ -145,11 +145,11 @@ test("a channel plugin that returns at once doesn't stop the hub answering", asy
   const it = await install({ "quick/channel.ts": "export default async function quick() {}" });
   const key = it.cli("key", "new", "channel", "quick").stdout.trim();
   edit(join(it.home, "config.json"), (config) => (config.channels = { quick: { use: "quick", key } }));
-  edit(join(it.home, "rules.json"), (rules) => (rules.channels = { quick: { name: "快" } }));
+  edit(join(it.home, "rules.json"), (rules) => (rules.channels = { quick: { name: "Быстро" } }));
   const up = it.up();
-  await until(() => answers(it.port), "中台应答");
+  await until(() => answers(it.port), "Сервис отвечает");
   assert.equal(alive(up), true);
-  await until(() => it.said().includes("[quick] stopped"), "日志说通道停了");
+  await until(() => it.said().includes("[quick] stopped"), "день志说通道Остановлено");
   await new Promise((resolve) => setTimeout(resolve, 1_000));
   assert.equal(it.said().split("[quick] stopped").length - 1, 1, "it waits before going again");
 });
@@ -165,16 +165,16 @@ test("a worker that stops is started again, and the hub stays up", async () => {
     }
   });
   const up = it.up();
-  await until(() => answers(it.port), "中台应答");
+  await until(() => answers(it.port), "Сервис отвечает");
   assert.equal(it.cli("emit", "try.start", "--subject", "#1").status, 0);
   const runs = join(it.home, "worker", "runs");
   // Started and not just about to: one that can't write to its folder while starting counts as the hub being out of reach,
   // and that waits 30 seconds before the next round.
-  await until(() => it.said().includes("turn 1 started"), "这一轮开始");
+  await until(() => it.said().includes("turn 1 started"), "这Одинцикл.Старт");
   // With a run in hand it comes round every second, and something in the way of its folder stops the next round.
   rmSync(runs, { recursive: true, force: true });
   writeFileSync(runs, "");
-  await until(() => alive(up) === false || it.said().includes("[worker] stopped"), "日志说接单程序停了");
+  await until(() => alive(up) === false || it.said().includes("[worker] stopped"), "день志说接单программаОстановлено");
   assert.equal(alive(up), true, it.said());
   assert.equal(await answers(it.port), true);
 });
@@ -189,9 +189,9 @@ test("with nowhere left to write to it stops, as it always has, instead of going
   });
   const key = it.cli("key", "new", "channel", "stray").stdout.trim();
   edit(join(it.home, "config.json"), (config) => (config.channels = { stray: { use: "stray", key } }));
-  edit(join(it.home, "rules.json"), (rules) => (rules.channels = { stray: { name: "乱" } }));
+  edit(join(it.home, "rules.json"), (rules) => (rules.channels = { stray: { name: "Хаос" } }));
   const up = it.up();
-  await until(() => it.said().includes("thrown out of reach"), "日志记下抛错");
+  await until(() => it.said().includes("thrown out of reach"), "день志记下抛错");
   up.stdout!.destroy();
   up.stderr!.destroy();
   await until(() => !alive(up), "进程退出");
@@ -208,12 +208,12 @@ test("a channel plugin's stray throw and unhandled rejection stay its own troubl
   });
   const key = it.cli("key", "new", "channel", "stray").stdout.trim();
   edit(join(it.home, "config.json"), (config) => (config.channels = { stray: { use: "stray", key } }));
-  edit(join(it.home, "rules.json"), (rules) => (rules.channels = { stray: { name: "乱" } }));
+  edit(join(it.home, "rules.json"), (rules) => (rules.channels = { stray: { name: "Хаос" } }));
   const up = it.up();
-  await until(() => alive(up) === false || it.said().includes("thrown out of reach"), "日志记下抛错");
+  await until(() => alive(up) === false || it.said().includes("thrown out of reach"), "день志记下抛错");
   await until(
     () => alive(up) === false || it.said().includes("rejected with nobody listening"),
-    "日志记下没人接的 Promise",
+    "день志记下没人接для Promise",
   );
   assert.equal(alive(up), true, it.said());
   assert.equal(await answers(it.port), true);
@@ -227,7 +227,7 @@ async function heldWhileRulesChange(
   const it = await install();
   before(it.home);
   const up = it.up();
-  await until(() => answers(it.port), "中台应答");
+  await until(() => answers(it.port), "Сервис отвечает");
   const db = new DatabaseSync(join(it.home, "hub.db"));
   db.exec("BEGIN IMMEDIATE");
   // Moved into place, so the watcher sees one change and no second tick is waiting on the lock when it's let go.
@@ -237,7 +237,7 @@ async function heldWhileRulesChange(
   writeFileSync(`${file}.new`, JSON.stringify(rules, null, 2));
   renameSync(`${file}.new`, file);
   const failed = () => it.said().split("Error: database is locked").length - 1;
-  await until(() => alive(up) === false || failed() >= failures, "这一次到点失败", 30_000);
+  await until(() => alive(up) === false || failed() >= failures, "这ОднаждыПрибытие点失败", 30_000);
   db.exec("ROLLBACK");
   const askFirst = () => {
     const row = db.prepare("SELECT data FROM projections WHERE collection='config' AND key='rules'").get()!;
@@ -257,25 +257,33 @@ async function heldWhileRulesChange(
 }
 
 test("the database held too long by another process fails a tick, not the hub, and the change still lands", async () => {
-  const { up, askFirst, landed } = await heldWhileRulesChange((rules) => (rules.askFirst = ["只问这一件"]));
-  await until(() => alive(up) === false || askFirst()[0] === "只问这一件", "新规则生效");
+  const { up, askFirst, landed } = await heldWhileRulesChange(
+    (rules) => (rules.askFirst = ["Просто спросите вот об этом"]),
+  );
+  await until(() => alive(up) === false || askFirst()[0] === "Просто спросите вот об этом", "новый规则生效");
   await landed();
 });
 
 test("whatever comes along while a failed tick waits to go again doesn't lose it", async () => {
   // With no worker asking, the only other thing due is the card about it, ten minutes off. The second failure is the one to
   // wait for: a file watcher can report one change twice, and a tick waiting on the lock would go through when it's let go.
-  const { it, up, askFirst, landed } = await heldWhileRulesChange((rules) => (rules.askFirst = ["只问这一件"]), {
-    before: (home) => edit(join(home, "config.json"), (config) => delete config.worker),
-    failures: 2,
-  });
+  const { it, up, askFirst, landed } = await heldWhileRulesChange(
+    (rules) => (rules.askFirst = ["Просто спросите вот об этом"]),
+    {
+      before: (home) => edit(join(home, "config.json"), (config) => delete config.worker),
+      failures: 2,
+    },
+  );
   assert.equal(it.cli("emit", "try.start", "--subject", "#1").status, 0);
-  await until(() => alive(up) === false || askFirst()[0] === "只问这一件", "新规则生效");
+  await until(() => alive(up) === false || askFirst()[0] === "Просто спросите вот об этом", "новый规则生效");
   await landed();
 });
 
 test("rules written wrong while the database is held are told once it's free", async () => {
   const { up, cards, landed } = await heldWhileRulesChange((rules) => (rules.rules[0].to = "nobody"));
-  await until(() => alive(up) === false || cards().includes("rules.json 写错了，还在用旧规则"), "告诉本人规则写错了");
+  await until(
+    () => alive(up) === false || cards().includes("rules.json Неправильное написание, все еще по старым правилам."),
+    "Скажи мне, что правила неправильные",
+  );
   await landed();
 });

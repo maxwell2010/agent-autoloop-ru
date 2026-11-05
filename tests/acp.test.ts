@@ -11,7 +11,7 @@
 // writing through it lands outside. A permission request that gives only the tool call's id is judged as if it had no kind;
 // what an earlier message said of the call hides what this one says, or a field left empty wipes what was known. A thought
 // in the middle of a message loses its first half; a finished tool call between two messages with no id runs them together,
-// so a "没跑成" after it reads as work done; a line that can't be read, which an agent must not write, is passed over, so one
+// so a "FAILED" after it reads as work done; a line that can't be read, which an agent must not write, is passed over, so one
 // with no newline takes the answer with it and the run hangs until its time limit. A failed turn doesn't say so until the agent and its stdout are gone, which may be never; its half-written answer counts; or what the
 // agent itself said on stderr is lost from the reason.
 import assert from "node:assert/strict";
@@ -38,10 +38,10 @@ readline.createInterface({input:process.stdin}).on('line',line=>{const m=JSON.pa
 if(m.method==='initialize'){writeFileSync(${JSON.stringify(join(home, "client-version"))},m.params.clientInfo.version);send({id:m.id,result:{protocolVersion:1,agentCapabilities:{loadSession:true}}});}
 if(m.method==='session/new')send({id:m.id,result:{sessionId:'agent-session'}});
 if(m.method==='session/load'){if(m.params.sessionId!=='agent-session')return send({id:m.id,error:{code:-1,message:'bad session'}});update('agent_message_chunk','旧历史');send({id:m.id,result:{}});}
-if(m.method==='session/prompt'){if(m.params.prompt[0].text==='中途断了'){update('tool_call','');process.exit(9);}update('agent_thought_chunk','思考');update('agent_message_chunk','中间消息');update('tool_call','');update('agent_message_chunk',m.params.prompt[0].text);send({id:m.id,result:{stopReason:'end_turn'}});}
+if(m.method==='session/prompt'){if(m.params.prompt[0].text==='Сломан на полпути'){update('tool_call','');process.exit(9);}update('agent_thought_chunk','Мышление');update('agent_message_chunk','Промежуточное сообщение');update('tool_call','');update('agent_message_chunk',m.params.prompt[0].text);send({id:m.id,result:{stopReason:'end_turn'}});}
 });`,
 );
-const bridged = (command: string[], resume: string | null, prompt = "完成了", access = "read") =>
+const bridged = (command: string[], resume: string | null, prompt = "Завершено", access = "read") =>
   new Promise<{ code: number | null; out: string; err: string }>((resolve) => {
     const child = spawn(
       process.execPath,
@@ -58,7 +58,7 @@ const bridged = (command: string[], resume: string | null, prompt = "完成了",
     child.stderr.on("data", (b) => (err += b));
     child.on("close", (code) => resolve({ code, out, err }));
   });
-const run = (resume: string | null, prompt = "完成了") => bridged([process.execPath, fake], resume, prompt);
+const run = (resume: string | null, prompt = "Завершено") => bridged([process.execPath, fake], resume, prompt);
 /** One launch of a stand-in agent. */
 const launch = (name: string, script: string, resume: string | null = null, prompt?: string, access?: string) =>
   bridged([process.execPath, acpAgent(home, name, script)], resume, prompt, access);
@@ -74,10 +74,10 @@ test("ACP speaks v1, resumes across processes, discards history and returns only
       .trim()
       .split("\n")
       .map((l) => JSON.parse(l));
-    assert.equal(lines.at(-1).text, "完成了");
+    assert.equal(lines.at(-1).text, "Завершено");
     assert.equal(lines.at(-1).session, "agent-session");
     assert.ok(!r.out.includes("旧历史"));
-    assert.ok(!r.out.includes("思考"));
+    assert.ok(!r.out.includes("Мышление"));
   }
   const bad = await run("missing-session");
   assert.notEqual(bad.code, 0);
@@ -92,8 +92,8 @@ test("ACP says a turn started once the agent has the prompt, and never for a ses
       "printed before the prompt goes, so it survives a kill",
     );
     assert.equal(acp.read(ok.out, null, "").started, true);
-    assert.equal(acp.read(ok.out, ok.code, ok.err).text, "完成了");
-    const lost = await run(resume, "中途断了");
+    assert.equal(acp.read(ok.out, ok.code, ok.err).text, "Завершено");
+    const lost = await run(resume, "Сломан на полпути");
     assert.notEqual(lost.code, 0);
     const reading = acp.read(lost.out, lost.code, lost.err);
     assert.deepEqual(
@@ -110,7 +110,7 @@ test("ACP says a turn started once the agent has the prompt, and never for a ses
 });
 for (const [what, script] of [
   ["exits as soon as it starts", "process.exit(3);"],
-  ["fails to initialize", `on.initialize = ${refusing("初始化坏了")};`],
+  ["fails to initialize", `on.initialize = ${refusing("Инициализация нарушена")};`],
   ["speaks another version", "on.initialize = (m) => send({ id: m.id, result: { protocolVersion: 99 } });"],
   ["exits while loading the session", "on['session/load'] = () => process.exit(4);"],
   [
@@ -137,13 +137,13 @@ test("ACP going on in a session stays there when the program can't be started at
 
 test("ACP lets a new session start only when the agent says no to this one", async () => {
   for (const [name, script, why] of [
-    ["refuses-load", `on['session/load'] = ${refusing("没有这个会话")};`, /没有这个会话/],
+    ["refuses-load", `on['session/load'] = ${refusing("Не найденосессия")};`, /Не найденосессия/],
     [
       "refuses-resume",
-      `${declaring({ sessionCapabilities: { resume: {} } })} on['session/resume'] = ${refusing("没有这个会话")};`,
-      /没有这个会话/,
+      `${declaring({ sessionCapabilities: { resume: {} } })} on['session/resume'] = ${refusing("Не найденосессия")};`,
+      /Не найденосессия/,
     ],
-    ["cannot-resume", declaring({}), /不支持恢复/],
+    ["cannot-resume", declaring({}), /Сеанс восстановления не поддерживается/],
     // What the official adapter says of a session that truly isn't there, and the same code as "in use" for another reason.
     [
       "no-rollout",
@@ -152,8 +152,8 @@ test("ACP lets a new session start only when the agent says no to this one", asy
     ],
     [
       "bad-request",
-      `on['session/load'] = (m) => send({ id: m.id, error: { code: -32600, message: '不接受', data: { reason: 'other' } } });`,
-      /不接受/,
+      `on['session/load'] = (m) => send({ id: m.id, error: { code: -32600, message: 'Не принимать', data: { reason: 'other' } } });`,
+      /Не принимать/,
     ],
   ] as const) {
     const result = await launch(name, script, "agent-session");
@@ -163,12 +163,12 @@ test("ACP lets a new session start only when the agent says no to this one", asy
     assert.match(reading.error!, why);
     assert.equal(acp.read(result.out, null, "").started, undefined, `${name}: and it reads that way while it's going`);
   }
-  const fresh = await launch("fresh-breaks", `on.initialize = ${refusing("初始化坏了")};`);
+  const fresh = await launch("fresh-breaks", `on.initialize = ${refusing("Инициализация нарушена")};`);
   assert.equal(acp.read(fresh.out, fresh.code, fresh.err).started, undefined, "a new session has nothing to stay in");
 });
 
 test("ACP stays in a session something else has open, and says why in the agent's own words", async () => {
-  const inUse = `(m) => send({ id: m.id, error: { code: -32600, message: '这个会话正在别处打开，关掉后再试', data: { reason: 'thread_active_writer' } } })`;
+  const inUse = `(m) => send({ id: m.id, error: { code: -32600, message: 'этотсессия正В别处打开, 关掉后Опять试', data: { reason: 'thread_active_writer' } } })`;
   for (const [name, script] of [
     ["in-use-load", `on['session/load'] = ${inUse};`],
     ["in-use-resume", `${declaring({ sessionCapabilities: { resume: {} } })} on['session/resume'] = ${inUse};`],
@@ -177,7 +177,7 @@ test("ACP stays in a session something else has open, and says why in the agent'
     assert.notEqual(result.code, 0);
     const reading = acp.read(result.out, result.code, result.err);
     assert.deepEqual([reading.started, reading.session], [true, "agent-session"], name);
-    assert.match(reading.error!, /这个会话正在别处打开，关掉后再试/);
+    assert.match(reading.error!, /этотсессия正В别处打开, 关掉后Опять试/);
   }
 });
 
@@ -191,7 +191,7 @@ test("ACP uses session/resume for an agent that only has that, and session/load 
     "agent-session",
   );
   assert.equal(onlyResume.code, 0, onlyResume.err);
-  assert.equal(acp.read(onlyResume.out, onlyResume.code, onlyResume.err).text, "做完了");
+  assert.equal(acp.read(onlyResume.out, onlyResume.code, onlyResume.err).text, "Закончено");
   assert.deepEqual(JSON.parse(readFileSync(called, "utf8")), ["session/resume", "agent-session", home, []]);
   rmSync(called);
   const hasBoth = await launch(
@@ -207,44 +207,65 @@ test("ACP reads U+2028 and U+2029 in what the agent says as part of the line", a
   const result = await launch(
     "line-separators",
     `on['session/prompt'] = (m) => {
-      update({ sessionUpdate: 'tool_call', toolCallId: 't1', kind: 'read', title: '工具输出\\u2028第二行' });
-      say('第一行\\u2028第二行\\u2029第三行');
+      update({ sessionUpdate: 'tool_call', toolCallId: 't1', kind: 'read', title: 'Выход инструмента\\u2028номерДва行' });
+      say('номерОдин行\\u2028номерДва行\\u2029номертри行');
       send({ id: m.id, result: { stopReason: 'end_turn' } });
     };`,
   );
   assert.equal(result.code, 0, result.err);
-  assert.equal(acp.read(result.out, result.code, result.err).text, "第一行 第二行 第三行");
+  assert.equal(acp.read(result.out, result.code, result.err).text, "номерОдин行 номерДва行 номертри行");
 });
 
 test("ACP finds where the last message starts", async () => {
-  const tool = (sessionUpdate: string, status?: string) => ({ sessionUpdate, toolCallId: "t", title: "工具", status });
-  const thought = { sessionUpdate: "agent_thought_chunk", content: { type: "text", text: "想" } };
+  const tool = (sessionUpdate: string, status?: string) => ({
+    sessionUpdate,
+    toolCallId: "t",
+    title: "Инструменты",
+    status,
+  });
+  const thought = { sessionUpdate: "agent_thought_chunk", content: { type: "text", text: "Подумайте" } };
   const say = (text: string, messageId?: string) => ({ text, messageId });
   for (const [why, steps, expected] of [
-    ["a thought doesn't split a message with an id", [say("前半", "m1"), thought, say("后半", "m1")], "前半后半"],
-    ["a tool call doesn't split one either", [say("前半", "m1"), tool("tool_call"), say("后半", "m1")], "前半后半"],
+    [
+      "a thought doesn't split a message with an id",
+      [say("Первая половина", "m1"), thought, say("Вторая половина", "m1")],
+      "Первая половинаВторая половина",
+    ],
+    [
+      "a tool call doesn't split one either",
+      [say("Первая половина", "m1"), tool("tool_call"), say("Вторая половина", "m1")],
+      "Первая половинаВторая половина",
+    ],
     [
       "nor does a finished one",
-      [say("前半", "m1"), tool("tool_call_update", "completed"), say("后半", "m1")],
-      "前半后半",
+      [say("Первая половина", "m1"), tool("tool_call_update", "completed"), say("Вторая половина", "m1")],
+      "Первая половинаВторая половина",
     ],
-    ["a new id is a new message", [say("旧的", "m1"), say("新的", "m2")], "新的"],
-    ["an id after none is a new message", [say("旧的"), say("新的", "m2")], "新的"],
-    ["with no id, a thought is a boundary", [say("旧的"), thought, say("新的")], "新的"],
-    ["with no id, a tool call is a boundary", [say("旧的"), tool("tool_call"), say("新的")], "新的"],
+    ["a new id is a new message", [say("旧для", "m1"), say("новыйдля", "m2")], "новыйдля"],
+    ["an id after none is a new message", [say("旧для"), say("новыйдля", "m2")], "новыйдля"],
+    ["with no id, a thought is a boundary", [say("旧для"), thought, say("новыйдля")], "новыйдля"],
+    ["with no id, a tool call is a boundary", [say("旧для"), tool("tool_call"), say("новыйдля")], "новыйдля"],
     [
       "with no id, a completed tool call is a boundary",
-      [say("旧的"), tool("tool_call_update", "completed"), say("新的")],
-      "新的",
+      [say("旧для"), tool("tool_call_update", "completed"), say("новыйдля")],
+      "новыйдля",
     ],
     [
       "with no id, a failed tool call is a boundary",
-      [say("旧的"), tool("tool_call_update", "failed"), say("新的")],
-      "新的",
+      [say("旧для"), tool("tool_call_update", "failed"), say("новыйдля")],
+      "новыйдля",
     ],
-    ["a tool call still going isn't", [say("前半"), tool("tool_call_update", "in_progress"), say("后半")], "前半后半"],
-    ["nor is one that only reports", [say("前半"), tool("tool_call_update"), say("后半")], "前半后半"],
-    ["chunks with no boundary are one message", [say("一"), say("二"), say("三")], "一二三"],
+    [
+      "a tool call still going isn't",
+      [say("Первая половина"), tool("tool_call_update", "in_progress"), say("Вторая половина")],
+      "Первая половинаВторая половина",
+    ],
+    [
+      "nor is one that only reports",
+      [say("Первая половина"), tool("tool_call_update"), say("Вторая половина")],
+      "Первая половинаВторая половина",
+    ],
+    ["chunks with no boundary are one message", [say("Один"), say("Два"), say("три")], "ОдинДватри"],
   ] as const) {
     const result = await launch(
       `boundary-${why.replaceAll(/\W/g, "-")}`,
@@ -263,8 +284,8 @@ test("ACP finds where the last message starts", async () => {
 
 test("ACP ends a turn as soon as it can't read a line from the agent", async () => {
   for (const [name, stray] of [
-    ["a-stray-line", "这不是 JSON\\n"],
-    ["a-stray-print-with-no-newline", "这不是 JSON"],
+    ["a-stray-line", "这Нет JSON\\n"],
+    ["a-stray-print-with-no-newline", "这Нет JSON"],
     ["a-blank-line", "\\n"],
     ["a-null", "null\\n"],
   ] as const) {
@@ -273,7 +294,7 @@ test("ACP ends a turn as soon as it can't read a line from the agent", async () 
       name,
       `setTimeout(() => process.exit(0), 3000);
       on['session/prompt'] = (m) => {
-        say('做完了');
+        say('Закончено');
         process.stdout.write('${stray}');
         send({ id: m.id, result: { stopReason: 'end_turn' } });
       };`,
@@ -288,10 +309,10 @@ test("ACP ends a turn as soon as it can't read a line from the agent", async () 
 test("ACP says a turn has failed and why as soon as it has, so nothing has to wait for the agent to go", async () => {
   const result = await launch(
     "max-tokens",
-    `on['session/prompt'] = (m) => { say('写了一半'); send({ id: m.id, result: { stopReason: 'max_tokens' } }); };`,
+    `on['session/prompt'] = (m) => { say('Написано наполовину'); send({ id: m.id, result: { stopReason: 'max_tokens' } }); };`,
   );
   assert.notEqual(result.code, 0);
-  const why = "ACP 没有完成这一轮：max_tokens";
+  const why = "ACP не завершил этот цикл:max_tokens";
   assert.deepEqual(JSON.parse(result.out.trim().split("\n").at(-1)!), {
     session: "agent-session",
     finished: true,
@@ -308,7 +329,7 @@ test("ACP says a turn has failed and why as soon as it has, so nothing has to wa
     assert.deepEqual([reading.error, reading.session, reading.started], [why, "agent-session", true]);
     assert.equal(reading.text, undefined, "half an answer isn't an answer");
   }
-  const talkative = acp.read(result.out, 0, `${result.err}${"它还在写日志\n".repeat(100)}`);
+  const talkative = acp.read(result.out, 0, `${result.err}${"\u5b83\u8fd8\u5728\u5199\u65e5\u5fd7\n".repeat(100)}`);
   assert.ok(talkative.error!.endsWith(why), "an agent that goes on talking doesn't push out the reason");
 });
 
@@ -319,14 +340,14 @@ test("ACP's reason for a failure keeps what the agent itself said", async () => 
   );
   const reading = acp.read(result.out, result.code, result.err);
   assert.match(reading.error!, /登录过期了/);
-  assert.match(reading.error!, /ACP 在交回结果前退出：1/);
+  assert.match(reading.error!, /ACP: процесс завершился до получения результата, код 1/);
 });
 
 test("ACP doesn't make up a session for a turn that failed before it had one", async () => {
-  const result = await launch("no-session", `on['session/new'] = ${refusing("开不了")};`);
-  assert.deepEqual(JSON.parse(result.out.trim()), { finished: true, error: "开不了" });
+  const result = await launch("no-session", `on['session/new'] = ${refusing("Не могу открыть")};`);
+  assert.deepEqual(JSON.parse(result.out.trim()), { finished: true, error: "Не могу открыть" });
   const bad = await launch("bad-session", `on['session/new'] = (m) => send({ id: m.id, result: { sessionId: 7 } });`);
-  assert.deepEqual(JSON.parse(bad.out.trim()), { finished: true, error: "ACP 没有返回会话编号" });
+  assert.deepEqual(JSON.parse(bad.out.trim()), { finished: true, error: "ACP Не возвращен ID сессии" });
 });
 
 test("ACP chooses only a one-time permission and respects structured kinds and resolved paths", () => {
@@ -395,7 +416,7 @@ test("ACP judges a permission on all that's been said of the tool call, the requ
   const call = (toolCallId: string, fields: object) => ({
     sessionUpdate: "tool_call",
     toolCallId,
-    title: "工具",
+    title: "Инструменты",
     ...fields,
   });
   const change = (toolCallId: string, fields: object) => ({ sessionUpdate: "tool_call_update", toolCallId, ...fields });
@@ -485,7 +506,7 @@ test("ACP doesn't count tool calls from the history it's loading as this turn's"
   const result = await launch(
     "permission-history",
     `on['session/load'] = (m) => {
-      update({ sessionUpdate: 'tool_call', toolCallId: 'old', title: '旧的', kind: 'read' });
+      update({ sessionUpdate: 'tool_call', toolCallId: 'old', title: '旧для', kind: 'read' });
       send({ id: m.id, result: {} });
     };
     on['session/prompt'] = async (m) => {

@@ -21,16 +21,17 @@ export async function probe(target: Target, request = fetch): Promise<Observatio
       signal: AbortSignal.timeout(20_000),
       headers: { "user-agent": "agent-autoloop-site-check/1.0" },
     });
-    if (response.status !== 200) return { ok: false, reason: `返回 ${response.status}` };
-    if (!(await response.text()).includes(target.contains)) return { ok: false, reason: "缺少约定的健康内容" };
-    return { ok: true, reason: "状态为 200，且包含约定的健康内容" };
+    if (response.status !== 200) return { ok: false, reason: `Возвращает ${response.status}` };
+    if (!(await response.text()).includes(target.contains))
+      return { ok: false, reason: "Отсутствует ожидаемое содержимое проверки работоспособности" };
+    return { ok: true, reason: "состояние равно 200, И включить согласованный контент о здоровье" };
   } catch {
-    return { ok: false, reason: "连接、读取失败或超过 20 秒未完成" };
+    return { ok: false, reason: "Подключение или чтение завершилось ошибкой либо превысило 20 секунд без завершения" };
   }
 }
 
 export function receipt(target: Target, observation: Observation, context: Context): Receipt {
-  const title = `${target.name}暂时无法正常访问`;
+  const title = `${target.name}Сейчас нормальный доступ невозможен`;
   const open = context.open.filter((card) => card.title === title);
   const changed = observation.ok ? open.length > 0 : open.length === 0;
   if (!changed) return {};
@@ -39,13 +40,13 @@ export function receipt(target: Target, observation: Observation, context: Conte
     .digest("hex");
   return {
     ...(observation.ok
-      ? { resolve: open.map(({ card }) => ({ card, reason: `巡检已恢复：${observation.reason}` })) }
+      ? { resolve: open.map(({ card }) => ({ card, reason: `Проверка возобновилась:${observation.reason}` })) }
       : {
           notice: [
             {
               key: `site-${target.id}`,
               title,
-              text: "自动巡检发现异常，已交给维护 Agent 排查；恢复后会更新这张卡片。",
+              text: "Автоматическая проверка обнаружила ошибку; задача передана на обслуживание Agent Проверьте; эта карта будет обновлена ​​после восстановления.",
             },
           ],
         }),
@@ -54,7 +55,7 @@ export function receipt(target: Target, observation: Observation, context: Conte
         id,
         type: observation.ok ? "site.recovered" : "site.down",
         subject: target.id,
-        summary: observation.ok ? "网站巡检已恢复" : "网站巡检发现异常",
+        summary: observation.ok ? "Работа сайта восстановлена" : "Мониторинг обнаружил ошибку сайта",
         detail: observation.reason,
         link: new URL(target.url).href,
       },
@@ -76,11 +77,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     url.search ||
     url.hash
   ) {
-    throw new Error("检查 site.json：填写站点编号、名称、关键内容和不含凭据、查询参数或片段的 HTTP 地址");
+    throw new Error(
+      "Проверить site.json:Заполните номер сайта, имя, ключевое содержимое и информацию без учетных данных, параметров запроса или фрагментов. HTTP адрес",
+    );
   }
   const context: Context = JSON.parse(readFileSync(process.env.AGENT_AUTOLOOP_CONTEXT!, "utf8"));
   const observation = await probe(target);
   console.log(
-    `巡检完成：${observation.reason}\n\n\`\`\`agent-autoloop\n${JSON.stringify(receipt(target, observation, context))}\n\`\`\``,
+    `Проверка завершена:${observation.reason}\n\n\`\`\`agent-autoloop\n${JSON.stringify(receipt(target, observation, context))}\n\`\`\``,
   );
 }

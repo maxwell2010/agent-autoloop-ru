@@ -31,7 +31,9 @@ export function serve(port: number, host = "127.0.0.1", { commit = "dev" }: { co
     } catch (error) {
       console.error(error);
       if (res.headersSent) return void res.end();
-      res.writeHead(500, { "content-type": "application/json" }).end(JSON.stringify({ error: "中台出错了" }));
+      res
+        .writeHead(500, { "content-type": "application/json" })
+        .end(JSON.stringify({ error: "Что-то пошло не так на сервиса" }));
     }
   });
   server.on("close", runtime.close);

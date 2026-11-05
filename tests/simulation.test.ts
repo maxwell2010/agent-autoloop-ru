@@ -30,7 +30,7 @@ test("the simulator rejects a hub that refuses valid receipt replays", () => {
   const original = World.prototype.call;
   World.prototype.call = function (type: string, ...args: any[]) {
     const run = this.view.get("runs", args[0])!;
-    if (type === "finish" && run?.last_issued && run.issued === null) throw new AuthError("故意拒绝有效重放");
+    if (type === "finish" && run?.last_issued && run.issued === null) throw new AuthError("故意Отклонить有效重放");
     return original.call(this, type, ...args);
   };
   try {
@@ -46,7 +46,7 @@ test("answer checks reject a run in the wrong subject lane", () => {
     key: "q",
     kind: "ask",
     title: "选",
-    options: ["甲", "乙"],
+    options: ["А", "Б"],
     rule: "one",
     lane: "#1",
     grp: "shared",
@@ -55,7 +55,7 @@ test("answer checks reject a run in the wrong subject lane", () => {
   w.call("answer", 1, { choice: 0 });
   const log = structuredClone(w.log);
   for (const f of log) for (const c of f.changes) if (c.table === "runs" && c.row) c.row.lane = "wrong-lane";
-  assert.throws(() => invariants(evolve(new World().view, log.slice(1)), log), /原事项/);
+  assert.throws(() => invariants(evolve(new World().view, log.slice(1)), log), /первоначальный вопрос/);
 });
 
 test("the simulation catches omitted deadlines that strand deferred work", () => {

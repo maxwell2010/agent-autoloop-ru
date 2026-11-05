@@ -69,5 +69,5 @@ test("a number left in up.pid that is now its own doesn't stop it starting; a se
 
   const second = spawnSync(process.execPath, [...program, "up"], { env, encoding: "utf8", timeout: 30_000 });
   assert.notEqual(second.status, 0);
-  assert.match(second.stderr, /已经在跑了/);
+  assert.match(second.stderr, /Уже запущен/);
 });

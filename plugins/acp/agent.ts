@@ -23,7 +23,7 @@ export default {
       // What the agent itself said, then why it failed. The bridge says that last, unless the agent went on talking.
       const said = tail(stderr);
       const error = said.endsWith(reading.error ?? "") ? said : tail(`${said}\n${reading.error}`);
-      return { session: reading.session, started: reading.started, error: error || "ACP 没有完成这一轮" };
+      return { session: reading.session, started: reading.started, error: error || "ACP не завершил этот цикл" };
     }
     return reading;
   },

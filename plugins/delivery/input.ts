@@ -5,10 +5,10 @@ export function subjectNumber<E extends { subject: string }>(repo: string, conte
   const subjects = [...new Set(context.events.map((event) => event.subject))];
   const suffix = subjects[0]?.slice(repo.length + 1);
   if (subjects.length !== 1 || !subjects[0].startsWith(`${repo}#`) || !/^[1-9]\d*$/.test(suffix)) {
-    throw new Error("事件没有指向规则指定仓库的同一个事项");
+    throw new Error("Событие не указывает на одно и то же вещество на репозитории, указанном правилом");
   }
   const number = Number(suffix);
-  if (!Number.isSafeInteger(number)) throw new Error("事项编号不正确");
+  if (!Number.isSafeInteger(number)) throw new Error("Номер позиции неверен.");
   return number;
 }
 
@@ -22,7 +22,7 @@ export function question(issue: { number: number; title: string; body?: string; 
     key: `owner-${issue.number}`,
     title: [...issue.title].slice(0, 100).join(""),
     text: [...(text || issue.html_url)].slice(0, 1500).join(""),
-    options: ["已处理", "暂不处理"],
+    options: ["Обработано", "Пока не обрабатывать"],
     about: issue.html_url,
   };
 }
@@ -33,12 +33,14 @@ export const receiptBlock = (receipt: object) =>
 
 export function deliveryReceipt(number: number, result: Delivered, attended: boolean) {
   if (!result.findings?.length) return result.summary;
-  const text = result.findings.map((finding) => `${finding.title}：${finding.text}`).join("\n");
+  const text = result.findings.map((finding) => `${finding.title}:${finding.text}`).join("\n");
   // Left as written, a finding could hold a receipt block of its own, and the hub would act on it.
   if (attended) return `${result.summary}\n${text.replaceAll("```", "'''")}`;
   // An open card with the same key takes the new one in, so findings on a new commit need a key of their own.
   const key = `review-${number}-${result.head?.slice(0, 12)}`;
-  const title = result.merged ? "已合并的改动审查发现问题" : "交付前需要修复问题";
+  const title = result.merged
+    ? "При проверке объединенных изменений обнаружены проблемы"
+    : "Проблемы необходимо устранить до поставки.";
   const notice = { key, title, text: [...text].slice(0, 1500).join("") };
   return `${result.summary}\n${receiptBlock({ notice: [notice] })}`;
 }
@@ -47,7 +49,7 @@ export function deliveryReceipt(number: number, result: Delivered, attended: boo
 export function failedReceipt(number: number, failure: Error & Partial<Delivered>, attended: boolean) {
   const why = failure.message.split("\n")[0].replaceAll("```", "'''");
   const { findings, head, merged } = failure;
-  return deliveryReceipt(number, { summary: `没跑成：${why}`, findings, head, merged }, attended);
+  return deliveryReceipt(number, { summary: `FAILED:${why}`, findings, head, merged }, attended);
 }
 
 export function pendingEvents(

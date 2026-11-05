@@ -29,7 +29,7 @@ const note = (n: number, step = "new") => ({
   id: `feedback:${n}:${step}`,
   type: `feedback.${step}`,
   subject: `#${n}`,
-  summary: `第 ${n} 条`,
+  summary: `номер ${n} 条`,
   link: `https://x.test/feedback?id=${n}`,
 });
 const alert = (key: string) => ({ id: `alert:${key}`, type: "alert.raised", subject: key });
@@ -63,17 +63,17 @@ test("work goes only to its agent's worker, once, with the rule and what to read
   clean();
   ingest("ops", alert("probe.public"), at(0));
   const w2 = claim("w2", at(1))!;
-  assert.equal(w2.rule.name, "告警");
+  assert.equal(w2.rule.name, "Тревога");
   assert.equal(w2.agent.use, "codex");
   assert.equal(w2.agent.access, "full");
   assert.deepEqual(
     w2.context.events.map((e) => [e.sourceName, e.type, e.subject]),
     [["运维", "alert.raised", "probe.public"]],
   );
-  assert.ok(w2.askFirst.includes("删数据"));
+  assert.ok(w2.askFirst.includes("Удаление данных"));
   assert.equal(claim("w2", at(1)), null);
   const w1 = claim("w1", at(1))!;
-  assert.equal(w1.rule.name, "告警也记一笔");
+  assert.equal(w1.rule.name, "Тревога также записывается.");
   assert.equal(w1.agent.access, "edit");
   assert.equal(claim("w1", at(1)), null);
   assert.equal(claim("nobody", at(1)), null);
@@ -124,7 +124,7 @@ test("a claim whose answer was lost gets the same work back, under a token that 
     AuthError,
     "the answer that was lost holds nothing",
   );
-  finish(again.run, again.token, { outcome: "done", summary: "好了" }, at(3));
+  finish(again.run, again.token, { outcome: "done", summary: "Хорошо" }, at(3));
   assert.equal(claimNext("w2", "claim-1", at(4)), null, "a claim that finished doesn't come back");
   // Another worker's claim id doesn't reach it.
   ingest("ops", alert("y"), at(5));
@@ -143,7 +143,7 @@ test("events while work waits join it; while it runs they wait for the next run"
   );
   ingest("ops", alert("third"), at(3));
   assert.equal(claim("w2", at(4)), null, "the group already has a run going");
-  finish(first.run, first.token, { outcome: "done", summary: "处理了两条告警" }, at(5));
+  finish(first.run, first.token, { outcome: "done", summary: "Были обработаны два сигнала тревоги." }, at(5));
   const second = claim("w2", at(5))!;
   assert.deepEqual(
     second.context.events.map((e) => e.subject),
@@ -160,7 +160,7 @@ test("a parallel rule runs each subject on its own, no more than its number at o
     [["#1"], ["#2"], ["#3"]],
   );
   assert.equal(claim("w1", at(5)), null, "three at once at most");
-  finish(running[1].run, running[1].token, { outcome: "done", summary: "第 2 条改好了" }, at(6));
+  finish(running[1].run, running[1].token, { outcome: "done", summary: "номер 2 条Исправлено" }, at(6));
   assert.deepEqual(
     claim("w1", at(6))!.context.events.map((e) => e.subject),
     ["#4"],
@@ -186,7 +186,7 @@ test("a subject's events join its waiting run, and wait while it runs; other sub
   );
   ingest("app", note(1, "decided"), at(4));
   assert.equal(claim("w1", at(4)), null, "#1 already has a run going");
-  finish(first.run, first.token, { outcome: "done", summary: "第 1 条好了" }, at(5));
+  finish(first.run, first.token, { outcome: "done", summary: "номер 1 条Хорошо" }, at(5));
   assert.deepEqual(
     claim("w1", at(5))!.context.events.map((e) => [e.type, e.subject]),
     [["feedback.decided", "#1"]],
@@ -206,7 +206,7 @@ test("a failed run comes back later with what came in meanwhile, in its own sess
     other.context.events.map((e) => e.subject),
     ["#2"],
   );
-  finish(job.run, job.token, { outcome: "failed", error: "没加载出工具" }, at(2));
+  finish(job.run, job.token, { outcome: "failed", error: "没Загрузка出Инструменты" }, at(2));
   assert.equal(claim("w1", at(6)), null, "the first retry waits five minutes");
   job = claim("w1", at(7))!;
   assert.equal(job.attempt, 2);
@@ -219,22 +219,25 @@ test("a failed run comes back later with what came in meanwhile, in its own sess
     ],
   );
   assert.deepEqual(
-    all<{ id: number }>("SELECT id FROM runs WHERE rule = '意见' ORDER BY id").map((r) => r.id),
+    all<{ id: number }>("SELECT id FROM runs WHERE rule = 'Мнение' ORDER BY id").map((r) => r.id),
     [job.run, other.run],
   );
-  finish(job.run, job.token, { outcome: "failed", error: "没加载出工具" }, at(8));
+  finish(job.run, job.token, { outcome: "failed", error: "没Загрузка出Инструменты" }, at(8));
   assert.equal(claim("w1", at(17)), null, "the second waits ten");
   job = claim("w1", at(18))!;
   assert.deepEqual(told(), []);
-  finish(job.run, job.token, { outcome: "failed", error: "没加载出工具" }, at(19));
+  finish(job.run, job.token, { outcome: "failed", error: "没Загрузка出Инструменты" }, at(19));
   assert.equal(told().length, 1);
-  assert.match(told()[0].text, /连续 3 次自动处理没跑完（卡在：没加载出工具），10:39 会自动再试/);
+  assert.match(
+    told()[0].text,
+    /подряд 3 попыток не завершены \(этап:没Загрузка出Инструменты\), 10:39 Автоматически повторит попытку/,
+  );
   job = claim("w1", at(39))!;
   finish(job.run, job.token, { outcome: "failed", error: "还是不行" }, at(40));
   assert.equal(told().length, 1);
   assert.equal(claim("w1", at(79)), null, "and so on, doubling");
   job = claim("w1", at(80))!;
-  finish(job.run, job.token, { outcome: "done", summary: "好了" }, at(81));
+  finish(job.run, job.token, { outcome: "done", summary: "Хорошо" }, at(81));
   assert.equal(told()[0].state, "closed", "once it has worked the failing card closes by itself");
 });
 
@@ -251,7 +254,7 @@ test("after ten failures in a row a run stops, tells the owner once, and newer e
     assert.equal(job.run, id);
   }
   ingest("app", note(1, "followup"), at(10 * step - 2));
-  finish(id, job.token, { outcome: "failed", error: "没登录。" }, at(10 * step));
+  finish(id, job.token, { outcome: "failed", error: "没登录. " }, at(10 * step));
   assert.equal(state(id), "cancelled");
   const stopped = one<{ attempts: number; error: string; summary: string; finished_at: string }>(
     "SELECT attempts, error, summary, finished_at FROM runs WHERE id = ?",
@@ -259,7 +262,7 @@ test("after ten failures in a row a run stops, tells the owner once, and newer e
   )!;
   assert.equal(stopped.attempts, 10);
   assert.equal(stopped.error, "没登录");
-  assert.match(stopped.summary, /连续 10 次没跑成/);
+  assert.match(stopped.summary, /подряд 10 неудач; автоматические повторы прекращены/);
   assert.ok(stopped.finished_at);
   const open = told().filter((card) => card.state === "open");
   assert.deepEqual(
@@ -267,7 +270,10 @@ test("after ten failures in a row a run stops, tells the owner once, and newer e
     [`run:${id}:stopped`],
     "the third-failure card has been replaced by this one",
   );
-  assert.match(open[0].text, /连续 10 次.*卡在：没登录.*不再自动重试/);
+  assert.match(
+    open[0].text,
+    /подряд 10 попыток не завершены.*этап:没登录.*Больше никаких автоматических повторных попыток/,
+  );
 
   const next = claim("w1", at(10 * step + 1))!;
   assert.notEqual(next.run, id, "what came in meanwhile is its own run, with a clean count");
@@ -276,7 +282,7 @@ test("after ten failures in a row a run stops, tells the owner once, and newer e
     next.context.events.map((event) => event.type),
     ["feedback.followup"],
   );
-  finish(next.run, next.token, { outcome: "done", summary: "好了" }, at(10 * step + 2));
+  finish(next.run, next.token, { outcome: "done", summary: "Хорошо" }, at(10 * step + 2));
   assert.equal(claim("w1", at(100 * step)), null, "nothing is left to run again by itself");
 });
 
@@ -284,19 +290,23 @@ test("the owner is told what the rule says: needed only with a card, always ever
   clean();
   ingest("app", note(1), at(0));
   let job = claim("w1", at(0))!;
-  finish(job.run, job.token, { outcome: "done", summary: "第 1 条改好了" }, at(1));
+  finish(job.run, job.token, { outcome: "done", summary: "номер 1 条Исправлено" }, at(1));
   assert.deepEqual(told(), []);
   ingest("app", note(2), at(2));
   job = claim("w1", at(2))!;
   finish(
     job.run,
     job.token,
-    { outcome: "done", summary: "代码已上线", notice: [{ title: "要开权限", text: "要你做：开通读抖音数据的权限。" }] },
+    {
+      outcome: "done",
+      summary: "Код доступен онлайн.",
+      notice: [{ title: "требуетсяОткрытый авторитет", text: "требуетсятыделать:开通读抖音数据для权限. " }],
+    },
     at(3),
   );
   assert.deepEqual(
     told().map((m) => [m.title, m.text, m.state]),
-    [["要开权限", "要你做：开通读抖音数据的权限。", "open"]],
+    [["требуетсяОткрытый авторитет", "требуетсятыделать:开通读抖音数据для权限. ", "open"]],
   );
 
   clean();
@@ -307,7 +317,7 @@ test("the owner is told what the rule says: needed only with a card, always ever
   finish(
     quiet.run,
     quiet.token,
-    { outcome: "done", summary: "记下了", notice: [{ title: "看一眼", text: "细节" }] },
+    { outcome: "done", summary: "记下了", notice: [{ title: "看Один眼", text: "细节" }] },
     at(1),
   );
   const cards = all<{ title: string; text: string; state: string; fyi: number; quiet: number }>(
@@ -315,12 +325,12 @@ test("the owner is told what the rule says: needed only with a card, always ever
   );
   assert.deepEqual(
     cards[0],
-    { title: "告警", text: "网站已恢复", state: "closed", fyi: 1, quiet: 0 },
+    { title: "Тревога", text: "网站已恢复", state: "closed", fyi: 1, quiet: 0 },
     "always: told and needs nothing back",
   );
   assert.deepEqual(
     cards[1],
-    { title: "看一眼", text: "细节", state: "open", fyi: 0, quiet: 1 },
+    { title: "看Один眼", text: "细节", state: "open", fyi: 0, quiet: 1 },
     "never: kept for the page, not pushed",
   );
 });
@@ -329,7 +339,7 @@ test("a run with nothing to do is told to nobody and frees its group", () => {
   clean();
   ingest("ops", alert("probe.public"), at(0));
   const job = claim("w2", at(0))!;
-  finish(job.run, job.token, { outcome: "nothing", summary: "已经恢复了" }, at(1));
+  finish(job.run, job.token, { outcome: "nothing", summary: "Уже восстановлено" }, at(1));
   assert.equal(state(job.run), "nothing");
   assert.deepEqual(told(), []);
   ingest("ops", alert("probe.public:2"), at(2));
@@ -348,7 +358,7 @@ test("a result is checked strictly and nothing of a bad one takes effect", () =>
     { outcome: "done", oops: 1 },
     { outcome: "done", summary: "x".repeat(501) },
     { outcome: "failed", error: "x".repeat(501) },
-    { outcome: "done", ask: [{ title: "x", text: "y", options: ["只有一个"] }] },
+    { outcome: "done", ask: [{ title: "x", text: "y", options: ["Существует только один"] }] },
     { outcome: "done", ask: [{ title: "x", text: "y", options: ["a", "b", "c", "d", "e", "f"] }] },
     { outcome: "done", ask: [{ title: "x", text: "y", options: ["a", "b"], recommend: 2 }] },
     { outcome: "done", ask: [{ title: "", text: "y", options: ["a", "b"] }] },
@@ -375,8 +385,8 @@ test("a failed run's receipt tells the owner but changes nothing else: it will r
     job.token,
     {
       outcome: "failed",
-      error: "要批准",
-      notice: [{ title: "要你批准", text: "确认服务器权限" }],
+      error: "требуется批准",
+      notice: [{ title: "требуетсяты批准", text: "确认服务器权限" }],
       ask: [{ title: "x", text: "y", options: ["a", "b"] }],
       later: [{ key: "k", at: "2026-10-18T10:00:00+08:00", about: "y" }],
       events: [{ id: "e", type: "feedback.new" }],
@@ -385,13 +395,17 @@ test("a failed run's receipt tells the owner but changes nothing else: it will r
   );
   assert.deepEqual(
     told().map((m) => m.title),
-    ["要你批准"],
+    ["требуетсяты批准"],
   );
   assert.equal(all("SELECT id FROM timers").length, 0);
   assert.equal(all("SELECT id FROM events").length, 1);
   assert.deepEqual(
     receipt.rejected.map((r) => r.reason),
-    ["没跑成的一轮只能发通知", "没跑成的一轮只能发通知", "没跑成的一轮只能发通知"],
+    [
+      "Неудачный цикл может отправлять только уведомления",
+      "Неудачный цикл может отправлять только уведомления",
+      "Неудачный цикл может отправлять только уведомления",
+    ],
   );
   // The same notice when it fails again isn't told again; a new one is. And a failure with its own notice isn't also told as a failure.
   for (const n of [1, 2]) {
@@ -402,10 +416,10 @@ test("a failed run's receipt tells the owner but changes nothing else: it will r
       job.token,
       {
         outcome: "failed",
-        error: "要批准",
+        error: "требуется批准",
         notice: [
-          { title: "要你批准", text: "确认服务器权限" },
-          ...(n === 2 ? [{ title: "还要", text: "插上手机" }] : []),
+          { title: "требуетсяты批准", text: "确认服务器权限" },
+          ...(n === 2 ? [{ title: "还требуется", text: "插上手机" }] : []),
         ],
       },
       at(70 * n),
@@ -413,7 +427,7 @@ test("a failed run's receipt tells the owner but changes nothing else: it will r
   }
   assert.deepEqual(
     told().map((m) => m.title),
-    ["要你批准", "还要"],
+    ["требуетсяты批准", "还требуется"],
   );
 });
 
@@ -434,20 +448,24 @@ test("a run token works only for its run, and only for that attempt; a replay ge
     "the answer was lost: the same report is taken as already taken",
   );
   assert.equal(state(mine.run), "queued");
-  assert.throws(() => finish(mine.run, mine.token, { outcome: "done", summary: "旧的那次" }, at(3)), Conflict);
+  assert.throws(() => finish(mine.run, mine.token, { outcome: "done", summary: "旧для那次" }, at(3)), Conflict);
   const again = claim("w1", at(8))!;
   assert.equal(again.run, mine.run);
   assert.notEqual(again.token, mine.token);
   assert.throws(
-    () => finish(mine.run, mine.token, { outcome: "done", summary: "旧的那次" }, at(9)),
+    () => finish(mine.run, mine.token, { outcome: "done", summary: "旧для那次" }, at(9)),
     AuthError,
     "an older attempt's token is gone",
   );
-  const success = { outcome: "done", summary: "好了", notice: [{ title: "一张", text: "只发一次" }] };
+  const success = {
+    outcome: "done",
+    summary: "Хорошо",
+    notice: [{ title: "Одна деталь", text: "Отправлять только один раз" }],
+  };
   finish(again.run, again.token, success, at(9));
   assert.equal(finish(again.run, again.token, success, at(10)).duplicate, true);
-  assert.throws(() => finish(again.run, again.token, { outcome: "done", summary: "又一次" }, at(10)), Conflict);
-  assert.equal(told().filter((m) => m.title === "一张").length, 1);
+  assert.throws(() => finish(again.run, again.token, { outcome: "done", summary: "Опять" }, at(10)), Conflict);
+  assert.equal(told().filter((m) => m.title === "Одна деталь").length, 1);
 });
 
 test("work a worker took and stopped reporting while it keeps coming is told once as unknown; a late result still counts", () => {
@@ -463,13 +481,13 @@ test("work a worker took and stopped reporting while it keeps coming is told onc
   sweep(at(9));
   assert.equal(state(job.run), "unknown");
   assert.equal(unknown().length, 1);
-  assert.match(unknown()[0].text, /交给 乙 后超过 5 分钟没有回音，不确定做没做完/);
+  assert.match(unknown()[0].text, /Исполнитель Б не отвечает более 5 минут/);
   heartbeat("w2", [], at(12));
   sweep(at(12));
   assert.equal(unknown().length, 1);
   ingest("ops", alert("other"), at(13));
   assert.ok(claim("w2", at(13)), "an unknown run no longer holds its group");
-  finish(job.run, job.token, { outcome: "done", summary: "其实修好了" }, at(14));
+  finish(job.run, job.token, { outcome: "done", summary: "Фактически исправлено" }, at(14));
   assert.equal(state(job.run), "done");
   assert.equal(unknown()[0].state, "closed", "the card closes once the result is in");
 });
@@ -486,7 +504,9 @@ test("a worker gone with work in hand keeps the work, is told once each time it 
   assert.equal(state(job.run), "claimed", "gone isn't lost: it may still be working");
   assert.deepEqual(
     told().map((m) => m.text),
-    ["w1 已经 11 分钟没连上中台，有 1 件任务在排队或在跑（请看一眼那台电脑是不是关机、休眠或断网了）。"],
+    [
+      "Исполнитель w1 не подключается к сервису 11 мин.; в очереди или в работе: 1. Проверьте питание, спящий режим и сетевое подключение.",
+    ],
   );
   sweep(at(30));
   assert.equal(told().length, 1);
@@ -504,8 +524,8 @@ test("a worker gone with work in hand keeps the work, is told once each time it 
       .map((m) => m.text)
       .sort(),
     [
-      "w1 一直没连上中台，有 1 件任务等了 11 分钟没人接（请看一眼那台电脑有没有开机联网）。",
-      "w2 一直没连上中台，有 1 件任务等了 11 分钟没人接（请看一眼那台电脑有没有开机联网）。",
+      "Исполнитель w1 еще не подключался к сервису; 1 задач ожидают 11 мин. Проверьте, включен ли компьютер и подключен ли он к сети",
+      "Исполнитель w2 еще не подключался к сервису; 1 задач ожидают 11 мин. Проверьте, включен ли компьютер и подключен ли он к сети",
     ],
   );
 });
@@ -536,7 +556,7 @@ test("stopping a run that isn't there, or has already ended, is refused and chan
   assert.throws(() => cancel(9999, at(0)), NotFound);
   ingest("ops", alert("x"), at(0));
   const job = claim("w2", at(0))!;
-  finish(job.run, job.token, { outcome: "done", summary: "好了" }, at(1));
+  finish(job.run, job.token, { outcome: "done", summary: "Хорошо" }, at(1));
   assert.throws(() => cancel(job.run, at(2)), InputError);
   const row = one<{ state: string; cancel_at: string | null }>("SELECT state, cancel_at FROM runs WHERE id = ?", [
     job.run,
@@ -569,7 +589,7 @@ test("a run's usage and session are kept", () => {
   finish(
     job.run,
     job.token,
-    { outcome: "done", summary: "好了", session: "t-1", usage: { input: 100, output: 20, cached: 50, cost: 0.1 } },
+    { outcome: "done", summary: "Хорошо", session: "t-1", usage: { input: 100, output: 20, cached: 50, cost: 0.1 } },
     at(1),
   );
   const row = one<{ session: string; usage: string }>("SELECT session, usage FROM runs WHERE id = ?", [job.run])!;

@@ -20,7 +20,7 @@ const rules = parseRules(
     ...given,
     rules: given.rules
       .filter((rule: { when: { source?: string } }) => rule.when.source)
-      .map((rule: { name: string }) => (rule.name === "意见" ? { ...rule, resume: true } : rule)),
+      .map((rule: { name: string }) => (rule.name === "Мнение" ? { ...rule, resume: true } : rule)),
   }),
   0,
   "UTC",
@@ -127,7 +127,7 @@ test("a session doesn't go over to the agent the rule was moved to, nor back to 
   const it = hub();
   it.round("S");
   const moved = structuredClone(rules);
-  moved.rules.find((rule) => rule.name === "意见")!.to = "a3";
+  moved.rules.find((rule) => rule.name === "Мнение")!.to = "a3";
   it.act("rules", moved);
   assert.equal(it.round(null).session, null);
   it.act("rules", rules);
@@ -138,7 +138,7 @@ test("an answer goes back to the session it was asked in, not a newer one on the
   const it = hub();
   it.message();
   const asking = it.claim();
-  const ask = [{ title: "选哪个", text: "x", options: ["甲", "乙"] }];
+  const ask = [{ title: "选哪", text: "x", options: ["А", "Б"] }];
   it.act("finish", asking.run, asking.token, { outcome: "done", session: "S", ask });
   it.round("T");
   it.act("answer", it.cards().find((card) => card.kind === "ask")!.id, { choice: 0 });
@@ -213,7 +213,7 @@ test("an answer doesn't open a session a round may still be running in, and stil
   const it = hub();
   it.message();
   const asking = it.claim();
-  const ask = [{ title: "选哪个", text: "x", options: ["甲", "乙"] }];
+  const ask = [{ title: "选哪", text: "x", options: ["А", "Б"] }];
   it.act("finish", asking.run, asking.token, { outcome: "done", session: "S", ask });
   it.message();
   const lost = it.claim();
@@ -230,7 +230,7 @@ test("a due check doesn't open a session a round may still be running in, and st
   const it = hub();
   it.message();
   const asking = it.claim();
-  const later = [{ key: "复查", at: "2026-11-05T03:00:00.000Z", about: "看看好了没" }];
+  const later = [{ key: "Обзор", at: "2026-11-05T03:00:00.000Z", about: "看看Хорошо没" }];
   it.act("finish", asking.run, asking.token, { outcome: "done", session: "S", later });
   it.message();
   const lost = it.claim();
@@ -247,11 +247,11 @@ test("a due check doesn't open a session a round may still be running in, and st
 test("without the option, an answer doesn't open a session a round may still be running in either", () => {
   const it = hub();
   const without = structuredClone(rules);
-  delete without.rules.find((rule) => rule.name === "意见")!.resume;
+  delete without.rules.find((rule) => rule.name === "Мнение")!.resume;
   it.act("rules", without);
   it.message();
   const asking = it.claim();
-  const ask = ["一", "二"].map((title) => ({ title, text: "x", options: ["甲", "乙"] }));
+  const ask = ["Один", "Два"].map((title) => ({ title, text: "x", options: ["А", "Б"] }));
   it.act("finish", asking.run, asking.token, { outcome: "done", session: "S", ask });
   const [first, second] = it.cards().filter((card) => card.kind === "ask");
   it.act("answer", first.id, { choice: 0 });
@@ -270,7 +270,7 @@ test("a round still going keeps its session to itself when its rule's group chan
   const going = it.claim();
   assert.equal(going.session, "S");
   const regrouped = structuredClone(rules);
-  regrouped.rules.find((rule) => rule.name === "意见")!.group = "新组";
+  regrouped.rules.find((rule) => rule.name === "Мнение")!.group = "новыйгруппа";
   it.act("rules", regrouped);
   it.message();
   assert.equal(it.claim().session, null);
@@ -284,9 +284,9 @@ test("a round stopped for failing too often starts its thread over, as the card 
     it.pass(61);
     const job = it.claim();
     assert.equal(job.session, "S");
-    it.act("finish", job.run, job.token, { outcome: "failed", error: "太长了", session: "S" });
+    it.act("finish", job.run, job.token, { outcome: "failed", error: "Слишком долго", session: "S" });
   }
-  assert.ok(it.cards().some((card) => card.text.includes("从头开始")));
+  assert.ok(it.cards().some((card) => card.text.includes("начнется с нуля")));
   assert.equal(it.round("T").session, null);
   assert.equal(it.round("U").session, "T");
   it.check();

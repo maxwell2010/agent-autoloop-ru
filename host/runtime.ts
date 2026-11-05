@@ -27,8 +27,8 @@ const masterKey = readFileSync(masterKeyFile, "utf8").trim();
 // void every link and token, so that is left to the owner.
 if (!/^[A-Za-z0-9_-]{43}$/.test(masterKey)) {
   throw new Error(
-    `${masterKeyFile} 坏了（应该是 43 个字符），中台不启动。从备份恢复这个文件；没有备份就删掉它，` +
-      "重启会生成新的，但已经发出的卡片链接和正在跑的轮次会失效。",
+    `${masterKeyFile} Сломано (должно быть 43 символов), сервис не запускается. Восстановите этот файл из резервной копии; удалите его, если у вас нет резервной копии,` +
+      "После перезапуска будет создан новый ключ, но прежние ссылки карточек и токены выполняющихся циклов перестанут действовать.",
   );
 }
 export const environment = {
@@ -39,7 +39,9 @@ export const environment = {
 export const db = new DatabaseSync(join(HOME, "hub.db"));
 db.exec("PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL; PRAGMA busy_timeout=5000;");
 if (db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='events'").get()) {
-  throw new Error("这是旧版数据库；本轮未提供导入工具，请使用新的 AGENT_AUTOLOOP_HOME");
+  throw new Error(
+    "Старая версия базы данных; в этой версии нет инструмента импорта. Используйте новый AGENT_AUTOLOOP_HOME",
+  );
 }
 db.exec(`
   CREATE TABLE IF NOT EXISTS facts(seq INTEGER PRIMARY KEY, fact TEXT NOT NULL);
@@ -152,13 +154,14 @@ export function reloadRules(file = RULES_FILE) {
 }
 
 function unreadable(file: string, error: NodeJS.ErrnoException) {
-  if (error.code === "ENOENT") return `找不到 ${file}，被删掉或移走了？放回去就会接着用`;
-  if (error.code === "EACCES" || error.code === "EPERM") return `没有权限读 ${file}，改回能读的权限就会接着用`;
-  return `读不到 ${file}：${error.code ?? error.message}`;
+  if (error.code === "ENOENT") return `Не найдено ${file}, удален или перемещен? Верните файл, и работа продолжится`;
+  if (error.code === "EACCES" || error.code === "EPERM")
+    return `Нет прав на чтение ${file}, Исправьте права чтения, и работа продолжится`;
+  return `Недоступно для чтения ${file}:${error.code ?? error.message}`;
 }
 
 const initial = reloadRules();
-if (!rules) throw new Error(initial.problem ?? "缺少规则");
+if (!rules) throw new Error(initial.problem ?? "Не заданы правила");
 
 export const ruleNamed = (name: string) => rules.rules.find((rule) => rule.name === name);
 
@@ -241,7 +244,7 @@ export const logAfter = (after = 0, limit = -1) =>
 /** The part of the log that explains one run: its events, cards and receipts, and the rules it ran under. */
 export function why(id: number) {
   const latest = getView();
-  if (!latest.get("runs", id)) throw new NotFound("没有这一轮");
+  if (!latest.get("runs", id)) throw new NotFound("Такого цикла нет");
   const events = query.eventsOf(latest, id).map((event) => event.id);
   const cards = [...rows(latest, "cards", { run_id: id }), ...rows(latest, "cards", { answer_event: events })];
   const sequences = new Set<number>();

@@ -9,19 +9,19 @@ export const environment = { secret: "test-simulation", publicUrl: "https://hub.
 export const rules = parseRules(
   JSON.stringify({
     timezone: "UTC",
-    sources: { app: { name: "来源" } },
+    sources: { app: { name: "источник" } },
     agents: {
-      a: { name: "甲", worker: "w1", use: "command", command: ["true"] },
-      b: { name: "乙", worker: "w2", use: "command", command: ["true"] },
+      a: { name: "А", worker: "w1", use: "command", command: ["true"] },
+      b: { name: "Б", worker: "w2", use: "command", command: ["true"] },
     },
-    channels: { chat: { name: "通道", answerers: ["owner"] } },
+    channels: { chat: { name: "канал", answerers: ["owner"] } },
     rules: [
       {
         name: "one",
         when: { source: "app", types: ["one"] },
         to: "a",
         cwd: "/tmp",
-        prompt: "做事",
+        prompt: "Делать дела",
         group: "shared",
         parallel: 2,
       },
@@ -30,7 +30,7 @@ export const rules = parseRules(
         when: { source: "app", types: ["two"] },
         to: "b",
         cwd: "/tmp",
-        prompt: "做事",
+        prompt: "Делать дела",
         group: "shared",
         parallel: 2,
       },
@@ -86,7 +86,7 @@ export class World {
     this.alarm();
     assert.ok(
       rows(this.view, "timers").every((t) => Date.parse(t.at) > this.now || t.event_id !== null),
-      "故障停止后到期任务没被叫醒",
+      "После восстановления просроченная задача не возобновилась",
     );
     for (const c of rows(this.view, "cards").filter((c) => c.state === "open" && c.kind === "ask"))
       this.call("answer", c.id, { choice: 0 });
@@ -97,7 +97,7 @@ export class World {
     }
     assert.ok(
       rows(this.view, "runs").every((r) => ["done", "nothing", "cancelled"].includes(r.state)),
-      "故障停止后仍没结局",
+      "После восстановления нет результата",
     );
     return rows(this.view, "runs").length;
   }

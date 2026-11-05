@@ -1,12 +1,12 @@
 // The channel a new install starts with: a notification on this computer that there's something to look at. It can't take
 // an answer; `agent-autoloop status` shows the card and `agent-autoloop answer` answers it.
 //   "channels": { "desktop": { "key": "…" } } in config.json
-//   "channels": { "desktop": { "name": "桌面通知" } } in rules.json
+//   "channels": { "desktop": { "name": "Уведомления рабочего стола" } } in rules.json
 import { execFile, spawnSync } from "node:child_process";
 import type { Card, ChannelContext } from "../../host/channels.ts";
 
-const WORDS = "运行 agent-autoloop status 查看";
-const TITLE = "Agent 问你一个问题";
+const WORDS = "Выполните agent-autoloop status Просмотреть";
+const TITLE = "Agent Задать вопрос";
 const APPLESCRIPT = ["on run argv", "display notification (item 2 of argv) with title (item 1 of argv)", "end run"];
 
 /**
@@ -41,7 +41,7 @@ export default async function desktop({ hub, log, signal }: ChannelContext) {
     try {
       ({ card } = await hub.nextCard(50));
     } catch (error) {
-      log(`连不上中台：${error}`);
+      log(`Не удается подключиться к сервису:${error}`);
       await new Promise((resolve) => setTimeout(resolve, 10_000));
       continue;
     }
@@ -59,7 +59,7 @@ export default async function desktop({ hub, log, signal }: ChannelContext) {
       await show(card.title);
       await hub.delivered(card.id, card.version, `shown-${card.id}`);
     } catch (error) {
-      log(`卡片 ${card.id} 的桌面通知没发出：${error}`);
+      log(`карточка ${card.id} не удалось отправить уведомление рабочего стола:${error}`);
       await hub.failed(card.id, card.version, String(error)).catch(() => {});
     }
   }

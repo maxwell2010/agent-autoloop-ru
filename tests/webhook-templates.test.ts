@@ -8,7 +8,7 @@ import webhook from "../plugins/webhook/channel.ts";
 import { payload } from "../plugins/webhook/templates.ts";
 test("templates reject text beyond vendor limits instead of losing the answer link", () => {
   assert.throws(() => payload("discord", "x".repeat(2001)));
-  assert.throws(() => payload("wecom", "字".repeat(683)));
+  assert.throws(() => payload("wecom", "\u5b57".repeat(683)));
   assert.throws(() => payload("missing", "text"));
 });
 const card: any = {
@@ -16,7 +16,7 @@ const card: any = {
   version: 1,
   ref: null,
   state: "open",
-  title: "要处理",
+  title: "требуетсяОбработка",
   text: "正文 @everyone <@U1>",
   options: [],
   link: "https://example.com/c/a",
@@ -34,7 +34,7 @@ for (const platform of ["dingtalk", "wecom", "slack", "discord"])
             ? "ok"
             : platform === "discord"
               ? ""
-              : JSON.stringify({ errcode: received.length === 1 ? 0 : 310000, errmsg: "拒绝" }),
+              : JSON.stringify({ errcode: received.length === 1 ? 0 : 310000, errmsg: "Отклонить" }),
         );
       });
     });

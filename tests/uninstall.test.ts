@@ -124,7 +124,7 @@ test("the install it makes is what it takes away: service stopped, links gone, a
   linksAreGone(it);
   ownThingsAreThere(it);
   assert.ok(existsSync(join(it.hub, "config.json")), "nobody was there to say yes, so the data stays");
-  assert.match(done.stdout, /规则、密钥和记录还留在/);
+  assert.match(done.stdout, /Правила, ключи и записи остаются/);
   assert.ok(!existsSync(it.app), "the installed code is removed");
 });
 
@@ -216,7 +216,7 @@ test("with nothing installed it still finishes, and says so plainly", () => {
   const it = install();
   const nothing = it.run(["uninstall", "--yes"], { AGENT_AUTOLOOP_HOME: join(it.person, "never") });
   assert.equal(nothing.status, 0, nothing.stderr);
-  assert.match(nothing.stdout, /卸载好了/);
+  assert.match(nothing.stdout, /Удалено/);
 });
 
 test("without a terminal uninstall asks for --yes before removing anything", () => {

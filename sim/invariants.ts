@@ -29,26 +29,31 @@ export function replay(log: Fact[]): Snapshot {
 }
 export function invariants(current: View, log: Fact[], before?: Snapshot) {
   const view = snapshot(current);
-  assert.deepEqual(view, replay(log), "日志重放记录不同");
-  for (const [index, fact] of log.entries()) assert.equal(fact.seq, index + 1, "日志序号不连续");
+  assert.deepEqual(view, replay(log), "Повтор журнала дал другое состояние");
+  for (const [index, fact] of log.entries())
+    assert.equal(fact.seq, index + 1, "журналномер вариантанарушена последовательность");
   const events = rows(view, "events");
   const runs = rows(view, "runs");
   const cards = rows(view, "cards");
   const links = rows(view, "run_events");
-  assert.equal(new Set(events.map((e) => JSON.stringify([e.source, e.key]))).size, events.length, "重复事件");
+  assert.equal(new Set(events.map((e) => JSON.stringify([e.source, e.key]))).size, events.length, "Повторное событие");
   const held = runs.filter((r) => r.state === "claimed");
-  assert.equal(new Set(held.map((r) => JSON.stringify([r.grp, r.lane]))).size, held.length, "同一事项同时领了两轮");
+  assert.equal(
+    new Set(held.map((r) => JSON.stringify([r.grp, r.lane]))).size,
+    held.length,
+    "Одно и то же дело рассматривалось в двух инстанциях одновременно",
+  );
   for (const group of new Set(held.map((r) => r.grp)))
     assert.ok(
       held.filter((r) => r.grp === group).length <=
         (view.tables.config.rules.value.rules.find((r: Row) => r.group === group)?.parallel ?? 1),
-      "超出同组并发数",
+      "Превышена параллельность группы",
     );
   for (const e of events)
     for (const rule of JSON.parse(e.routed))
       assert.ok(
         links.some((l) => l.event_id === e.id && view.tables.runs[l.run_id]?.rule === rule),
-        "已收事件丢了派发关系",
+        "Полученное событие утратило свою связь распределения.",
       );
   for (const card of cards)
     if (card.answer_event !== null) {
@@ -62,11 +67,12 @@ export function invariants(current: View, log: Fact[], before?: Snapshot) {
               view.tables.runs[l.run_id]?.rule === card.rule &&
               view.tables.runs[l.run_id]?.lane === card.lane,
           ),
-          "回答没叫醒原事项",
+          "Ответ не разбудил первоначальный вопрос",
         );
     }
   if (before) {
-    for (const e of rows(before, "events")) assert.deepEqual(view.tables.events[e.id], e, "已落盘事件被改了或丢了");
+    for (const e of rows(before, "events"))
+      assert.deepEqual(view.tables.events[e.id], e, "Размещенное событие было изменено или потеряно");
     for (const c of rows(before, "cards"))
       if (c.answer_event !== null) {
         const now = view.tables.cards[c.id];
@@ -76,8 +82,13 @@ export function invariants(current: View, log: Fact[], before?: Snapshot) {
       }
     for (const r of rows(before, "runs"))
       if (["done", "nothing", "cancelled"].includes(r.state))
-        assert.deepEqual(view.tables.runs[r.id], r, "完成的回执再次生效");
+        assert.deepEqual(view.tables.runs[r.id], r, "Завершенная структурированный результат снова вступает в силу.");
   }
-  if (log.length) assert.deepEqual(view.tables.due, deadlines(current, log.at(-1)!.at), "到期表和重算的不一样");
+  if (log.length)
+    assert.deepEqual(
+      view.tables.due,
+      deadlines(current, log.at(-1)!.at),
+      "Таблица сроков годности отличается от пересчитанной",
+    );
   return view;
 }

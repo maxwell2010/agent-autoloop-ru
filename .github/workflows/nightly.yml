@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       commit:
-        description: 要检查的提交，不填就是这个分支最新的
+        description: Проверяемый коммит; по умолчанию последний в этой ветке
         required: false
   pull_request:
     paths:

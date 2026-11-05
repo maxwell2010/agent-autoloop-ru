@@ -9,12 +9,12 @@ import { findProgram, tail, type Adapter, type Reading, type Usage } from "../..
 import { addUsage } from "../../protocol/validate.ts";
 
 const PRESET = { read: "read-only", edit: "workspace-write", full: "danger-full-access" };
-const NOT_FINISHED = "DSH 没跑完这一轮";
-const NO_RESULT = "DSH 没有完成并留下实际结果";
+const NOT_FINISHED = "DSH Цикл не завершен";
+const NO_RESULT = "DSH не завершил работу и не оставил результата";
 const WHY_NOT: Record<string, string> = {
-  aborted: "这一轮被中止了",
-  blocked: "这一轮被卡住了，没有完成",
-  "max-tokens": "这一轮用完了输出上限",
+  aborted: "Этот цикл прерван",
+  blocked: "Этот цикл заблокирован и не завершен",
+  "max-tokens": "Достигнут предел вывода этого цикла",
 };
 
 /** dsh reports each step's tokens as inputTokens / outputTokens / cacheReadTokens. */
@@ -73,7 +73,7 @@ export default {
       else reading.error = WHY_NOT[kind ?? ""] ?? NOT_FINISHED;
     } else if (code !== null) {
       const why = failed || tail(stderr);
-      if (code !== 0) reading.error = `退出码 ${code}：${why || "没留下原因"}`;
+      if (code !== 0) reading.error = `код выхода ${code}:${why || "Причина отсутствует"}`;
       else reading.error = why || NO_RESULT;
     }
     return reading;
@@ -87,10 +87,10 @@ export default {
       });
       // The options this needs came in 0.2.2, and npm's `latest` is behind that for now.
       if (!help.includes("--approval-policy"))
-        return "DSH 版本太旧，要 0.2.2 或更新：npm install -g @deepseek-ai/dsh@next --allow-scripts=koffi,node-pty,@deepseek-ai/dsh-subprocess-local";
+        return "DSH Версия слишком старая; требуется 0.2.2 Или обновить:npm install -g @deepseek-ai/dsh@next --allow-scripts=koffi,node-pty,@deepseek-ai/dsh-subprocess-local";
       return null;
     } catch (error) {
-      return `DSH 用不了：运行 dsh headless "hi" 看看（${(error as Error).message.split("\n")[0]}）`;
+      return `DSH недоступно; выполните dsh headless "hi" Проверьте (${(error as Error).message.split("\n")[0]})`;
     }
   },
 } satisfies Adapter;

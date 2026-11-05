@@ -234,7 +234,7 @@ export function createWorker({
       contextFile: path.join(entry.dir, "context.json"),
       folder: entry.dir,
     };
-    if (!existsSync(cwd)) throw new Error(`在 ${cwd} 启动不了：这个目录不存在`);
+    if (!existsSync(cwd)) throw new Error(`Невозможно запустить в ${cwd}: каталог не существует`);
     const argv = adapter.command(turn);
     const { out, err, exit, command } = files(entry);
     // Login shells don't agree on how a command reads its arguments (fish has no $0 or $@), so the command waits in a
@@ -306,13 +306,13 @@ export function createWorker({
     const { out, err } = files(entry);
     try {
       const reading = adapter.read(snapshot(out), code, code === null ? "" : snapshot(err));
-      if (!reading) throw new Error("它什么也没给");
+      if (!reading) throw new Error("Это ничего не дает");
       return reading;
     } catch (error) {
       sayOnce(`run ${entry.run}: couldn't read its output: ${error}`);
       // One still going goes on, since this says nothing about how it's doing. Whether one that has ended got started isn't
       // known, and starting it again in a new session could do its work twice: it stays in this one.
-      return { started: true, error: `读不懂这个 Agent 的输出：${(error as Error).message ?? error}` };
+      return { started: true, error: `Не удалось разобрать вывод агента: ${(error as Error).message ?? error}` };
     }
   }
 
@@ -324,8 +324,8 @@ export function createWorker({
       usage: entry.usage,
     });
     const notice: Notice = {
-      title: `「${entry.job.rule.name}」的回执读不懂`,
-      text: `这一轮按第一行算结束了，但它要中台做的事没有生效（${problem}）。原文在 ${files(original).out}，留 ${KEEP_DAYS} 天。`,
+      title: `«${entry.job.rule.name}»структурированный результат не читается`,
+      text: `Цикл завершен согласно первой строке, но дополнительные действия сервиса не применены (${problem}). Оригинальный текст находится в ${files(original).out}, хранится ${KEEP_DAYS} дней.`,
     };
     endWith(entry, { ...result, notice: [...(result.notice ?? []), notice] });
   }
@@ -339,15 +339,16 @@ export function createWorker({
     if (seen.session) entry.session = seen.session;
     const usage = entry.usage && { usage: entry.usage };
     const known = session && { session };
-    if (entry.why === "cancel") return endWith(entry, { outcome: "cancelled", summary: "已停止", ...known, ...usage });
+    if (entry.why === "cancel")
+      return endWith(entry, { outcome: "cancelled", summary: "Остановлено", ...known, ...usage });
     if (entry.why === "timeout") {
       const minutes = entry.job.agent.timeout ?? TIMEOUT_MINUTES;
-      const error = `超过 ${minutes} 分钟还没结束，已停止`;
+      const error = `Превышен лимит ${minutes} мин.; выполнение остановлено`;
       if (entry.repairs) return discardReceipt(entry, adapter, error);
       return endWith(entry, { outcome: "failed", error, ...known, ...usage });
     }
     if (seen.error !== undefined || !seen.text?.trim()) {
-      const error = seen.error || "没留下结果";
+      const error = seen.error || "Результат отсутствует";
       if (entry.repairs) return discardReceipt(entry, adapter, error);
       // The conversation may not be there to go on in, or something else has it open: this go carries on in a new one.
       // Not once the turn has started: a new one would do its work again. The hub tries again later, in this one.
@@ -496,7 +497,7 @@ export function createWorker({
     if (!unreachable?.length || told || tries >= TELL_TRIES || moment - unreachableSince < UNREACHABLE) return;
     tries += 1;
     const minutes = Math.floor((moment - unreachableSince) / 60_000);
-    const text = `${name} 连不上中台已经 ${minutes} 分钟了，派给它的活暂时没人接；它还在一直重试。`;
+    const text = `${name} Не удается подключиться к сервису уже ${minutes} Прошли минуты, а порученное ему задание никто не взял на себя; он все еще пытается снова.`;
     const [program, ...args] = unreachable;
     try {
       execFileSync(

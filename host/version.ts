@@ -37,5 +37,5 @@ export function versionName(root = ROOT) {
 }
 
 export function versionLine(root = ROOT) {
-  return `agent-autoloop ${releaseOf(root) ?? "未发布"}（提交 ${commitOf(root).slice(0, 12)}）`;
+  return `agent-autoloop ${releaseOf(root) ?? "Не опубликовано"}(Коммит ${commitOf(root).slice(0, 12)})`;
 }

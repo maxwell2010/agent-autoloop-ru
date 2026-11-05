@@ -50,7 +50,7 @@ test("conformance rejects an implementation that opens the wrong door", async ()
       conformance("http://wrong", { keys, eventType: "feedback.new", answerer: "me" }, async () =>
         Response.json({ ok: true }),
       ),
-    /状态码/,
+    /код статуса/,
   );
 });
 test("the same isolated hub can be checked twice", async () => {
@@ -76,7 +76,7 @@ test("conformance checks another actual run rather than a missing id", async () 
     }
     return res;
   };
-  await assert.rejects(() => conformance(base, config, wrong), /状态码/);
+  await assert.rejects(() => conformance(base, config, wrong), /код статуса/);
 });
 for (const mode of ["empty", "keys"] as const)
   test(`conformance rejects ${mode} in the fact stream`, async () => {

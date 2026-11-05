@@ -26,8 +26,8 @@ async function copyDatabase(from: string, to: string) {
 /** Writes a backup folder nothing exists in yet: the database first, then whichever of the files are there. */
 export async function backup(home: string, target: string) {
   const database = path.join(home, DB);
-  if (!existsSync(database)) throw new Error("还没装好：先运行 agent-autoloop init");
-  if (existsSync(target) && readdirSync(target).length) throw new Error(`备份目录不是空的：${target}`);
+  if (!existsSync(database)) throw new Error("Сначала выполните настройку: agent-autoloop init");
+  if (existsSync(target) && readdirSync(target).length) throw new Error(`Каталог резервных копий не пуст:${target}`);
   mkdirSync(target, { recursive: true, mode: 0o700 });
   // A mode only reaches a folder this makes, and an empty one may already be there.
   chmodSync(target, 0o700);
@@ -46,8 +46,9 @@ export async function backup(home: string, target: string) {
 function readableBackup(source: string) {
   const database = path.join(source, DB);
   const key = path.join(source, KEY);
-  if (!existsSync(database) || !existsSync(key)) throw new Error(`这个目录不像备份：缺 ${DB} 或 ${KEY}`);
-  if (!KEY_SHAPE.test(readFileSync(key, "utf8").trim())) throw new Error("备份里的 master.key 坏了");
+  if (!existsSync(database) || !existsSync(key))
+    throw new Error(`Каталог не похож на резервную копию; отсутствует ${DB} или ${KEY}`);
+  if (!KEY_SHAPE.test(readFileSync(key, "utf8").trim())) throw new Error("В резервной копии master.key Сломанный");
   let result: unknown;
   try {
     const check = new DatabaseSync(database);
@@ -58,7 +59,7 @@ function readableBackup(source: string) {
       check.close();
     }
   } catch {}
-  if (result !== "ok") throw new Error("备份里的 hub.db 读不出来");
+  if (result !== "ok") throw new Error("В резервной копии hub.db Не удалось прочитать");
 }
 
 /** Whether anything has the database open, a hub between requests included: only then is this lock out of reach. */
@@ -79,7 +80,9 @@ function inUse(database: string) {
 /** Puts a backup back in place, keeping what it replaced. */
 export async function restore(home: string, source: string) {
   if (inUse(path.join(home, DB))) {
-    throw new Error("中台还在跑：先停掉它（例如 agent-autoloop service remove，或手动停服务），再恢复");
+    throw new Error(
+      "Сервис все еще работает: сначала остановите ее (например, agent-autoloop service remove, Или вручную остановить службу) и затем восстановить ее",
+    );
   }
   readableBackup(source);
   mkdirSync(home, { recursive: true, mode: 0o700 });

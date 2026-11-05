@@ -41,7 +41,7 @@ for (const [name, config] of [
     writeFileSync(file, original);
     const result = join(home);
     assert.equal(result.status, 1, result.stderr);
-    assert.match(result.stderr, /已经配置过了/);
+    assert.match(result.stderr, /Уже настроено/);
     assert.equal(readFileSync(file, "utf8"), original);
     assert.ok(existsSync(file));
   });

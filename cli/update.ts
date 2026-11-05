@@ -3,12 +3,12 @@
 // fail on a copy it had moved.
 import { spawnSync } from "node:child_process";
 
-const PUBLISHED = "https://github.com/KKKKhazix/agent-autoloop.git";
+const PUBLISHED = "https://github.com/maxwell2010/agent-autoloop-ru.git";
 const RELEASE = /refs\/tags\/(v(\d+)\.(\d+)\.(\d+))$/;
 
 function git(root: string, ...args: string[]) {
   const done = spawnSync("git", ["-C", root, ...args], { encoding: "utf8" });
-  if (done.status !== 0) throw new Error(`git ${args[0]} 没成功：${done.stderr?.trim() || done.error?.message}`);
+  if (done.status !== 0) throw new Error(`git ${args[0]} не выполнено:${done.stderr?.trim() || done.error?.message}`);
   return done.stdout.trim();
 }
 

@@ -56,14 +56,14 @@ function logStream(after: number, signal: AbortSignal, key: string) {
 
 async function adaptWebhook(source: string, headers: Headers, body: string) {
   const adapter = hub.rules.sources[source]?.adapter;
-  if (!adapter || !/^[a-z][a-z0-9-]*$/.test(adapter)) throw new NotFound("这个来源不收 Webhook");
+  if (!adapter || !/^[a-z][a-z0-9-]*$/.test(adapter)) throw new NotFound("Этот источник не принимает Webhook");
   const translate = await loadPlugin(adapter, "source");
   const secret = process.env[`AGENT_AUTOLOOP_SECRET_${source.toUpperCase().replaceAll("-", "_")}`] ?? "";
   try {
     const events = translate({ headers: Object.fromEntries(headers), body, secret });
     return Array.isArray(events) ? events : [];
   } catch {
-    throw new AuthError("验签没过");
+    throw new AuthError("Проверка подписи не пройдена");
   }
 }
 

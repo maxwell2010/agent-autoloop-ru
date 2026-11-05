@@ -75,9 +75,9 @@ test("the latest time due is found across a long gap without walking every minut
 });
 
 test("common schedules read in plain words", () => {
-  assert.equal(describeCron("0 18 * * *"), "每天 18:00");
-  assert.equal(describeCron("0 6 * * 0"), "每周日 06:00");
-  assert.equal(describeCron("0 9 * * 1-5"), "工作日 09:00");
-  assert.equal(describeCron("0 4 1 * *"), "每月 1 日 04:00");
+  assert.equal(describeCron("0 18 * * *"), "каждый день 18:00");
+  assert.equal(describeCron("0 6 * * 0"), "каждую неделю в воскресенье 06:00");
+  assert.equal(describeCron("0 9 * * 1-5"), "рабочие дни 09:00");
+  assert.equal(describeCron("0 4 1 * *"), "каждый месяц 1 день 04:00");
   assert.equal(describeCron("*/5 * * * *"), "*/5 * * * *");
 });

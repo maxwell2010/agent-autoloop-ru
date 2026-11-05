@@ -8,7 +8,7 @@ import { checkSchema } from "../protocol/schema.ts";
 import { parseEvent, parseResult } from "../protocol/validate.ts";
 
 test("notice receipts accept an optional boolean fyi and keep all other boundaries", () => {
-  const notice = { title: "已设好", text: "每天九点检查", key: "daily-check" };
+  const notice = { title: "Уже установлено", text: "каждый день九点Проверить", key: "daily-check" };
   for (const item of [notice, { ...notice, fyi: true }, { ...notice, fyi: false }]) {
     const result = { outcome: "done", notice: [item] };
     assert.deepEqual(parseResult(result), result);
@@ -30,18 +30,18 @@ test("notice receipts accept an optional boolean fyi and keep all other boundari
   const tooMany = { outcome: "done", notice: Array(11).fill({ ...notice, fyi: true }) };
   assert.throws(() => parseResult(tooMany), /notice/);
   assert.ok(checkSchema("result", tooMany).length);
-  const ask = { outcome: "done", ask: [{ ...notice, options: ["继续", "暂停"], fyi: true }] };
+  const ask = { outcome: "done", ask: [{ ...notice, options: ["Продолжить", "暂停"], fyi: true }] };
   assert.throws(() => parseResult(ask), /ask/);
   assert.ok(checkSchema("result", ask).length);
 });
 
 test("a receipt's key with half a character in it is refused: stored and looked up differently, it could never match", () => {
   const key = "half-\ud83d-key";
-  const words = { title: "看一眼", text: "这个" };
-  assert.throws(() => parseResult({ outcome: "done", ask: [{ ...words, options: ["甲", "乙"], key }] }), /ask/);
+  const words = { title: "看Один眼", text: "этот" };
+  assert.throws(() => parseResult({ outcome: "done", ask: [{ ...words, options: ["А", "Б"], key }] }), /ask/);
   assert.throws(() => parseResult({ outcome: "done", notice: [{ ...words, key }] }), /notice/);
   assert.throws(() => parseResult({ outcome: "done", later: [{ key, cancel: true }] }), /later/);
-  const whole = { outcome: "done", notice: [{ ...words, key: "一条-😀" }] };
+  const whole = { outcome: "done", notice: [{ ...words, key: "Один-😀" }] };
   assert.deepEqual(parseResult(whole), whole);
 });
 
@@ -65,9 +65,9 @@ test("wire schemas agree with event and receipt boundaries", () => {
     { outcome: "done" },
     { outcome: "done", events: [{ id: "x", type: "app.changed" }] },
     { outcome: "unknown" },
-    { outcome: "done", ask: [{ title: "选", text: "内容", options: ["一"] }] },
-    { outcome: "done", ask: [{ title: "选", text: "内容", options: ["一", "二"], recommend: 2 }] },
-    { outcome: "done", later: [{ key: "k", at: "badZ", about: "后来" }] },
+    { outcome: "done", ask: [{ title: "选", text: "Содержание", options: ["Один"] }] },
+    { outcome: "done", ask: [{ title: "选", text: "Содержание", options: ["Один", "Два"], recommend: 2 }] },
+    { outcome: "done", later: [{ key: "k", at: "badZ", about: "Позже" }] },
   ]) {
     let accepted = true;
     try {
@@ -83,7 +83,7 @@ test("schema checks reject inherited names and incomplete tasks or question card
   assert.ok(checkSchema("event", { id: "x", type: "one", constructor: "unexpected" }).length);
   assert.ok(checkSchema("job", { run: 1, token: "t", rule: {}, agent: {}, context: {} }).length);
   assert.ok(
-    checkSchema("card", { id: 1, version: 1, kind: "ask", state: "open", title: "选", text: "内容", options: [] })
+    checkSchema("card", { id: 1, version: 1, kind: "ask", state: "open", title: "选", text: "Содержание", options: [] })
       .length,
   );
   assert.throws(() => checkSchema("constructor", {}));
@@ -108,11 +108,14 @@ test("usage must be an object of finite nonnegative amounts", () => {
 
 test("timer timestamps are real calendar dates in the documented ISO format", () => {
   for (const at of ["2000Z", "2026-02-30T10:00:00Z", "2026-01-01T25:00:00Z"]) {
-    const result = { outcome: "done", later: [{ key: "later", at, about: "再查" }] };
+    const result = { outcome: "done", later: [{ key: "later", at, about: "Проверьте еще раз" }] };
     assert.throws(() => parseResult(result));
     assert.ok(checkSchema("result", result).length);
   }
-  const result = { outcome: "done", later: [{ key: "later", at: "2028-02-29T10:00:00+08:00", about: "再查" }] };
+  const result = {
+    outcome: "done",
+    later: [{ key: "later", at: "2028-02-29T10:00:00+08:00", about: "Проверьте еще раз" }],
+  };
   assert.doesNotThrow(() => parseResult(result));
   assert.deepEqual(checkSchema("result", result), []);
 });

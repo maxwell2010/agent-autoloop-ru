@@ -6,7 +6,7 @@ type Turn = { prompt: string; session: string; resume: string | null; access: "r
 export default {
   command(turn: Turn) {
     const session = turn.resume ?? turn.session;
-    const text = `收到了 ${turn.prompt.length} 字的提示词，权限 ${turn.access}。这是 hello-agent，什么也没做。`;
+    const text = `Получено ${turn.prompt.length} слово подсказка слово, авторитет ${turn.access}. Это hello-agent, Ничего не делается.`;
     return ["echo", JSON.stringify({ session, text })];
   },
   // Called while it runs too, with code null. A throw here counts the turn as not having got through, so anything it can't read is an error it returns.
@@ -14,12 +14,12 @@ export default {
   // tried again in its session, while one that never got going carries on in a new session.
   read(stdout: string, code: number | null, stderr: string) {
     if (code === null) return {};
-    if (code !== 0) return { error: stderr.trim() || `退出码 ${code}` };
+    if (code !== 0) return { error: stderr.trim() || `код выхода ${code}` };
     try {
       const { session, text } = JSON.parse(stdout);
       return { session, text };
     } catch {
-      return { error: `读不懂它的输出：${stdout.slice(0, 200)}` };
+      return { error: `Не удалось разобрать вывод:${stdout.slice(0, 200)}` };
     }
   },
   // With a link the worker reports the session as soon as the run starts. A session it reads has to be one `resume` can go on

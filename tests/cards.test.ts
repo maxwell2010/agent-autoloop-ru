@@ -38,11 +38,11 @@ const clean = () => {
 const note = (n: number, step = "new") => ({ id: `feedback:${n}:${step}`, type: `feedback.${step}`, subject: `#${n}` });
 const claim = (worker: string, now: number) => claimNext(worker, `c${Math.random()}`, now);
 const question = {
-  title: "要不要删旧表",
-  text: "占了 10 GB。",
-  options: ["删", "留着"],
+  title: "требуется不требуетсяУдалить旧表",
+  text: "Занято 10 GB. ",
+  options: ["Удалить", "хранится着"],
   recommend: 1,
-  about: "表名 old_x，删之前先备份",
+  about: "表имя old_x, Резервное копирование перед удалением",
   key: "drop-old-x",
 };
 const card = (id: number) => one<any>("SELECT * FROM cards WHERE id = ?", [id])!;
@@ -52,7 +52,12 @@ function asked(n: number, now = at(0)) {
   ingest("app", note(n), now);
   const job = claim("w1", now)!;
   started(job.run, job.token, { session: `s-${n}`, link: `app://s-${n}` }, now);
-  finish(job.run, job.token, { outcome: "done", summary: "等你决定", session: `s-${n}`, ask: [question] }, now);
+  finish(
+    job.run,
+    job.token,
+    { outcome: "done", summary: "Требуется ваше решение", session: `s-${n}`, ask: [question] },
+    now,
+  );
   return { job, id: one<{ id: number }>("SELECT id FROM cards WHERE run_id = ?", [job.run])!.id };
 }
 
@@ -76,7 +81,7 @@ test("the same question isn't asked twice while it's open, and can be asked agai
   let job = claim("w1", at(1))!;
   finish(job.run, job.token, { outcome: "done", ask: [question] }, at(2));
   assert.equal(all("SELECT id FROM cards").length, 1);
-  resolve(id, "不用了", "owner", at(3));
+  resolve(id, "Нет необходимости", "owner", at(3));
   ingest("app", note(1, "decided"), at(4));
   job = claim("w1", at(4))!;
   finish(job.run, job.token, { outcome: "done", ask: [question] }, at(5));
@@ -93,7 +98,7 @@ test("an answer wakes the thread that asked, in its session, with what it left f
   assert.equal(answer(id, { choice: 1, by: "me" }, at(2)).changed, true);
   assert.equal(card(id).state, "decided");
   const job = claim("w1", at(2))!;
-  assert.equal(job.rule.name, "意见");
+  assert.equal(job.rule.name, "Мнение");
   assert.equal(job.session, "s-1");
   assert.deepEqual(
     job.context.events.map((e) => [e.type, e.subject]),
@@ -101,11 +106,11 @@ test("an answer wakes the thread that asked, in its session, with what it left f
   );
   assert.deepEqual(
     job.context.answers.map((a) => [a.card, a.title, a.options[a.choice!], a.about, a.by]),
-    [[id, "要不要删旧表", "留着", "表名 old_x，删之前先备份", "me"]],
+    [[id, "требуется不требуетсяУдалить旧表", "хранится着", "表имя old_x, Резервное копирование перед удалением", "me"]],
   );
   const before = card(id).version;
-  finish(job.run, job.token, { outcome: "done", summary: "留着，已记下" }, at(3));
-  assert.deepEqual([card(id).state, card(id).result], ["done", "留着，已记下"]);
+  finish(job.run, job.token, { outcome: "done", summary: "хранится着, 已记下" }, at(3));
+  assert.deepEqual([card(id).state, card(id).result], ["done", "хранится着, 已记下"]);
   assert.equal(card(id).version, before + 1);
 });
 
@@ -136,8 +141,8 @@ test("a failed run that carried an answer keeps it for the retry; the card stays
   assert.equal(card(id).state, "decided");
   job = claim("w1", at(8))!;
   assert.equal(job.context.answers[0].card, id);
-  finish(job.run, job.token, { outcome: "nothing", summary: "已经有人删了" }, at(9));
-  assert.deepEqual([card(id).state, card(id).result], ["done", "已经有人删了"]);
+  finish(job.run, job.token, { outcome: "nothing", summary: "Кто-то удалил это" }, at(9));
+  assert.deepEqual([card(id).state, card(id).result], ["done", "Кто-то удалил это"]);
 });
 
 test("a failed run merged with what came in meanwhile goes on in the asker's session, whichever of them carried it", () => {
@@ -183,11 +188,11 @@ test("a stopped run's receipt takes no effect, and the answer it carried isn't s
     job.token,
     {
       outcome: "cancelled",
-      summary: "已停止",
-      ask: [{ title: "还要问", text: "x", options: ["a", "b"] }],
-      notice: [{ title: "还要说", text: "x" }],
+      summary: "Остановлено",
+      ask: [{ title: "还требуется问", text: "x", options: ["a", "b"] }],
+      notice: [{ title: "还требуется说", text: "x" }],
       resolve: [{ card: other, reason: "顺手结了" }],
-      later: [{ key: "k", at: new Date(at(60)).toISOString(), about: "再看" }],
+      later: [{ key: "k", at: new Date(at(60)).toISOString(), about: "Посмотрите еще раз" }],
     },
     at(3),
   );
@@ -203,7 +208,7 @@ test("an answer to a card whose rule has gone still counts, and wakes nobody", (
   const { id } = asked(1);
   underRules(
     (rules) => {
-      rules.rules = rules.rules.filter((rule: { name: string }) => rule.name !== "意见");
+      rules.rules = rules.rules.filter((rule: { name: string }) => rule.name !== "Мнение");
     },
     () => {
       assert.deepEqual(answer(id, { choice: 1, by: "me" }, at(1)), { changed: true, state: "decided" });
@@ -267,7 +272,7 @@ test("an answer counts once; a choice must exist; only one of answering and reso
   assert.equal(card(id).state, "decided");
 
   const other = asked(2, at(4)).id;
-  assert.equal(resolve(other, "问题自己好了", "owner", at(5)), true);
+  assert.equal(resolve(other, "проблема自己Хорошо", "owner", at(5)), true);
   assert.equal(
     answer(other, { choice: 0, by: "me" }, at(6)).changed,
     false,
@@ -280,27 +285,27 @@ test("a free-text answer counts as an answer", () => {
   clean();
   const { id } = asked(1);
   assert.throws(() => answer(id, { text: " ", by: "me" }, at(1)), InputError);
-  answer(id, { text: "都不选，改成归档", by: "me" }, at(1));
+  answer(id, { text: "都不选, 改成Архив", by: "me" }, at(1));
   const job = claim("w1", at(1))!;
-  assert.deepEqual([job.context.answers[0].choice, job.context.answers[0].text], [null, "都不选，改成归档"]);
+  assert.deepEqual([job.context.answers[0].choice, job.context.answers[0].text], [null, "都不选, 改成Архив"]);
 });
 
 test("an answer is bounded by the protocol's limits, and a refused one changes nothing", () => {
   clean();
-  const words = (n: number) => "可".repeat(n);
+  const words = (n: number) => "\u53ef".repeat(n);
   const first = asked(1);
   const before = getView().seq;
   assert.throws(() => answer(first.id, { text: words(4001), by: "me" }, at(1)), InputError);
-  assert.throws(() => answer(first.id, { text: "好的", by: "名".repeat(501) }, at(1)), InputError);
-  assert.throws(() => answer(first.id, { text: "好的", by: 42 } as any, at(1)), InputError);
-  assert.throws(() => answer(first.id, { text: "好的", ref: "r".repeat(501) }, at(1)), InputError);
-  assert.throws(() => answer(first.id, { text: "好的", ref: 42 } as any, at(1)), InputError);
+  assert.throws(() => answer(first.id, { text: "Хорошо", by: "\u540d".repeat(501) }, at(1)), InputError);
+  assert.throws(() => answer(first.id, { text: "Хорошо", by: 42 } as any, at(1)), InputError);
+  assert.throws(() => answer(first.id, { text: "Хорошо", ref: "r".repeat(501) }, at(1)), InputError);
+  assert.throws(() => answer(first.id, { text: "Хорошо", ref: 42 } as any, at(1)), InputError);
   assert.throws(() => answer(first.id, { text: 42 } as any, at(1)), InputError);
   assert.equal(getView().seq, before, "a refused answer writes no fact");
   assert.equal(card(first.id).state, "open", "a refused answer leaves the card open");
   // The limit itself is allowed.
   assert.equal(
-    answer(first.id, { text: words(4000), by: "名".repeat(500), ref: "r".repeat(500) }, at(1)).changed,
+    answer(first.id, { text: words(4000), by: "\u540d".repeat(500), ref: "r".repeat(500) }, at(1)).changed,
     true,
   );
   // A channel's own message id has the same bound.
@@ -334,8 +339,8 @@ test("a run may resolve only what it was given to check, and a bad id doesn't sp
     const w2 = claim("w2", at(0))!;
     const w1 = claim("w1", at(0))!;
     finish(w1.run, w1.token, { outcome: "nothing" }, at(0));
-    finish(w2.run, w2.token, { outcome: "done", notice: [{ title: "别的组", text: "x" }] }, at(0));
-    return one<{ id: number }>("SELECT id FROM cards WHERE title = '别的组'")!.id;
+    finish(w2.run, w2.token, { outcome: "done", notice: [{ title: "Другие группы", text: "x" }] }, at(0));
+    return one<{ id: number }>("SELECT id FROM cards WHERE title = 'Другие группы'")!.id;
   })();
   ingest("app", note(2), at(1));
   const job = claim("w1", at(2))!;
@@ -348,10 +353,10 @@ test("a run may resolve only what it was given to check, and a bad id doesn't sp
     job.token,
     {
       outcome: "done",
-      summary: "好了",
+      summary: "Хорошо",
       resolve: [
-        { card: mine, reason: "原站恢复了" },
-        { card: elsewhere, reason: "越界" },
+        { card: mine, reason: "Исходный сайт восстановлен." },
+        { card: elsewhere, reason: "выходит за допустимые пределы" },
         { card: 9999, reason: "没这张" },
       ],
     },
@@ -363,10 +368,10 @@ test("a run may resolve only what it was given to check, and a bad id doesn't sp
   );
   assert.deepEqual(
     receipt.rejected.map((r) => r.reason),
-    ["不在本轮核对范围", "不在本轮核对范围"],
+    ["Не входит в рамки данного цикла проверки.", "Не входит в рамки данного цикла проверки."],
   );
   assert.equal(one<{ state: string }>("SELECT state FROM runs WHERE id = ?", [job.run])!.state, "done");
-  assert.deepEqual([card(mine).state, card(mine).result], ["closed", "原站恢复了"]);
+  assert.deepEqual([card(mine).state, card(mine).result], ["closed", "Исходный сайт восстановлен."]);
   assert.equal(card(elsewhere).state, "open");
   assert.equal(all("SELECT id FROM events WHERE type = 'card.answered'").length, 0, "resolving wakes nobody");
 });
@@ -377,7 +382,7 @@ test("a card made after this run was claimed isn't in its scope", () => {
   const job = claim("w1", at(0))!;
   ingest("app", note(2), at(1));
   const other = claim("w1", at(1))!;
-  finish(other.run, other.token, { outcome: "done", notice: [{ title: "后来的", text: "x" }] }, at(2));
+  finish(other.run, other.token, { outcome: "done", notice: [{ title: "Позже", text: "x" }] }, at(2));
   const later = one<{ id: number }>("SELECT id FROM cards")!.id;
   const receipt = finish(job.run, job.token, { outcome: "done", resolve: [{ card: later, reason: "看过了" }] }, at(3));
   assert.deepEqual(
@@ -392,7 +397,7 @@ test("each channel gets each card once, and an update when its state changes; a 
   const first = nextCard("chat", at(1))!;
   assert.deepEqual(
     [first.id, first.version, first.ref, first.kind, first.state, first.options, first.recommend],
-    [id, 1, null, "ask", "open", ["删", "留着"], 1],
+    [id, 1, null, "ask", "open", ["Удалить", "хранится着"], 1],
   );
   assert.equal(nextCard("chat", at(1)), null, "out with the channel for a minute");
   // The report was lost: it comes round again under the same message identity.
@@ -419,13 +424,13 @@ test("each channel gets each card once, and an update when its state changes; a 
 
 test("a failed send is retried further and further apart, then given up within the hour; a channel that never came hasn't failed", () => {
   clean();
-  const id = tell("source:app:k", "应用", "周报来了", at(0)).card;
+  const id = tell("source:app:k", "Применение", "Еженедельный отчет здесь.", at(0)).card;
   const tries = [0, 1, 3, 7, 15, 25, 35, 45, 55];
   for (const minute of tries) {
     const given = nextCard("chat", at(minute));
     assert.equal(given?.id, id, `try at ${minute}`);
     assert.equal(nextCard("chat", at(minute)), null);
-    failed("chat", id, given!.version, "飞书挂了", at(minute));
+    failed("chat", id, given!.version, "FeishuПовесить трубку", at(minute));
   }
   assert.equal(nextCard("chat", at(56)), null);
   assert.equal(nextCard("chat", at(500)), null, "given up");
@@ -439,14 +444,14 @@ test("a failed send is retried further and further apart, then given up within t
   delivered("chat", asking, v1.version, "om_1", at(0));
   answer(asking, { choice: 0, by: "me", channel: "chat", ref: "om_1" }, at(1));
   const v2 = nextCard("chat", at(1))!;
-  failed("chat", asking, 1, "旧的失败", at(1));
+  failed("chat", asking, 1, "旧для失败", at(1));
   assert.ok(nextCard("chat", at(1)), "a stale failure doesn't delay the update");
   assert.equal(v2.version, 2);
 });
 
 test("a channel that takes a card and never reports stops getting it: after the last try, or once an hour is up", () => {
   clean();
-  const id = tell("source:app:k", "应用", "周报", at(0)).card;
+  const id = tell("source:app:k", "Применение", "Еженедельный отчет", at(0)).card;
   for (const minute of [0, 1, 2, 3, 4, 5, 6, 7, 8])
     assert.equal(nextCard("chat", at(minute))?.id, id, `try at ${minute}`);
   assert.equal(nextCard("chat", at(9)), null, "that was the last try");
@@ -467,8 +472,8 @@ test("closing a card that isn't there, or reporting a failure on one the channel
   clean();
   const { id } = asked(1);
   assert.throws(() => resolve(9999, "没这张", "owner", at(1)), NotFound);
-  assert.throws(() => failed("chat", 9999, 1, "挂了", at(1)), NotFound);
-  assert.throws(() => failed("chat", id, 1, "挂了", at(1)), NotFound, "it was never handed to this channel");
+  assert.throws(() => failed("chat", 9999, 1, "Повесить трубку", at(1)), NotFound);
+  assert.throws(() => failed("chat", id, 1, "Повесить трубку", at(1)), NotFound, "it was never handed to this channel");
   assert.deepEqual(all("SELECT card_id FROM deliveries"), []);
 });
 
@@ -476,7 +481,7 @@ test("a card closed while its first message is on the way still gets that messag
   clean();
   const { id } = asked(1);
   const out = nextCard("chat", at(1))!;
-  resolve(id, "问题自己好了", "owner", at(2));
+  resolve(id, "проблема自己Хорошо", "owner", at(2));
   delivered("chat", id, out.version, "om_1", at(3));
   const update = nextCard("chat", at(3))!;
   assert.deepEqual([update.id, update.state, update.ref, update.version], [id, "closed", "om_1", 2]);
@@ -488,7 +493,12 @@ test("a notice's handling note must be words, and one that isn't changes nothing
   clean();
   ingest("app", note(1), at(0));
   const job = claim("w1", at(0))!;
-  finish(job.run, job.token, { outcome: "done", notice: [{ title: "要你做一件事", text: "开权限" }] }, at(0));
+  finish(
+    job.run,
+    job.token,
+    { outcome: "done", notice: [{ title: "требуетсятыделатьОдин件事", text: "Открытый авторитет" }] },
+    at(0),
+  );
   const { id } = one<{ id: number }>("SELECT id FROM cards")!;
   assert.throws(() => answer(id, { text: 42 } as any, at(1)), InputError);
   assert.equal(card(id).state, "open");
@@ -497,16 +507,16 @@ test("a notice's handling note must be words, and one that isn't changes nothing
 test("a card solved before it was sent doesn't bother the owner; a closed one already sent is updated", () => {
   clean();
   const { id } = asked(1);
-  resolve(id, "问题自己好了", "owner", at(1));
+  resolve(id, "проблема自己Хорошо", "owner", at(1));
   assert.equal(nextCard("chat", at(2)), null);
   const sent = asked(2, at(3)).id;
   const v1 = nextCard("chat", at(3))!;
   delivered("chat", sent, v1.version, "om_2", at(3));
-  resolve(sent, "问题自己好了", "owner", at(4));
+  resolve(sent, "проблема自己Хорошо", "owner", at(4));
   const update = nextCard("chat", at(4))!;
   assert.deepEqual(
     [update.id, update.state, update.ref, update.options, update.result],
-    [sent, "closed", "om_2", ["删", "留着"], "问题自己好了"],
+    [sent, "closed", "om_2", ["Удалить", "хранится着"], "проблема自己Хорошо"],
   );
 });
 
@@ -514,10 +524,15 @@ test("a notice has one button that closes it; something only to know has none an
   clean();
   ingest("app", note(1), at(0));
   const job = claim("w1", at(0))!;
-  finish(job.run, job.token, { outcome: "done", notice: [{ title: "要你做一件事", text: "开权限" }] }, at(0));
+  finish(
+    job.run,
+    job.token,
+    { outcome: "done", notice: [{ title: "требуетсятыделатьОдин件事", text: "Открытый авторитет" }] },
+    at(0),
+  );
   const id = one<{ id: number }>("SELECT id FROM cards")!.id;
   const shown = nextCard("chat", at(0))!;
-  assert.deepEqual([shown.kind, shown.options], ["notice", ["已处理"]]);
+  assert.deepEqual([shown.kind, shown.options], ["notice", ["Обработано"]]);
   delivered("chat", id, shown.version, "om_1", at(0));
   assert.equal(answer(id, { choice: 0, by: "me", channel: "chat", ref: "om_1" }, at(1)).changed, true);
   assert.equal(card(id).state, "closed");
@@ -525,17 +540,22 @@ test("a notice has one button that closes it; something only to know has none an
   const closed = nextCard("chat", at(1))!;
   assert.deepEqual([closed.id, closed.state, closed.options], [id, "closed", []], "its message loses the button");
   delivered("chat", id, closed.version, "om_1", at(1));
-  const fyi = tell("source:app:k2", "应用", "只是告诉你", at(2)).card;
+  const fyi = tell("source:app:k2", "Применение", "Просто скажу тебе", at(2)).card;
   const given = nextCard("chat", at(2))!;
   assert.deepEqual([given.id, given.state, given.options], [fyi, "closed", []]);
 });
 
 test("a card closed as it's made says when, or whatever reads the state takes it for still waiting", () => {
   clean();
-  tell("source:app:k3", "应用", "只是告诉你", at(1));
+  tell("source:app:k3", "Применение", "Просто скажу тебе", at(1));
   ingest("app", note(1), at(2));
   const job = claim("w1", at(2))!;
-  finish(job.run, job.token, { outcome: "done", notice: [{ title: "已设好", text: "每天九点", fyi: true }] }, at(3));
+  finish(
+    job.run,
+    job.token,
+    { outcome: "done", notice: [{ title: "Уже установлено", text: "каждый день九点", fyi: true }] },
+    at(3),
+  );
   const [told, receipt] = [nextCard("chat", at(3))!, nextCard("chat", at(3))!];
   assert.deepEqual([told.state, told.closedAt], ["closed", new Date(at(1)).toISOString()]);
   assert.deepEqual([receipt.state, receipt.closedAt], ["closed", new Date(at(3)).toISOString()]);
@@ -552,9 +572,9 @@ test("receipt FYIs arrive as grey closed cards; ordinary notices and questions s
       outcome: "done",
       ask: [question],
       notice: [
-        { title: "已设好", text: "每天九点检查", fyi: true },
-        { title: "要开权限", text: "请开通权限" },
-        { title: "要查告警", text: "请查看日志", fyi: false },
+        { title: "Уже установлено", text: "каждый день九点Проверить", fyi: true },
+        { title: "требуетсяОткрытый авторитет", text: "请开通权限" },
+        { title: "требуется查Тревога", text: "请Просмотретьдень志", fyi: false },
       ],
     },
     at(1),
@@ -564,16 +584,16 @@ test("receipt FYIs arrive as grey closed cards; ordinary notices and questions s
     shown.map((c) => [c.title, c.state, c.options]),
     [
       [question.title, "open", question.options],
-      ["已设好", "closed", []],
-      ["要开权限", "open", ["已处理"]],
-      ["要查告警", "open", ["已处理"]],
+      ["Уже установлено", "closed", []],
+      ["требуетсяОткрытый авторитет", "open", ["Обработано"]],
+      ["требуется查Тревога", "open", ["Обработано"]],
     ],
   );
   for (const c of shown) delivered("chat", c.id, c.version, `om_${c.id}`, at(1));
   const fyi = shown[1];
   const grey = render(fyi);
   assert.equal(grey.header.template, "grey");
-  assert.doesNotMatch(JSON.stringify(grey), /callback|已处理/);
+  assert.doesNotMatch(JSON.stringify(grey), /callback|Обработано/);
   for (const c of [shown[0], shown[2], shown[3]]) {
     assert.equal(render(c).header.template, "blue");
     assert.match(JSON.stringify(render(c)), /callback/);
@@ -592,7 +612,7 @@ test("receipt FYIs arrive as grey closed cards; ordinary notices and questions s
   assert.deepEqual(next.context.answers, []);
   assert.deepEqual(
     next.context.open.map((c) => c.title),
-    [question.title, "要开权限", "要查告警"],
+    [question.title, "требуетсяОткрытый авторитет", "требуется查Тревога"],
   );
   finish(
     next.run,
@@ -621,7 +641,7 @@ test("a run that keeps failing says its FYI once, and the third failure in a row
     finish(
       job.run,
       job.token,
-      { outcome: "failed", error: "boom", notice: [{ title: "已试过", text: "还在试", key: "retry", fyi: true }] },
+      { outcome: "failed", error: "boom", notice: [{ title: "Пробовал", text: "还В试", key: "retry", fyi: true }] },
       at(attempt * 120 + 1),
     );
   }
@@ -639,21 +659,21 @@ test("why shows receipt FYIs while keeping hub end notices and empty closures hi
     job.token,
     {
       outcome: "done",
-      summary: "本轮检查完成",
+      summary: "本цикл.Проверка завершена",
       notice: [
-        { title: "仅告知的结果", text: "已经完成核实", fyi: true },
-        { title: "仍需处理的结果", text: "请检查日志" },
+        { title: "Только обоснованные результаты", text: "Проверка завершена", fyi: true },
+        { title: "Результаты, которые еще необходимо обработать", text: "请Проверитьдень志" },
       ],
     },
     at(1),
   );
   const output = formatWhy(job.run, why(job.run));
-  assert.match(output, /通知：仅告知的结果/);
-  assert.match(output, /已经完成核实/);
-  assert.match(output, /通知：仍需处理的结果/);
-  assert.match(output, /结束：本轮检查完成/);
-  assert.doesNotMatch(output, /通知：告警|结案：仅告知的结果/);
-  assert.equal(output.split("本轮检查完成").length - 1, 1);
+  assert.match(output, /Уведомление:Только обоснованные результаты/);
+  assert.match(output, /Проверка завершена/);
+  assert.match(output, /Уведомление:Результаты, которые еще необходимо обработать/);
+  assert.match(output, /Завершено:本цикл.Проверка завершена/);
+  assert.doesNotMatch(output, /Уведомление:Тревога|Закрыто:Только обоснованные результаты/);
+  assert.equal(output.split("本цикл.Проверка завершена").length - 1, 1);
 });
 
 test("a receipt FYI is deliverable for one day even though it starts closed", () => {
@@ -665,7 +685,7 @@ test("a receipt FYI is deliverable for one day even though it starts closed", ()
     job.token,
     {
       outcome: "done",
-      notice: [{ title: "已上线", text: "可以使用了", fyi: true }],
+      notice: [{ title: "Уже онлайн", text: "Готов к использованию", fyi: true }],
     },
     at(0),
   );
@@ -684,7 +704,7 @@ for (const fyi of [undefined, false, true]) {
       {
         outcome: "done",
         ask: [question],
-        notice: [{ title: "记下了", text: "留作记录", ...(fyi !== undefined && { fyi }) }],
+        notice: [{ title: "记下了", text: "хранится作记录", ...(fyi !== undefined && { fyi }) }],
       },
       at(0),
     );
@@ -697,25 +717,25 @@ for (const fyi of [undefined, false, true]) {
 
 test("what only needed saying is told once per key; given up, it can be told again", () => {
   clean();
-  const first = tell("source:app:k", "应用", "周报", at(0));
+  const first = tell("source:app:k", "Применение", "Еженедельный отчет", at(0));
   assert.equal(first.duplicate, false);
-  assert.equal(tell("source:app:k", "应用", "周报", at(1)).duplicate, true);
+  assert.equal(tell("source:app:k", "Применение", "Еженедельный отчет", at(1)).duplicate, true);
   for (const minute of [0, 1, 3, 7, 15, 25, 35, 45, 55])
-    failed("chat", first.card, nextCard("chat", at(minute))!.version, "挂了", at(minute));
+    failed("chat", first.card, nextCard("chat", at(minute))!.version, "Повесить трубку", at(minute));
   assert.equal(nextCard("chat", at(60)), null);
-  const again = tell("source:app:k", "应用", "周报（更新）", at(70));
+  const again = tell("source:app:k", "Применение", "Еженедельный отчет (обновление)", at(70));
   assert.deepEqual(
     [again.card, again.duplicate],
     [first.card, false],
     "told again, it goes out at once with its new words",
   );
-  assert.equal(nextCard("chat", at(70))?.text, "周报（更新）");
-  assert.equal(nextCard("plain", at(70))?.text, "周报（更新）");
+  assert.equal(nextCard("chat", at(70))?.text, "Еженедельный отчет (обновление)");
+  assert.equal(nextCard("plain", at(70))?.text, "Еженедельный отчет (обновление)");
 });
 
 test("what only needed saying goes stale: a channel coming back after a day doesn't get yesterday's", () => {
   clean();
-  tell("source:app:k", "应用", "昨天的事", at(0));
+  tell("source:app:k", "Применение", "昨днейдля事", at(0));
   assert.equal(nextCard("chat", at(25 * 60)), null);
   const { id } = asked(1, at(25 * 60));
   assert.equal(nextCard("chat", at(25 * 60))?.id, id, "what still needs an answer does");

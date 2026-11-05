@@ -9,20 +9,20 @@ const clock = (zone: string) =>
   ({ timeZone: zone, month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }) as const;
 const when = (rule: Rule, rules: Rules, now: number) =>
   eventRule(rule)
-    ? `来源 ${rule.when.source} · ${rule.when.types.join("、")}`
-    : `定时 ${describeCron(cronOf(rule))}（下次 ${new Date(
+    ? `источник ${rule.when.source} · ${rule.when.types.join(", ")}`
+    : `Выбор времени ${describeCron(cronOf(rule))}(В следующий раз ${new Date(
         nextRun(parseCron(cronOf(rule))!, now, rules.timezone)!,
-      ).toLocaleString("zh-CN", clock(rules.timezone))}）`;
+      ).toLocaleString("ru-RU", clock(rules.timezone))})`;
 
 function details(rule: Rule, rules: Rules, now: number) {
   const parts = [when(rule, rules, now), `→ ${rule.to}`, rule.cwd];
-  if (rule.parallel) parts.push(`并发 ${rule.parallel}`);
-  if (rule.resume) parts.push("接着上一轮的会话");
-  if (rule.group !== rule.name) parts.push(`组 ${rule.group}`);
-  if (rule.tell !== "needed") parts.push(`通知 ${rule.tell}`);
-  if (rule.skill) parts.push("有 Skill");
-  if (rule.prompt) parts.push("有 Prompt");
-  if (rule.emits) parts.push(`可发 ${rule.emits.source} ${rule.emits.types.join("、")}`);
+  if (rule.parallel) parts.push(`Параллелизм ${rule.parallel}`);
+  if (rule.resume) parts.push("продолжить сессию прошлого цикла");
+  if (rule.group !== rule.name) parts.push(`группа ${rule.group}`);
+  if (rule.tell !== "needed") parts.push(`Уведомление ${rule.tell}`);
+  if (rule.skill) parts.push("есть Skill");
+  if (rule.prompt) parts.push("есть Prompt");
+  if (rule.emits) parts.push(`Можно отправить ${rule.emits.source} ${rule.emits.types.join(", ")}`);
   return parts.join(" · ");
 }
 
@@ -30,26 +30,27 @@ function details(rule: Rule, rules: Rules, now: number) {
 export function explainRules(text: string, now = Date.now(), zone = localZone()): string[] {
   const rules = parseRules(text, now, zone);
   const lines = [
-    `时区 ${rules.timezone}；先问你：${rules.askFirst.join("、")}；${rules.rules.length} 条规则`,
-    `来源：${Object.entries(rules.sources)
-      .map(([id, source]) => `${id}（${source.name}）`)
-      .join("、")}`,
-    `Agent：${Object.entries(rules.agents)
-      .map(([id, agent]) => `${id}（${agent.name}，${agent.worker}，权限 ${agent.access}）`)
-      .join("、")}`,
+    `часовой пояс ${rules.timezone};Сначала позвольте мне спросить вас:${rules.askFirst.join(", ")};${rules.rules.length} правил`,
+    `Источник:${Object.entries(rules.sources)
+      .map(([id, source]) => `${id}(${source.name})`)
+      .join(", ")}`,
+    `Agent:${Object.entries(rules.agents)
+      .map(([id, agent]) => `${id}(${agent.name}, ${agent.worker}, права ${agent.access})`)
+      .join(", ")}`,
   ];
   if (Object.keys(rules.channels).length)
     lines.push(
-      `通道：${Object.entries(rules.channels)
+      `Каналы:${Object.entries(rules.channels)
         .map(([id, channel]) => {
-          const answerers = channel.answerers?.length ? `，回答人 ${channel.answerers.join("、")}` : "";
-          return `${id}（${channel.name}${answerers}${channel.links ? "，带链接" : ""}）`;
+          const answerers = channel.answerers?.length ? `, Ответчик ${channel.answerers.join(", ")}` : "";
+          return `${id}(${channel.name}${answerers}${channel.links ? ", Со ссылкой" : ""})`;
         })
-        .join("、")}`,
+        .join(", ")}`,
     );
-  lines.push("规则：");
-  for (const rule of rules.rules) lines.push(`  ${rule.name}：${details(rule, rules, now)}`);
-  for (const task of rules.elsewhere) lines.push(`  ${task.name}：在别处（${task.where}）${describeCron(task.cron)}`);
+  lines.push("Правила:");
+  for (const rule of rules.rules) lines.push(`  ${rule.name}:${details(rule, rules, now)}`);
+  for (const task of rules.elsewhere)
+    lines.push(`  ${task.name}:В другом месте (${task.where})${describeCron(task.cron)}`);
   return lines;
 }
 
@@ -63,16 +64,16 @@ export function previewEvent(
 ): string[] {
   const rules = parseRules(text, now, zone);
   const parsed = parseEvent(event);
-  const lines = [`事件：${source} ${parsed.type}${parsed.subject ? ` ${parsed.subject}` : ""}`];
-  if (!rules.sources[source]) lines.push(`来源 ${source} 没有登记在 rules.json 的 sources 里`);
+  const lines = [`Событие:${source} ${parsed.type}${parsed.subject ? ` ${parsed.subject}` : ""}`];
+  if (!rules.sources[source]) lines.push(`источник ${source} не зарегистрировано в rules.json для sources внутри`);
   const matched = rules.rules.filter(
     (rule) => eventRule(rule) && rule.when.source === source && typeMatches(rule.when.types, parsed.type),
   );
   if (!matched.length) {
-    lines.push("没有规则接这条事件；真发出去会记成「没有规则接的事件」。");
+    lines.push("Для события нет правила; при отправке оно будет записано как событие без назначения.");
     return lines;
   }
-  lines.push("会派给：");
+  lines.push("Будет назначено:");
   for (const rule of matched) lines.push(`  ${rule.name} → ${rule.to} · ${rule.cwd}`);
   return lines;
 }

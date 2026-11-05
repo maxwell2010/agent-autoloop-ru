@@ -12,7 +12,7 @@ const ordinary = {
 
 test("a systemd service keeps its existing structure and zero-argument use", () => {
   const service = unit(ordinary);
-  assert.ok(service.includes("Description=Agent 自动化中台"));
+  assert.ok(service.includes("Description=Agent Сервис автоматизации"));
   assert.ok(service.includes('Environment="AGENT_AUTOLOOP_HOME=/home/me/.agent-autoloop"'));
   assert.ok(
     service.includes(
@@ -26,13 +26,13 @@ test("a systemd service keeps its existing structure and zero-argument use", () 
 
 test("systemd receives spaces and special path characters literally", () => {
   const service = unit({
-    home: String.raw`/home/用户/Agent Work/$cache%/say"hi"/back\slash`,
+    home: String.raw`/home/использовать户/Agent Work/$cache%/say"hi"/back\slash`,
     executable: String.raw`/opt/Node $cache%/say"hi"/node`,
     program: String.raw`/opt/Agent Work/$repo%/back\slash/agent.ts`,
   });
   assert.ok(
     service.includes(
-      String.raw`Environment="AGENT_AUTOLOOP_HOME=/home/用户/Agent Work/$cache%%/say\"hi\"/back\\slash"`,
+      String.raw`Environment="AGENT_AUTOLOOP_HOME=/home/использовать户/Agent Work/$cache%%/say\"hi\"/back\\slash"`,
     ),
   );
   assert.ok(
@@ -44,6 +44,6 @@ test("systemd receives spaces and special path characters literally", () => {
 
 test("systemd service values reject control characters", () => {
   for (const control of ["\0", "\t", "\n", "\r", "\u007f"]) {
-    assert.throws(() => unit({ ...ordinary, home: `/home/me/before${control}after` }), /控制字符/);
+    assert.throws(() => unit({ ...ordinary, home: `/home/me/before${control}after` }), /управляющие символы/);
   }
 });

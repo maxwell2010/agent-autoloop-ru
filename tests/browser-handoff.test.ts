@@ -20,8 +20,8 @@ function fixture() {
     `#!${process.execPath}
 import fs from 'node:fs';
 fs.appendFileSync('called.jsonl', JSON.stringify(process.argv.slice(2))+'\\n');
-console.log('页面证据：示例页面标题');
-console.log('[Codex 会话 ID：${session}]');
+console.log('页面证据:示例页面标题');
+console.log('[Codex Разговор ID:${session}]');
 process.exit(Number(process.env.BRIDGE_EXIT || 0));
 `,
     { mode: 0o755 },
@@ -29,8 +29,8 @@ process.exit(Number(process.env.BRIDGE_EXIT || 0));
   const task = {
     command: [command],
     url: "https://example.com/页面",
-    checks: ["核实标题", "保留字面量 $(touch SHOULD_NOT_EXIST) 和 `echo x`"],
-    allowedActions: ["只读页面", "仅关闭本次新建的标签"],
+    checks: ["核实标题", "Резервные литералы $(touch SHOULD_NOT_EXIST) и `echo x`"],
+    allowedActions: ["Страница только для чтения", "Закройте только этот вновь созданный ярлык."],
   };
   writeFileSync(join(dir, "browser.json"), JSON.stringify(task));
   const run = (args: string[] = [], code = 0) =>

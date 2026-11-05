@@ -1,7 +1,7 @@
 #!/bin/sh
-# Installs Agent 自动化中台: a clone in ~/.agent-autoloop/app, with nothing to build and nothing else to install.
+# Installs Agent Сервис автоматизации: a clone in ~/.agent-autoloop/app, with nothing to build and nothing else to install.
 set -e
-PUBLISHED=https://github.com/KKKKhazix/agent-autoloop.git
+PUBLISHED=https://github.com/maxwell2010/agent-autoloop-ru.git
 REPO="${AGENT_AUTOLOOP_REPO:-$PUBLISHED}"
 ROOT="${AGENT_AUTOLOOP_HOME:-$HOME/.agent-autoloop}"
 APP="$ROOT/app"
@@ -10,21 +10,22 @@ PROGRAM="$APP/bin/agent-autoloop.ts"
 need_node() {
   echo "$1"
   cat <<'END'
-用 Homebrew 的话，node@24 装好后默认不在 PATH 上，这三行都要运行（用 bash 就把 ~/.zshrc 换成 ~/.bashrc）：
+При использовании Homebrew добавьте node@24 в PATH. Выполните все три команды
+(для bash замените ~/.zshrc на ~/.bashrc):
   brew install node@24
   echo "export PATH=\"$(brew --prefix node@24)/bin:\$PATH\"" >> ~/.zshrc
   source ~/.zshrc
-用 nvm 的话：
+При использовании nvm:
   nvm install 24
   nvm alias default 24
-装好后再运行一遍这个安装命令。
+После установки повторите команду установки.
 END
   exit 1
 }
 
-command -v git >/dev/null || { echo "需要 git。"; exit 1; }
-command -v node >/dev/null || need_node "需要 Node.js 24 或更新，这台电脑上没找到。"
-node -e 'process.exit(Number(process.versions.node.split(".")[0]) >= 24 ? 0 : 1)' || need_node "需要 Node.js 24 或更新，现在是 $(node -v)。"
+command -v git >/dev/null || { echo "Требуется Git."; exit 1; }
+command -v node >/dev/null || need_node "Требуется Node.js 24 или новее; Node на этом компьютере не найден."
+node -e 'process.exit(Number(process.versions.node.split(".")[0]) >= 24 ? 0 : 1)' || need_node "Требуется Node.js 24 или новее, сейчас установлен $(node -v)."
 
 mkdir -p -m 700 "$ROOT"
 chmod 700 "$ROOT"
@@ -43,7 +44,7 @@ if [ -d "$APP/.git" ]; then
   from=$(git -C "$APP" config --get remote.origin.url || true)
   # Going on would say it had updated, and leave this copy following where it came from.
   if [ -n "${AGENT_AUTOLOOP_REPO:-}" ] && [ "$(place "$from")" != "$(place "$REPO")" ]; then
-    echo "这里已经装过了，来源是 $from，不是 $REPO。要换来源，先运行 agent-autoloop uninstall 再装。"
+    echo "Программа уже установлена из $from，Нет $REPO。Для смены источника сначала выполните agent-autoloop uninstall Переустановите."
     exit 1
   fi
 fi
@@ -87,7 +88,7 @@ IFS=$usual_ifs
 if [ "${1:-}" = join ]; then
   "$PROGRAM" "$@"
 elif [ -f "$ROOT/config.json" ]; then
-  echo "更新好了。"
+  echo "Обновление завершено."
   case " $* " in *" --no-service "*) ;; *) "$PROGRAM" service install ;; esac
 else
   "$PROGRAM" init "$@"
@@ -95,7 +96,7 @@ fi
 
 if ! [ "$(command -v agent-autoloop)" -ef "$PROGRAM" ]; then
   echo
-  echo "直接打 agent-autoloop 运行不了这个程序：PATH 上没有能放它的目录，或者排在前面的是另一个同名程序。"
-  echo "要写完整路径 $PROGRAM，或者把这一行加进 ~/.zshrc（用 bash 就是 ~/.bashrc）："
+  echo "выполнить напрямую agent-autoloop Не удалось запустить программу:PATH Не существует каталога, в котором ее можно поместить, или первой указана другая программа с таким же именем."
+  echo "Укажите полный путь $PROGRAM，Или добавьте эту строку в ~/.zshrc（использовать bash То есть ~/.bashrc）："
   echo "  alias agent-autoloop='$PROGRAM'"
 fi

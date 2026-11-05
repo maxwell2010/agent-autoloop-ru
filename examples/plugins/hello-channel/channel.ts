@@ -1,7 +1,7 @@
 // The smallest channel: every card becomes a few lines in a file. Someone answers with `agent-autoloop answer`, because a file
 // has no buttons.
-//   rules.json:  "channels": { "cards": { "name": "文件" } }
-//   config.json: "channels": { "cards": { "use": "hello-channel", "key": "…", "file": "/绝对路径/cards.txt" } }
+//   rules.json:  "channels": { "cards": { "name": "файл" } }
+//   config.json: "channels": { "cards": { "use": "hello-channel", "key": "…", "file": "/абсолютный путь/cards.txt" } }
 import { appendFileSync } from "node:fs";
 
 type Card = { id: number; version: number; ref: string | null; title: string; text: string; options: string[] };

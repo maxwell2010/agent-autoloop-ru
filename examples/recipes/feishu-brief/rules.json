@@ -1,20 +1,28 @@
 {
   "timezone": "Asia/Shanghai",
-  "askFirst": ["删数据", "停服", "花钱", "对外发消息", "改产品方向", "新建或轮换密钥", "修改权限"],
+  "askFirst": [
+    "Удаление данных",
+    "Остановка сервиса",
+    "расходы",
+    "Отправка сообщений во внешний мир",
+    "менять направление продукта",
+    "Создать или обновить ключ",
+    "Изменение полномочий"
+  ],
   "sources": {
     "feishu-brief": {
-      "name": "飞书摘要资料"
+      "name": "Данные для сводки Feishu"
     }
   },
   "agents": {
     "brief-collector": {
-      "name": "飞书资料读取",
+      "name": "Чтение данных Feishu",
       "worker": "my-computer",
       "use": "command",
       "command": ["node", "{cwd}/collect.ts", "{cwd}/sources.json"]
     },
     "brief-agent": {
-      "name": "周报摘要 Agent",
+      "name": "Сводный еженедельный отчет Agent",
       "worker": "my-computer",
       "use": "codex",
       "access": "edit"
@@ -22,7 +30,7 @@
   },
   "rules": [
     {
-      "name": "读取飞书周报资料",
+      "name": "Прочитать данные еженедельного отчета Feishu",
       "when": {
         "cron": "0 18 * * 0"
       },
@@ -36,7 +44,7 @@
       }
     },
     {
-      "name": "整理飞书周报与业务摘要",
+      "name": "Подготовка еженедельного отчета Feishu и бизнес-сводки",
       "when": {
         "source": "feishu-brief",
         "types": ["brief.ready"]
@@ -50,7 +58,7 @@
   ],
   "channels": {
     "feishu": {
-      "name": "飞书",
+      "name": "Feishu",
       "answerers": ["ou_REPLACE_ME"]
     }
   }

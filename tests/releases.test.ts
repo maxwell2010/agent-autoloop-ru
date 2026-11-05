@@ -23,7 +23,7 @@ import { after, test } from "node:test";
 import { updateCode } from "../cli/update.ts";
 import { releaseOf } from "../host/version.ts";
 
-const PUBLISHED = "https://github.com/KKKKhazix/agent-autoloop.git";
+const PUBLISHED = "https://github.com/maxwell2010/agent-autoloop-ru.git";
 const script = join(import.meta.dirname, "..", "install.sh");
 const dir = realpathSync(mkdtempSync(join(tmpdir(), "agent-autoloop-releases-")));
 after(() => rmSync(dir, { recursive: true, force: true }));
@@ -160,7 +160,7 @@ test("the installer installs the newest release, and running it again moves on t
   const newer = publish("v1.11.0", "v1.11.0");
   const again = install(person);
   assert.equal(at(again.app), newer);
-  assert.match(again.out, /更新好了/);
+  assert.match(again.out, /Обновление завершено/);
   assert.equal(existsSync(join(again.app, ".git")), true);
 });
 
@@ -207,8 +207,8 @@ test("a repository given by hand over a copy from elsewhere stops and says so, r
   writeFileSync(join(person, "hub", "config.json"), "{}");
   const done = runInstaller(person, { AGENT_AUTOLOOP_REPO: `file://${original}` });
   assert.notEqual(done.status, 0);
-  assert.match(done.stdout, /要换来源/);
-  assert.doesNotMatch(done.stdout, /更新好了/);
+  assert.match(done.stdout, /Для смены источника/);
+  assert.doesNotMatch(done.stdout, /Обновление завершено/);
   assert.equal(at(app), release);
 });
 

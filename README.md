@@ -96,6 +96,23 @@ agent-autoloop up
 
 Плагины выполняют локальный код. Ссылка на карточку дает ее обладателю право ответить. Резервные копии содержат ключи и должны храниться как секреты. Подробности и границы проверки приведены в [отчете](docs/security-review.ru.md).
 
+## Сценарии
+
+| Сценарий | Назначение |
+|---|---|
+| [Утренний обзор](examples/recipes/morning-brief/README.md) | Сводка заметок и изменений Git |
+| [GitHub Issues](examples/recipes/github-issues/README.md) | Опрос задач и локальная подготовка исправлений |
+| [Рабочие инциденты](examples/recipes/ops-alerts/README.md) | Диагностика с подтверждением перезапуска |
+| [Мониторинг сайта](examples/recipes/website-watch/README.md) | Проверка доступности и восстановления |
+| [Обратная связь](examples/recipes/feedback/README.md) | Обработка обращения и подтверждение отправки ответа |
+| [Сводка Feishu](examples/recipes/feishu-brief/README.md) | Чтение отчетов от имени владельца |
+| [Браузерная проверка](examples/recipes/browser-handoff/README.md) | Ограниченное подключение браузера |
+
+## Плагины
+
+[Руководство по плагинам](docs/plugins.md) описывает адаптеры агентов, источники событий, каналы и проверку протокола.
+Справочник API: [протокол](docs/protocol.md). Инструкции для агента: [SKILL](skills/agent-autoloop/SKILL.md).
+
 ## Происхождение
 
 Основа: [KKKKhazix/agent-autoloop](https://github.com/KKKKhazix/agent-autoloop), коммит `a3b77bf26c0b98bb9eb1edd10ede2e3c13bfdd5d`. Лицензия MIT и сведения об авторах сохранены. Это самостоятельная адаптация, не официальный русскоязычный выпуск автора. Исходное английское описание: [README.en.md](README.en.md).

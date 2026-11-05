@@ -77,7 +77,7 @@ test("a held run's older rules are parsed once more, however many runs hold them
   const hub = new Hub();
   hub.queue(3);
   for (const n of [0, 1, 2]) hub.act("claimNext", "w1", `claim-${n}`);
-  hub.act("rules", { ...rules, askFirst: ["别的"] });
+  hub.act("rules", { ...rules, askFirst: ["Другие"] });
   assert.equal(rulesParsed(hub, "tick"), 2);
 });
 
@@ -85,9 +85,9 @@ test("new rules reach the next view, and a decision in flight leaves the view it
   const hub = new Hub();
   const before = hub.view;
   const was = configuration(before).askFirst;
-  const decided = decide(before, { type: "rules", args: [{ ...rules, askFirst: ["别的"] }] }, 2000, environment);
+  const decided = decide(before, { type: "rules", args: [{ ...rules, askFirst: ["Другие"] }] }, 2000, environment);
   assert.deepEqual(configuration(before).askFirst, was);
-  assert.deepEqual(configuration(evolve(before, decided.facts)).askFirst, ["别的"]);
+  assert.deepEqual(configuration(evolve(before, decided.facts)).askFirst, ["Другие"]);
 });
 
 test("a view opened after another writer changed the rules sees the new ones", () => {
@@ -99,13 +99,13 @@ test("a view opened after another writer changed the rules sees the new ones", (
   assert.deepEqual(configuration(first).askFirst, rules.askFirst);
   // A command writes to this database from its own process, on a view of its own.
   const other = openView(db, "format");
-  commit(db, other, () => facts(other, { ...rules, askFirst: ["别的"] }));
-  assert.deepEqual(configuration(openView(db, "format")).askFirst, ["别的"]);
+  commit(db, other, () => facts(other, { ...rules, askFirst: ["Другие"] }));
+  assert.deepEqual(configuration(openView(db, "format")).askFirst, ["Другие"]);
   db.close();
 });
 
 test("a decision that changes the rules sees its own change for what it does next", () => {
-  const moved = { ...rules, rules: rules.rules.map((rule) => (rule.name === "意见" ? { ...rule, to: "a2" } : rule)) };
+  const moved = { ...rules, rules: rules.rules.map((rule) => (rule.name === "Мнение" ? { ...rule, to: "a2" } : rule)) };
   const hub = new Hub();
   hub.queue(1);
   const decided = decide(hub.view, { type: "rules", args: [moved] }, 2000, environment);
@@ -199,7 +199,7 @@ function waitingForRetry() {
   const hub = new Hub();
   hub.queue(1);
   const job = hub.act("claimNext", "w1", "first");
-  hub.act("finish", job.run, job.token, { outcome: "failed", error: "没跑成" });
+  hub.act("finish", job.run, job.token, { outcome: "failed", error: "FAILED" });
   const retry = rows(hub.view, "due").find((due) => due.kind === "retry")!;
   assert.equal(retry.at, hub.now + 5 * MINUTE);
   return { hub, job, retry };

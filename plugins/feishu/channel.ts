@@ -2,7 +2,7 @@
 // clicks back, so this machine needs no public address. Only one listener can hold an app's card clicks, so run this in
 // one place.
 //   "channels": { "feishu": { "key": "…", "user": "ou_xxx" } } in config.json
-//   "channels": { "feishu": { "name": "飞书", "answerers": ["ou_xxx"] } } in rules.json: who may answer.
+//   "channels": { "feishu": { "name": "Feishu", "answerers": ["ou_xxx"] } } in rules.json: who may answer.
 import { execFile, spawn } from "node:child_process";
 import type { Card, ChannelContext } from "../../host/channels.ts";
 import { eachLine } from "../../host/lines.ts";
@@ -19,9 +19,10 @@ function safeJson(text: unknown): any {
 
 function outcomeOf(card: Card) {
   const chosen = card.choice === null ? card.answer : card.options[card.choice];
-  if (card.state === "decided") return `你选了「${chosen}」，已记录，等待处理。`;
-  if (card.state === "done") return `你选了「${chosen}」。${card.result ? `已执行：${card.result}` : "已执行。"}`;
-  if (card.state === "closed" && card.kind === "ask") return `不用决定了：${card.result ?? ""}`;
+  if (card.state === "decided") return `Вы выбрали «${chosen}», Записано, ожидает обработки.`;
+  if (card.state === "done")
+    return `Вы выбрали «${chosen}». ${card.result ? `Выполнено: ${card.result}` : "Выполнено."}`;
+  if (card.state === "closed" && card.kind === "ask") return `Нет необходимости решать:${card.result ?? ""}`;
   return card.state === "closed" && card.result ? card.result : null;
 }
 
@@ -42,7 +43,7 @@ export function render(card: Card) {
   const afterwards = outcome ? [{ tag: "markdown", content: `**${outcome}**` }] : [];
   const noteSaid =
     card.kind === "notice" && card.answer
-      ? [{ tag: "div", text: { tag: "plain_text", content: `处理说明：${card.answer}` } }]
+      ? [{ tag: "div", text: { tag: "plain_text", content: `Комментарий: ${card.answer}` } }]
       : [];
   const noteForm =
     card.kind === "notice"
@@ -58,16 +59,20 @@ export function render(card: Card) {
                 rows: 2,
                 auto_resize: true,
                 max_length: 1000,
-                label: { tag: "plain_text", content: "处理说明（可不填）" },
+                label: { tag: "plain_text", content: "Комментарий (необязательно)" },
                 label_position: "top",
-                placeholder: { tag: "plain_text", content: "比如：已回复他视频下周发；或：群发广告，不用管" },
+                placeholder: {
+                  tag: "plain_text",
+                  content:
+                    "Например: ответил, что видео выйдет на следующей неделе; или: реклама, действий не требуется",
+                },
               },
               {
                 tag: "button",
                 name: `handling_note_submit_${card.id}`,
                 form_action_type: "submit",
                 type: "primary",
-                text: { tag: "plain_text", content: "记录并结案" },
+                text: { tag: "plain_text", content: "Записать и закрыть" },
               },
             ],
           },
@@ -106,7 +111,8 @@ export default async function feishu({ hub, options, log, signal }: ChannelConte
     return out;
   };
   const owner = (options.user as string | undefined) ?? (await lark(["auth", "status"], "")).identities?.user?.openId;
-  if (!owner) throw new Error("飞书通道要在 config.json 写 user，或者先 lark-cli auth login");
+  if (!owner)
+    throw new Error("Канал Feishu должен находиться в config.json написать user, Или сначала lark-cli auth login");
 
   const updateMessage = (ref: string, content: string) =>
     lark(["im", "messages", "patch", "--message-id", ref, "--as", "bot", "--data", "-"], JSON.stringify({ content }));

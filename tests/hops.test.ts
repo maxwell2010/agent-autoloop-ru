@@ -31,7 +31,7 @@ test("answers and timers inherit the original chain depth", () => {
   const job = w.call("claimNext", "w1", "c");
   w.call("finish", job.run, job.token, {
     outcome: "done",
-    ask: [{ key: "q", title: "选", text: "选", options: ["甲", "乙"] }],
+    ask: [{ key: "q", title: "选", text: "选", options: ["А", "Б"] }],
     later: [{ key: "t", at: "1970-01-01T00:01:00Z", about: "查" }],
   });
   w.call("answer", 1, { choice: 0 });

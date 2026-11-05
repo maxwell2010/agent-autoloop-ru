@@ -21,9 +21,9 @@ export async function conformance(base: string, config: Probe, request: typeof f
       signal: AbortSignal.timeout(10000),
     });
     checks++;
-    assert.equal(response.status, status, `${path} 状态码`);
+    assert.equal(response.status, status, `${path} код статуса`);
     const value = await response.json();
-    if (schema) assert.deepEqual(checkSchema(schema, value), [], `${path} 格式`);
+    if (schema) assert.deepEqual(checkSchema(schema, value), [], `${path} формат`);
     return value;
   };
   const doors: [string, unknown, string[]][] = [
@@ -64,7 +64,7 @@ export async function conformance(base: string, config: Probe, request: typeof f
       body,
     });
     checks++;
-    assert.equal(response.status, status, "事件正文边界");
+    assert.equal(response.status, status, "Граница текста события");
     assert.deepEqual(checkSchema("error", await response.json()), []);
   }
   await call("/v1/work?wait=0", keys.worker, undefined, 400);
@@ -86,7 +86,7 @@ export async function conformance(base: string, config: Probe, request: typeof f
   await call(`/v1/runs/${job.run}/started`, job.token, { session: `session-${tag}` });
   await call("/v1/events", keys.source, { ...event, id: `other-${tag}`, subject: `other-${tag}` });
   const otherJob = (await call(`/v1/work?claim=other-${tag}&wait=0`, keys.worker, undefined, 200, "work")).job;
-  assert.ok(otherJob, "检查规则的 parallel 至少要是 2");
+  assert.ok(otherJob, "Проверить правила parallel Должно быть не менее 2");
   assert.notEqual(otherJob.run, job.run);
   await call(`/v1/runs/${otherJob.run}/result`, job.token, { outcome: "done" }, 401);
   await call(`/v1/runs/${job.run}/result`, otherJob.token, { outcome: "done" }, 401);
@@ -94,12 +94,12 @@ export async function conformance(base: string, config: Probe, request: typeof f
   await call(`/v1/runs/${job.run}/result`, job.token, { outcome: "unknown" }, 400);
   const result = {
     outcome: "done",
-    summary: "一致性检查",
+    summary: "Проверка согласованности",
     ask: [
-      { title: `选择 ${tag}`, text: "选择一个", options: ["甲", "乙"], key: tag },
-      { title: `另一个 ${tag}`, text: "核实后关闭", options: ["甲", "乙"], key: `other-${tag}` },
+      { title: `Выберите ${tag}`, text: "Выберите один", options: ["А", "Б"], key: tag },
+      { title: `Другой ${tag}`, text: "Проверить и закрыть", options: ["А", "Б"], key: `other-${tag}` },
     ],
-    resolve: [{ card: 99999999, reason: "越界" }],
+    resolve: [{ card: 99999999, reason: "выходит за допустимые пределы" }],
   };
   const receipt = await call(`/v1/runs/${job.run}/result`, job.token, result, 200, "receiptAck");
   assert.equal(receipt.rejected.length, 1);
@@ -124,18 +124,26 @@ export async function conformance(base: string, config: Probe, request: typeof f
   assert.equal((await call(`/v1/cards/${card.id}/answer`, keys.channel, answer)).changed, true);
   assert.equal((await call(`/v1/cards/${card.id}/answer`, keys.channel, { ...answer, choice: 1 })).changed, false);
   await call(`/v1/cards/${other.id}/resolve`, keys.owner, { reason: " " }, 400);
-  assert.equal((await call(`/v1/cards/${other.id}/resolve`, keys.owner, { reason: "已核实" })).changed, true);
+  assert.equal((await call(`/v1/cards/${other.id}/resolve`, keys.owner, { reason: "Проверено" })).changed, true);
   assert.equal((await call(`/v1/cards/${other.id}/answer`, keys.owner, { choice: 0 })).changed, false);
-  await call(`/v1/cards/${card.id}/failed`, keys.channel, { version: 1, error: "旧消息发送失败" });
+  await call(`/v1/cards/${card.id}/failed`, keys.channel, {
+    version: 1,
+    error: "Не удалось отправить прежнее сообщение",
+  });
   const next = (await take()).job;
   assert.equal(next.context.answers[0].choice, 0);
   await call(`/v1/runs/${next.run}/cancel`, keys.owner, {});
   assert.ok((await call("/v1/work?claim=cancel&capacity=0&wait=0", keys.worker)).cancel.includes(next.run));
   await call(`/v1/runs/${next.run}/result`, next.token, { outcome: "cancelled" });
-  const told = await call("/v1/tell", keys.source, { key: tag, text: "检查完成" });
+  const told = await call("/v1/tell", keys.source, { key: tag, text: "Проверка завершена" });
   assert.equal(told.duplicate, false);
-  assert.equal((await call("/v1/tell", keys.source, { key: tag, text: "检查完成" })).duplicate, true);
-  await call("/v1/tell", keys.worker, { key: tag, task: "not-assigned", text: "不能冒充" }, 401);
+  assert.equal((await call("/v1/tell", keys.source, { key: tag, text: "Проверка завершена" })).duplicate, true);
+  await call(
+    "/v1/tell",
+    keys.worker,
+    { key: tag, task: "not-assigned", text: "Невозможно выдать себя за другое лицо" },
+    401,
+  );
   const why = await call(`/v1/runs/${job.run}/why`, keys.owner);
   assert.ok(why.some((fact: { type: string }) => fact.type === "finish"));
   const abort = new AbortController();
@@ -153,18 +161,18 @@ export async function conformance(base: string, config: Probe, request: typeof f
     let count = 0;
     while (!text.includes("\n\n")) {
       const { done, value } = await reader.read();
-      assert.ok(!done, "日志流没有完整事实");
+      assert.ok(!done, "В потоке журнала нет полного события");
       text += decoder.decode(value, { stream: true });
     }
     for (const block of text.split("\n\n").slice(0, -1)) {
       const id = /^id: (\d+)$/m.exec(block);
       const data = /^data: (.+)$/m.exec(block);
-      assert.ok(id && data, "日志流缺少事实");
+      assert.ok(id && data, "В потоке журнала отсутствует событие");
       const fact = JSON.parse(data[1]);
       assert.deepEqual(checkSchema("fact", fact), []);
       assert.equal(fact.seq, Number(id[1]));
       const leaksKeys = fact.changes.some((change: { table: string }) => change.table === "keys");
-      assert.ok(!leaksKeys, "日志流泄露密钥记录");
+      assert.ok(!leaksKeys, "Поток журнала раскрыл запись ключа");
       count++;
     }
     assert.ok(count);
