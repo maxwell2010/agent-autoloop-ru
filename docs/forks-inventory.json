@@ -1,0 +1,5240 @@
+{
+  "base": "a3b77bf26c0b98bb9eb1edd10ede2e3c13bfdd5d",
+  "date": "2026-11-05",
+  "method": "GitHub compare API against fixed upstream commit; metadata comparison is not an audit of every fork",
+  "forks": [
+    {
+      "repository": "peRsiStents/agent-autoloop",
+      "head": null,
+      "status": "identical",
+      "ahead": 0,
+      "behind": 0,
+      "changed_files": []
+    },
+    {
+      "repository": "w0r1dcr4ck3r/agent-autoloop",
+      "head": null,
+      "status": "identical",
+      "ahead": 0,
+      "behind": 0,
+      "changed_files": []
+    },
+    {
+      "repository": "bingGit/agent-autoloop",
+      "head": null,
+      "status": "identical",
+      "ahead": 0,
+      "behind": 0,
+      "changed_files": []
+    },
+    {
+      "repository": "ChanLunEX/agent-autoloop",
+      "head": null,
+      "status": "identical",
+      "ahead": 0,
+      "behind": 0,
+      "changed_files": []
+    },
+    {
+      "repository": "coolsnake/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 2,
+      "changed_files": []
+    },
+    {
+      "repository": "liuxusummer/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 3,
+      "changed_files": []
+    },
+    {
+      "repository": "Stol3ntouch/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 3,
+      "changed_files": []
+    },
+    {
+      "repository": "argszero/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 3,
+      "changed_files": []
+    },
+    {
+      "repository": "zseissol-debug/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 4,
+      "changed_files": []
+    },
+    {
+      "repository": "fourgit/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 4,
+      "changed_files": []
+    },
+    {
+      "repository": "young354/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 6,
+      "changed_files": []
+    },
+    {
+      "repository": "Meriados/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 6,
+      "changed_files": []
+    },
+    {
+      "repository": "wanghy0804/agent-autoloop-2611050216",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 7,
+      "changed_files": []
+    },
+    {
+      "repository": "li-neo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 10,
+      "changed_files": []
+    },
+    {
+      "repository": "huangshaobin/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 13,
+      "changed_files": []
+    },
+    {
+      "repository": "416426/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 13,
+      "changed_files": []
+    },
+    {
+      "repository": "ltzaqmlp/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 14,
+      "changed_files": []
+    },
+    {
+      "repository": "Hahaxiong838383/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 14,
+      "changed_files": []
+    },
+    {
+      "repository": "huaizuo2022/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 14,
+      "changed_files": []
+    },
+    {
+      "repository": "zjk0829/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "osagem/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Kenneth9527/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Kling0012/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Amostim/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "SimonYam/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Zsx154855/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "1152405245hwc-coder/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "GongHang1/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "qixingpiaochon/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "HiMenma/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "denial-aa/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "cici-02/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Reger-c/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "M1racleShih/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 7,
+      "changed_files": []
+    },
+    {
+      "repository": "aieverything2005/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "felixyang007/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Eureka7366/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "Colin4k1024/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "gityangge/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "2653533859/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 16,
+      "changed_files": []
+    },
+    {
+      "repository": "Noploop/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 16,
+      "changed_files": []
+    },
+    {
+      "repository": "frederic8/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 21,
+      "changed_files": []
+    },
+    {
+      "repository": "joekytc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "walterhu1015/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "cxzgb123/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "pcedison/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "am0moomoo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "reengineering2026/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "finefu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 23,
+      "changed_files": []
+    },
+    {
+      "repository": "wuqing1982/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "NPC-NICEPEOPLEC/agent-autoloop",
+      "head": null,
+      "status": "identical",
+      "ahead": 0,
+      "behind": 0,
+      "changed_files": []
+    },
+    {
+      "repository": "k-macao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "Mr-Darks/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "sonicg83/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "vectorstone/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "quanshuilai78-create/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "yihao5un/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "HenryGits/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "pear1-pea/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "toastphoto/personal-loop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "MartianG/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "old-boys/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "aliveon/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "rocsung/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "dengpLXM/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "haskell-monad/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "pengyang8509-lgtm/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "edagarli/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "mingkin/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "macifyer/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "gmnoah/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "nickwind/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "gametoover/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "TrezzyCode/agent-autoloop-agent-",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "yudedipan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "xiaodaidai1114/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "sunny19950703/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "ljwl/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "hackcpp/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "mogubase/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "Osub/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "dylanzhou01/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 26,
+      "changed_files": []
+    },
+    {
+      "repository": "henrykui/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 26,
+      "changed_files": []
+    },
+    {
+      "repository": "whxy0144/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 27,
+      "changed_files": []
+    },
+    {
+      "repository": "SachinLee/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 27,
+      "changed_files": []
+    },
+    {
+      "repository": "jasoncodevault/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 29,
+      "changed_files": []
+    },
+    {
+      "repository": "molyaigc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 29,
+      "changed_files": []
+    },
+    {
+      "repository": "Artemsenik/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 32,
+      "changed_files": []
+    },
+    {
+      "repository": "Aw999Lab/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 32,
+      "changed_files": []
+    },
+    {
+      "repository": "Simon202410/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 32,
+      "changed_files": []
+    },
+    {
+      "repository": "se7en3595-bit/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 33,
+      "changed_files": []
+    },
+    {
+      "repository": "Sileec/Fork-agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 35,
+      "changed_files": []
+    },
+    {
+      "repository": "blueoceandevops/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 35,
+      "changed_files": []
+    },
+    {
+      "repository": "0x0b01/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 36,
+      "changed_files": []
+    },
+    {
+      "repository": "idxc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "rogerlou66/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "wst-ki/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "harryweiser/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "bytechina/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "edmund-902/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "founderlxy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "yeyang521/agent-autoloop",
+      "head": "4e50619b26b582bad3d9409da4bb909579f31ee0",
+      "status": "diverged",
+      "ahead": 3,
+      "behind": 38,
+      "changed_files": [
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "cli/main.ts",
+        "docs/plugins.md",
+        "plugins/dsh/agent.ts",
+        "plugins/opencode/agent.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/dsh.test.ts",
+        "tests/opencode.test.ts"
+      ]
+    },
+    {
+      "repository": "liangzemian/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "RichardPotter-Lai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "leisure0808/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "chrisx-per/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "jowelinad-netizen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "RuiningL/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "packylin1015/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "luckiestmax/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "sqchr888/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "7t6v2y92h9-spec/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "kai07851396/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "martinyyang/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "workhard2004816-rgb/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Openk3/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "qingtiannew/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Fengyang-yi/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "pandagf123/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "J-Observer/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Hongzixiang98/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "OMG-ai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "yangyangpig/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "1yu2/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "BeautyDiego/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "kwz-7/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "swenyuan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "keien411/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "xnklerEd/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "mxy6152065/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "newmymujian-hash/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Konbir-lab/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "A-electric-sheep/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Dear-Mr-An/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "wangshucheng/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 6,
+      "changed_files": []
+    },
+    {
+      "repository": "mengtanx/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "zhjnerv/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "chelflan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "caishuai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "weber0x0/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "warnerhaynordelmarsch-oss/Agent-Autoloop",
+      "head": "5de0786e02b9fefc8e81c1ab7350fc012dd789cf",
+      "status": "diverged",
+      "ahead": 4,
+      "behind": 38,
+      "changed_files": [
+        "bin/agent-autoloop.ts",
+        "cli/main.ts",
+        "examples/recipes/qq-mail-triage/README.md",
+        "examples/recipes/qq-mail-triage/rules.json",
+        "examples/watch-qq-mail.sh",
+        "host/service.ts",
+        "install.sh",
+        "package.json",
+        "plugins/acp/agent.ts",
+        "plugins/acp/bridge.ts",
+        "plugins/agy/agent.ts",
+        "plugins/delivery/action.ts",
+        "plugins/delivery/agent.ts",
+        "plugins/delivery/poll.ts",
+        "plugins/delivery/run.ts",
+        "plugins/qq-mail/source.ts",
+        "protocol/conformance.ts",
+        "tests/acp.test.ts",
+        "tests/agy.test.ts",
+        "tests/install.test.ts",
+        "tests/qq-mail.test.ts",
+        "tests/service.test.ts"
+      ]
+    },
+    {
+      "repository": "fanghengxuan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "xiaojian94xiaojian/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "MrLiuRuiNing/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "sam9029/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "csuffyy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "gzliudan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "SX-1996/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Armstrong-Bai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "b07460796-ctrl/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "seanfalling/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "PurpleSat/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "Nohho/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "9377333-maker/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "2021210507/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "starb5682a5-eng/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 39,
+      "changed_files": []
+    },
+    {
+      "repository": "zhangzhiheng2016/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 39,
+      "changed_files": []
+    },
+    {
+      "repository": "757065191/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "vleong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 39,
+      "changed_files": []
+    },
+    {
+      "repository": "lzh08/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 40,
+      "changed_files": []
+    },
+    {
+      "repository": "fridaycn/agentloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 40,
+      "changed_files": []
+    },
+    {
+      "repository": "CoderChenDQ/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "duguwuji/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 41,
+      "changed_files": []
+    },
+    {
+      "repository": "zlus/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 42,
+      "changed_files": []
+    },
+    {
+      "repository": "0xchen88/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 42,
+      "changed_files": []
+    },
+    {
+      "repository": "cynial/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 42,
+      "changed_files": []
+    },
+    {
+      "repository": "luawei1/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 42,
+      "changed_files": []
+    },
+    {
+      "repository": "ldbsoft2022/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 43,
+      "changed_files": []
+    },
+    {
+      "repository": "with3ai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 43,
+      "changed_files": []
+    },
+    {
+      "repository": "Reamd7/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 44,
+      "changed_files": []
+    },
+    {
+      "repository": "jjFeng2024/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 44,
+      "changed_files": []
+    },
+    {
+      "repository": "wang2858760505/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "gl545/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "xiaomouai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "coolber/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "penglonghu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "whf5210/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "mu369974680/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 47,
+      "changed_files": []
+    },
+    {
+      "repository": "RunningCoderLee/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 47,
+      "changed_files": []
+    },
+    {
+      "repository": "MNSTFNO/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 47,
+      "changed_files": []
+    },
+    {
+      "repository": "ZY-01/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 47,
+      "changed_files": []
+    },
+    {
+      "repository": "o1laabs/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 48,
+      "changed_files": []
+    },
+    {
+      "repository": "XSam2026/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 48,
+      "changed_files": []
+    },
+    {
+      "repository": "LLMrelevance/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 48,
+      "changed_files": []
+    },
+    {
+      "repository": "wuleiyuan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 48,
+      "changed_files": []
+    },
+    {
+      "repository": "Wen831/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 48,
+      "changed_files": []
+    },
+    {
+      "repository": "sally399/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 49,
+      "changed_files": []
+    },
+    {
+      "repository": "niubility6/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 49,
+      "changed_files": []
+    },
+    {
+      "repository": "lzmhlzsd/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 50,
+      "changed_files": []
+    },
+    {
+      "repository": "Leon1988520/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 52,
+      "changed_files": []
+    },
+    {
+      "repository": "mmllemon/agent-autoloop-liam",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 53,
+      "changed_files": []
+    },
+    {
+      "repository": "ZhangCurosr/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 53,
+      "changed_files": []
+    },
+    {
+      "repository": "wqou/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 55,
+      "changed_files": []
+    },
+    {
+      "repository": "Revieww/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 55,
+      "changed_files": []
+    },
+    {
+      "repository": "wajipu/agent-autoloop",
+      "head": "a3929eb32cbb5c22cd8bffbe88dd6e0185a375c0",
+      "status": "diverged",
+      "ahead": 2,
+      "behind": 23,
+      "changed_files": [
+        ".gitignore",
+        "console/components.json",
+        "console/index.html",
+        "console/package-lock.json",
+        "console/package.json",
+        "console/public/icon.svg",
+        "console/public/manifest.webmanifest",
+        "console/server.mjs",
+        "console/src/App.tsx",
+        "console/src/components/AskCard.tsx",
+        "console/src/components/BottomTabs.tsx",
+        "console/src/components/OverviewView.tsx",
+        "console/src/components/RunSheet.tsx",
+        "console/src/components/RunsView.tsx",
+        "console/src/components/SettingsView.tsx",
+        "console/src/components/StateBadge.tsx",
+        "console/src/components/SubmitView.tsx",
+        "console/src/components/Timeline.tsx",
+        "console/src/components/ui/badge.tsx",
+        "console/src/components/ui/button.tsx",
+        "console/src/components/ui/card.tsx",
+        "console/src/components/ui/dialog.tsx",
+        "console/src/components/ui/input.tsx",
+        "console/src/components/ui/label.tsx",
+        "console/src/components/ui/separator.tsx",
+        "console/src/components/ui/sheet.tsx",
+        "console/src/components/ui/skeleton.tsx",
+        "console/src/components/ui/sonner.tsx",
+        "console/src/components/ui/switch.tsx",
+        "console/src/components/ui/textarea.tsx",
+        "console/src/index.css",
+        "console/src/lib/api.ts",
+        "console/src/lib/format.ts",
+        "console/src/lib/timeline.ts",
+        "console/src/lib/utils.ts",
+        "console/src/main.tsx",
+        "console/src/types.ts",
+        "console/tsconfig.app.json",
+        "console/tsconfig.json",
+        "console/tsconfig.node.json",
+        "console/vite.config.ts",
+        "plugins/linear/source.ts"
+      ]
+    },
+    {
+      "repository": "gz7s4zjy9n-ux/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 56,
+      "changed_files": []
+    },
+    {
+      "repository": "huahaimaker/lark-agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 56,
+      "changed_files": []
+    },
+    {
+      "repository": "maksy5310/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "wasabihu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "ygx2378/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 56,
+      "changed_files": []
+    },
+    {
+      "repository": "rfiacne/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 57,
+      "changed_files": []
+    },
+    {
+      "repository": "songha-debut/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 57,
+      "changed_files": []
+    },
+    {
+      "repository": "15657306288/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 58,
+      "changed_files": []
+    },
+    {
+      "repository": "Sevmek-even/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 58,
+      "changed_files": []
+    },
+    {
+      "repository": "ceyyy427/agent-of-handoff",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 58,
+      "changed_files": []
+    },
+    {
+      "repository": "rzx007/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 58,
+      "changed_files": []
+    },
+    {
+      "repository": "shadowlg/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 59,
+      "changed_files": []
+    },
+    {
+      "repository": "GmuMu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 60,
+      "changed_files": []
+    },
+    {
+      "repository": "CK-LIN/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 60,
+      "changed_files": []
+    },
+    {
+      "repository": "1997-WJin/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 60,
+      "changed_files": []
+    },
+    {
+      "repository": "zhaoshengjun/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 60,
+      "changed_files": []
+    },
+    {
+      "repository": "wenlong66/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 60,
+      "changed_files": []
+    },
+    {
+      "repository": "zhangzongbo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 60,
+      "changed_files": []
+    },
+    {
+      "repository": "xingfukuaile996/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "witefree/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "jjy1213/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "kkkman22/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "Tks2k4/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "Minggnim-jpg/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "usercomeing/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "itsharex/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "1512886153/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "yibulaxi/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "huris/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "man21cn/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "rayjmj/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "ma2ong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "wangjazz/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 61,
+      "changed_files": []
+    },
+    {
+      "repository": "darcycool/agent-autoloop",
+      "head": "2d6be737818c7708a5ef4e231f66c011b5fff38e",
+      "status": "diverged",
+      "ahead": 2,
+      "behind": 15,
+      "changed_files": [
+        ".agents/skills/LICENSE.mattpocock.txt",
+        ".agents/skills/README.md",
+        ".agents/skills/code-review/SKILL.md",
+        ".agents/skills/code-review/agents/openai.yaml",
+        ".agents/skills/codebase-design/DEEPENING.md",
+        ".agents/skills/codebase-design/DESIGN-IT-TWICE.md",
+        ".agents/skills/codebase-design/SKILL.md",
+        ".agents/skills/codebase-design/agents/openai.yaml",
+        ".agents/skills/domain-modeling/ADR-FORMAT.md",
+        ".agents/skills/domain-modeling/GLOSSARY-FORMAT.md",
+        ".agents/skills/domain-modeling/SKILL.md",
+        ".agents/skills/domain-modeling/agents/openai.yaml",
+        ".agents/skills/grill-with-docs/SKILL.md",
+        ".agents/skills/grill-with-docs/agents/openai.yaml",
+        ".agents/skills/grilling/SKILL.md",
+        ".agents/skills/grilling/agents/openai.yaml",
+        ".agents/skills/implement/SKILL.md",
+        ".agents/skills/implement/agents/openai.yaml",
+        ".agents/skills/retro/SKILL.md",
+        ".agents/skills/retro/agents/openai.yaml",
+        ".agents/skills/setup-matt-pocock-skills/SKILL.md",
+        ".agents/skills/setup-matt-pocock-skills/agents/openai.yaml",
+        ".agents/skills/setup-matt-pocock-skills/domain.md",
+        ".agents/skills/setup-matt-pocock-skills/issue-tracker-github.md",
+        ".agents/skills/setup-matt-pocock-skills/issue-tracker-gitlab.md",
+        ".agents/skills/setup-matt-pocock-skills/issue-tracker-local.md",
+        ".agents/skills/setup-matt-pocock-skills/triage-labels.md",
+        ".agents/skills/tdd/SKILL.md",
+        ".agents/skills/tdd/agents/openai.yaml",
+        ".agents/skills/tdd/mocking.md",
+        ".agents/skills/tdd/tests.md",
+        ".agents/skills/to-spec/SKILL.md",
+        ".agents/skills/to-spec/agents/openai.yaml",
+        ".agents/skills/to-tickets/SKILL.md",
+        ".agents/skills/to-tickets/agents/openai.yaml",
+        ".agents/skills/writing-for-agents/SKILL-MECHANICS.md",
+        ".agents/skills/writing-for-agents/SKILL.md",
+        ".agents/skills/writing-for-agents/agents/openai.yaml",
+        ".gitignore",
+        ".impeccable/design.json",
+        ".prettierignore",
+        "AGENTS.md",
+        "CONTEXT.md",
+        "DESIGN.md",
+        "INSTALL.md",
+        "PRODUCT.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "cli/main.ts",
+        "docs/adr/0001-daily-overview-plugin.md",
+        "docs/architecture.svg",
+        "docs/daily-overview-surface.md",
+        "docs/daily-overview.md",
+        "docs/protocol.md",
+        "plugins/daily-overview/README.md",
+        "plugins/daily-overview/feed.ts",
+        "plugins/daily-overview/model.ts",
+        "plugins/daily-overview/public/app.js",
+        "plugins/daily-overview/public/index.html",
+        "plugins/daily-overview/public/style.css",
+        "plugins/daily-overview/run.ts",
+        "plugins/daily-overview/server.ts",
+        "scripts/ci-scope.sh",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/daily-overview-feed.test.ts",
+        "tests/daily-overview-http.test.ts",
+        "tests/daily-overview-integration.test.ts",
+        "tests/daily-overview-model.test.ts"
+      ]
+    },
+    {
+      "repository": "xiaokekehaha/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "MrSunJian/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "050-arch/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "InformationX/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "yangyj1358/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "danshuihegu666/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "Nanishapo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "wocclyl/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "guozhixin88/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "ZhanChuanYu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "gooncc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "Oliverfang-2025/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "JohnnieWind/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "ryukiheun/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "s459517271/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 63,
+      "changed_files": []
+    },
+    {
+      "repository": "xingye00186/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 63,
+      "changed_files": []
+    },
+    {
+      "repository": "MianTiaoDW/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 63,
+      "changed_files": []
+    },
+    {
+      "repository": "jackgu309/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 63,
+      "changed_files": []
+    },
+    {
+      "repository": "tingfeng007/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 64,
+      "changed_files": []
+    },
+    {
+      "repository": "ken-fs/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 64,
+      "changed_files": []
+    },
+    {
+      "repository": "imicer/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 64,
+      "changed_files": []
+    },
+    {
+      "repository": "yb-beep/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 65,
+      "changed_files": []
+    },
+    {
+      "repository": "cocobanyuexing/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "PlatoTheOne/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "feelerfei/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "aixingzhu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "devon-kong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "ZBJDSBJ/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "AlbertYm/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "peter376714/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "lbbyrs/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "baochangying/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "zhangbp7474/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "honanq/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "jiahongyuan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "jkxiongxin/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "zeroai525/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "xia-y/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "LeaxusJoe/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "xirfly/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "jia4128/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "sungt/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "Ceshao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "kai000kai/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "mabolong-spec/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "ds-dylanzh/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "eltociear/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "Garlyhe/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "Recallthepast/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "BoringLeo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "codersjj/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "abbiz2009315-hub/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "ZSSXD-gch/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "zhxqc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "largebigbug/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "chenjie1129/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "ZZZZihan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "LL314/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "shaxunyeman/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 13,
+      "changed_files": []
+    },
+    {
+      "repository": "shaojian0514/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "loveshelly/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "Bruce-BU/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "Kelvin-Gui/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "jintaogao65-stack/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "loveyaomy-web/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "xuwengen0909/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "lyxpython/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "elonneo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "max-mainnet/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "charles0747/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "Earthaveeman/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "PythonOtakus/AgentAutoLoop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "medking82/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "forward25wei/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "Elio-SiChien/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "Aliceconan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "xinrzhan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "snitfk/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "harrywoo123/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "githubliunengwen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "cmtdv/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "lj100886/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "sstt2026/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "297225669/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "abduallahJamal/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "newgsmbx/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 67,
+      "changed_files": []
+    },
+    {
+      "repository": "hello532/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "suj1e/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "JingLu7/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "cellinlab/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "busyddbb/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "lavenleo1013/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "MonicaArnaud/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "pingta-chaolibao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 69,
+      "changed_files": []
+    },
+    {
+      "repository": "CyrusNee/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 69,
+      "changed_files": []
+    },
+    {
+      "repository": "ouxxyy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 69,
+      "changed_files": []
+    },
+    {
+      "repository": "HailCHAN/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 69,
+      "changed_files": []
+    },
+    {
+      "repository": "zhg726615-ymy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 69,
+      "changed_files": []
+    },
+    {
+      "repository": "lk668a-lgtm/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 70,
+      "changed_files": []
+    },
+    {
+      "repository": "wufloor/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 71,
+      "changed_files": []
+    },
+    {
+      "repository": "PhilRobinluo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 71,
+      "changed_files": []
+    },
+    {
+      "repository": "lvlw/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "oxwuth515/agent-autoloop",
+      "error": "gh: Not Found (HTTP 404)",
+      "changed_files": []
+    },
+    {
+      "repository": "Daiwangyang/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ihoeysun/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Muwei-TA/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zhuozhou168/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "clen1/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "jikechenhao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "QuintusCyber/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 70,
+      "changed_files": []
+    },
+    {
+      "repository": "jianwei-su/agent-autoloop",
+      "head": "0b24dcbc5eb7675423d9f7373e492c655c06dd9c",
+      "status": "diverged",
+      "ahead": 5,
+      "behind": 72,
+      "changed_files": [
+        ".github/ISSUE_TEMPLATE/config.yml",
+        ".github/ISSUE_TEMPLATE/fkst-scheduled-workflow.md",
+        ".github/ISSUE_TEMPLATE/fkst-substrate-session.md",
+        ".github/ISSUE_TEMPLATE/fkst-work-item.md"
+      ]
+    },
+    {
+      "repository": "Oayoix/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "RainShow/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "kanezeng/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "andrew199799/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "h-freefree/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "cloudlove/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "47Amazing/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "jackchenjy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "chaozren/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "small-xiexu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Bin-Yang-JM/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yiyang066/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Running563/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ethansunqing/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "hopps59/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "halfkwood/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "chenqiao-tongtech/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "JereyLeer/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ybyqzxl/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "luofengwuhen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ihao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ryan9856/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "liuzl/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zg-mutu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "wsk0303212/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xiuixb/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "LaiJH12/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "k7airos/agent-autoloop",
+      "head": "ee44e522e8430349743bc0b15c5ed28276507fd9",
+      "status": "diverged",
+      "ahead": 1,
+      "behind": 72,
+      "changed_files": ["docs/protocol.md", "kernel/state.ts", "tests/loop.test.ts", "tests/runs.test.ts"]
+    },
+    {
+      "repository": "imbilly88/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "DODOYOYOx/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "misumi111/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "KaMang06/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "laptrains/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "189-sketch/autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "pokibao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "hei-ying/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "smiletochao-a11y/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "wojiachuangda/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "milihub/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xiaoyc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "rooong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ggxx39/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Mark-Radder-003/agent-autoloop-fork",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Hong-gblbcy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "dingxifan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "shengleizhu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ZS-Zhong777/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "johnson020202/agent-autoloop261104",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ouyyy18/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zhudebin/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "arthur-aicoding/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yizhiqianbi/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ANGJustinl/agent-autoloop",
+      "head": "f97a40035d5deaf23d0a54b119a3373700ece8e1",
+      "status": "diverged",
+      "ahead": 2,
+      "behind": 24,
+      "changed_files": [
+        "AGENTS.md",
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "docs/protocol.md",
+        "host/runtime.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/state-cursor.test.ts"
+      ]
+    },
+    {
+      "repository": "wsqyouth/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "JackieHeCc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "0xbillw/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 38,
+      "changed_files": []
+    },
+    {
+      "repository": "liuyaanng/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "byst4nder/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Kaefer-Z/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "fantasywxx/kkkkhazix-agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "huawanrr/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "J7700/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zeroer71/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "DJDJDJ-Jessie/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "TMelinda/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "hekiki/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Tomatose/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "qqw1584913629/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "dayou555/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "csgreater/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yaoyouzhong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 39,
+      "changed_files": []
+    },
+    {
+      "repository": "Pinned/agent-autoloop",
+      "head": "39e74ee9f5b0227efe1565ec3343cfb3bbe5c6e6",
+      "status": "diverged",
+      "ahead": 1,
+      "behind": 72,
+      "changed_files": [
+        "cli/main.ts",
+        "docs/protocol.md",
+        "package-lock.json",
+        "plugins/claude/agent.ts",
+        "plugins/codex/agent.ts",
+        "plugins/delivery/project.ts",
+        "plugins/delivery/review.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/adapters.test.ts",
+        "tests/delivery-review.test.ts",
+        "tests/delivery-scope.test.ts",
+        "worker/agents.ts"
+      ]
+    },
+    {
+      "repository": "supercc168/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "gslovemy/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "qiuC123/agent-autoloop",
+      "head": "3e15f25dbb15df79433eee4803cfb20cdd466986",
+      "status": "diverged",
+      "ahead": 35,
+      "behind": 72,
+      "changed_files": [
+        ".gitattributes",
+        ".github/workflows/check.yml",
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "cli/main.ts",
+        "cli/mcp.ts",
+        "cli/uninstall.ts",
+        "docs/architecture.en.svg",
+        "docs/architecture.svg",
+        "docs/plugins.md",
+        "docs/protocol.md",
+        "docs/windows-service-resilience.md",
+        "docs/windows-worker-startup.md",
+        "examples/channel.ts",
+        "examples/recipes/browser-handoff/handoff.ts",
+        "examples/recipes/feishu-brief/SKILL.md",
+        "examples/recipes/github-issues/SKILL.md",
+        "examples/worker.sh",
+        "examples/worker.ts",
+        "host/channels.ts",
+        "host/command.ts",
+        "host/config.ts",
+        "host/maintenance.ts",
+        "host/private.ts",
+        "host/runtime.ts",
+        "host/server.ts",
+        "host/service.ts",
+        "host/up.ts",
+        "host/version.ts",
+        "host/windows-acl.cs",
+        "host/windows-acl.ts",
+        "host/windows-control.ts",
+        "host/windows-launcher.ts",
+        "host/windows-service.ts",
+        "install.ps1",
+        "kernel/card-page.ts",
+        "kernel/credentials.ts",
+        "kernel/decide.ts",
+        "kernel/evolve.ts",
+        "kernel/http.ts",
+        "kernel/query.ts",
+        "kernel/rules.ts",
+        "kernel/schema.sql",
+        "package.json",
+        "plugins/acp/bridge.ts",
+        "plugins/claude/agent.ts",
+        "plugins/codex/agent.ts",
+        "plugins/codex/windows.ts",
+        "plugins/delivery/project.ts",
+        "plugins/delivery/review.ts",
+        "plugins/desktop/channel.ts",
+        "plugins/desktop/notify.ps1",
+        "plugins/feishu/channel.ts",
+        "protocol/client.ts",
+        "protocol/conformance.ts",
+        "protocol/job.ts",
+        "protocol/rules.ts",
+        "protocol/schema.json",
+        "protocol/validate.ts",
+        "scripts/benchmark.ts",
+        "scripts/ci-scope.sh",
+        "scripts/metrics.ts",
+        "scripts/test-quick.ts",
+        "scripts/windows-handle-race.ts",
+        "scripts/worker-startup.ts",
+        "sim/enumerate.ts",
+        "sim/invariants.ts",
+        "sim/mutate.ts",
+        "sim/mutation.test.ts",
+        "sim/random.ts",
+        "sim/world.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/acp.test.ts",
+        "tests/adapters.test.ts",
+        "tests/agent-acl.test.ts",
+        "tests/benchmark.test.ts",
+        "tests/browser-handoff.test.ts",
+        "tests/business-recipes.test.ts",
+        "tests/cards.test.ts",
+        "tests/channels.test.ts",
+        "tests/codex-windows.test.ts",
+        "tests/conformance.test.ts",
+        "tests/contract.test.ts",
+        "tests/delivery-input.test.ts",
+        "tests/delivery-review.test.ts",
+        "tests/delivery-scope.test.ts",
+        "tests/desktop.test.ts",
+        "tests/example-plugins.test.ts",
+        "tests/examples.test.ts",
+        "tests/helpers.ts",
+        "tests/http.test.ts",
+        "tests/install-windows.test.ts",
+        "tests/install.test.ts",
+        "tests/kernel.test.ts",
+        "tests/loop.test.ts",
+        "tests/maintenance.test.ts",
+        "tests/mcp.test.ts",
+        "tests/native-command.ts",
+        "tests/platform.test.ts",
+        "tests/private.test.ts",
+        "tests/private.ts",
+        "tests/projection.test.ts",
+        "tests/recipes.test.ts",
+        "tests/rules-watch.test.ts",
+        "tests/rules.test.ts",
+        "tests/schema.test.ts",
+        "tests/service-supervision.test.ts",
+        "tests/service-windows.test.ts",
+        "tests/service.test.ts",
+        "tests/simulation.test.ts",
+        "tests/uninstall-windows.test.ts",
+        "tests/uninstall.test.ts",
+        "tests/version.test.ts",
+        "tests/why.test.ts",
+        "tests/windows-console.cs",
+        "tests/windows-worker.test.ts",
+        "tests/worker-path.test.ts",
+        "tests/worker-process.test.ts",
+        "tests/worker-startup.test.ts",
+        "tests/worker.test.ts",
+        "worker/agents.ts",
+        "worker/contract.ts",
+        "worker/process.ts",
+        "worker/windows-job.cs",
+        "worker/windows.ts",
+        "worker/worker.ts"
+      ]
+    },
+    {
+      "repository": "WaterJason/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "whycantfindaname/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xinpengfei520/agent-autoloop",
+      "head": "024686b293b6ef037cd6f03b4e46141547383f47",
+      "status": "diverged",
+      "ahead": 1,
+      "behind": 72,
+      "changed_files": ["docs/架构解读.md", "docs/第三方Claude接入.md"]
+    },
+    {
+      "repository": "junun/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "syqfffszx/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "lyyu6694/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "mhlseye/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zxzvsdcj/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "HG920/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "YiwenXie/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "12cjn/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "TRhtang/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "CraneZhuang/agent-autoloop-develop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "emmaguoguo33/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "waveBoom/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "marvinwjs/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yanglfree/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "XiaoyeCodes/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "liangguodong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Albert-Johanan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Patrici63fjevstaHaixiito8gp3drfield/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "whusnail/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "junhao-ye/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "yak33/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xizaisheng/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "syzsunshine219/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "pllen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "erehw/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Striver9433/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "OpenSorceYCW/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "qingqiu5241/agent-autoloop",
+      "head": "acfab655a2ca7b4aac214792f8d30d7a7fc1af9c",
+      "status": "diverged",
+      "ahead": 1,
+      "behind": 72,
+      "changed_files": [
+        "docs/protocol.md",
+        "examples/plugins/budget-watchdog/README.md",
+        "examples/plugins/budget-watchdog/watchdog.ts",
+        "host/runtime.ts",
+        "host/server.ts",
+        "kernel/decide.ts",
+        "tests/lifecycle.test.ts",
+        "tests/runs.test.ts",
+        "tests/worker.test.ts",
+        "worker/worker.ts"
+      ]
+    },
+    {
+      "repository": "RobinZhiBin/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "talentbuilder/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "KingKongVon/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xiadongping-oss/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zxyao145/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yyxone/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "oneetx-art/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "bradyaaa/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Laojia219-Kaidar/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "sheldson/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "juexing1225/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "QiOrange-qior/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "raybest4u/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 15,
+      "changed_files": []
+    },
+    {
+      "repository": "ActionPan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "blinksmww/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "KaranocaVe/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zzt02511/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "1574070120/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "wr1984/my-workspace",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "OOSYOO/agent-autoloop",
+      "head": "83df7775fb4a0ae6297c5a9168519edf81fc249a",
+      "status": "diverged",
+      "ahead": 7,
+      "behind": 72,
+      "changed_files": [
+        "AGENTS.md",
+        "INSTALL.md",
+        "Local_Agent_Automation_PRD_v1.0.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "cli/gitlab.ts",
+        "cli/local-install.ts",
+        "cli/main.ts",
+        "cli/uninstall.ts",
+        "docs/architecture.svg",
+        "docs/gitlab-review.md",
+        "docs/protocol.md",
+        "docs/rules-walkthrough.md",
+        "docs/specs/local_agent_automation.md",
+        "docs/specs/local_agent_automation_evidence.md",
+        "docs/specs/remote_review_worker.md",
+        "docs/specs/remote_review_worker.svg",
+        "host/version.ts",
+        "plugins/feishu/channel.ts",
+        "plugins/gitlab/agent.ts",
+        "plugins/gitlab/answer.ts",
+        "plugins/gitlab/api.ts",
+        "plugins/gitlab/artifacts.ts",
+        "plugins/gitlab/auto.ts",
+        "plugins/gitlab/ci.ts",
+        "plugins/gitlab/codex.ts",
+        "plugins/gitlab/config.ts",
+        "plugins/gitlab/diff.ts",
+        "plugins/gitlab/instructions.ts",
+        "plugins/gitlab/manifest.ts",
+        "plugins/gitlab/manual.ts",
+        "plugins/gitlab/native.ts",
+        "plugins/gitlab/objects.ts",
+        "plugins/gitlab/outcome.ts",
+        "plugins/gitlab/poll.ts",
+        "plugins/gitlab/presentation.ts",
+        "plugins/gitlab/publish.ts",
+        "plugins/gitlab/report.ts",
+        "plugins/gitlab/request.ts",
+        "plugins/gitlab/resume.ts",
+        "plugins/gitlab/review.ts",
+        "plugins/gitlab/run.ts",
+        "plugins/gitlab/scan.ts",
+        "plugins/gitlab/storage.ts",
+        "plugins/gitlab/trusted-rules.ts",
+        "plugins/gitlab/worktree.ts",
+        "scripts/ci-scope.sh",
+        "scripts/metrics.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/benchmark.test.ts",
+        "tests/channels.test.ts",
+        "tests/gitlab-agent.test.ts",
+        "tests/gitlab-answer.test.ts",
+        "tests/gitlab-api.test.ts",
+        "tests/gitlab-artifacts.test.ts",
+        "tests/gitlab-auto.test.ts",
+        "tests/gitlab-ci.test.ts",
+        "tests/gitlab-cli.test.ts",
+        "tests/gitlab-codex.test.ts",
+        "tests/gitlab-config.test.ts",
+        "tests/gitlab-diff.test.ts",
+        "tests/gitlab-guide.test.ts",
+        "tests/gitlab-instructions.test.ts",
+        "tests/gitlab-integration.test.ts",
+        "tests/gitlab-manifest.test.ts",
+        "tests/gitlab-manual.test.ts",
+        "tests/gitlab-native.test.ts",
+        "tests/gitlab-objects.test.ts",
+        "tests/gitlab-outcome.test.ts",
+        "tests/gitlab-poll.test.ts",
+        "tests/gitlab-presentation.test.ts",
+        "tests/gitlab-publish.test.ts",
+        "tests/gitlab-report.test.ts",
+        "tests/gitlab-request.test.ts",
+        "tests/gitlab-review.test.ts",
+        "tests/gitlab-rules.test.ts",
+        "tests/gitlab-scan.test.ts",
+        "tests/gitlab-storage.test.ts",
+        "tests/gitlab-worktree.test.ts",
+        "tests/local-install.test.ts",
+        "tests/uninstall.test.ts",
+        "tests/version.test.ts",
+        "tests/worker.test.ts"
+      ]
+    },
+    {
+      "repository": "huhao6020-rgb/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "changshengliu312/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "iasiv5/dsh-agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "yangzheng27/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "vicharl/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "fusae/agent-autoloop",
+      "head": "3dc8db0c18e9265ca40b8ceadfd67b335ac3297e",
+      "status": "diverged",
+      "ahead": 21,
+      "behind": 72,
+      "changed_files": [
+        ".gitignore",
+        "AGENTS.md",
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "bin/agent-company.ts",
+        "cli/company-dashboard.ts",
+        "cli/company.ts",
+        "docs/company-audit-2026-11-05.md",
+        "docs/company.md",
+        "docs/plugins.md",
+        "docs/protocol.md",
+        "examples/recipes/company/README.md",
+        "examples/recipes/company/request.json",
+        "package-lock.json",
+        "package.json",
+        "plugins/codex/agent.ts",
+        "plugins/company/agent.ts",
+        "plugins/company/briefing.ts",
+        "plugins/company/business-run.ts",
+        "plugins/company/business.ts",
+        "plugins/company/channel.ts",
+        "plugins/company/company.ts",
+        "plugins/company/dashboard/app.js",
+        "plugins/company/dashboard/index.html",
+        "plugins/company/dashboard/style.css",
+        "plugins/company/executive.ts",
+        "plugins/company/inspection.ts",
+        "plugins/company/operations.ts",
+        "plugins/company/recovery.ts",
+        "plugins/company/run.ts",
+        "plugins/company/setup.ts",
+        "plugins/company/sources.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/adapters.test.ts",
+        "tests/company-autonomy.test.ts",
+        "tests/company-briefing.test.ts",
+        "tests/company-business.test.ts",
+        "tests/company-ceo.test.ts",
+        "tests/company-dashboard.test.ts",
+        "tests/company-e2e.test.ts",
+        "tests/company-feishu.test.ts",
+        "tests/company-sources.test.ts",
+        "tests/company.test.ts",
+        "tests/worker.test.ts"
+      ]
+    },
+    {
+      "repository": "brucelt1993/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "fenghu336-cpu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Pengyf04/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "hello-arkts/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "DarkKnight-Rises/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "NAMEWTA/agent-autoloop",
+      "head": "85cafdcb31719ed6b264a7eb0059e7a46f0d8266",
+      "status": "diverged",
+      "ahead": 3,
+      "behind": 72,
+      "changed_files": [
+        ".github/ISSUE_TEMPLATE/bug_report.yml",
+        ".github/ISSUE_TEMPLATE/config.yml",
+        ".github/ISSUE_TEMPLATE/feature_request.yml",
+        ".github/workflows/check.yml",
+        "AGENTS.md",
+        "CONTRIBUTING.md",
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "cli/main.ts",
+        "cli/why.ts",
+        "docs/architecture.en.svg",
+        "docs/architecture.svg",
+        "docs/herdr-core.md",
+        "docs/plugins.md",
+        "docs/protocol.md",
+        "examples/plugins/hello-agent/agent.ts",
+        "examples/recipes/browser-handoff/README.md",
+        "examples/recipes/browser-handoff/SKILL.md",
+        "examples/recipes/browser-handoff/browser.json",
+        "examples/recipes/browser-handoff/handoff.ts",
+        "examples/recipes/browser-handoff/rules.json",
+        "examples/recipes/feedback/README.md",
+        "examples/recipes/feedback/rules.json",
+        "examples/recipes/feishu-brief/README.md",
+        "examples/recipes/feishu-brief/rules.json",
+        "examples/recipes/github-issues/README.md",
+        "examples/recipes/github-issues/rules.json",
+        "examples/recipes/morning-brief/README.md",
+        "examples/recipes/morning-brief/rules.json",
+        "examples/recipes/ops-alerts/README.md",
+        "examples/recipes/ops-alerts/rules.json",
+        "examples/recipes/website-watch/README.md",
+        "examples/recipes/website-watch/rules.json",
+        "examples/watch-github-issues.sh",
+        "install.sh",
+        "kernel/rules.ts",
+        "package.json",
+        "plugins/acp/agent.ts",
+        "plugins/acp/bridge.ts",
+        "plugins/claude/agent.ts",
+        "plugins/codex/agent.ts",
+        "plugins/command/agent.ts",
+        "plugins/delivery/agent.ts",
+        "plugins/delivery/project.ts",
+        "plugins/delivery/review.ts",
+        "plugins/herdr-core/README.md",
+        "plugins/herdr-core/agent.ts",
+        "plugins/herdr-core/bridge.ts",
+        "plugins/herdr-core/control.ts",
+        "plugins/herdr-core/ownership.ts",
+        "plugins/herdr-core/receipt.ts",
+        "plugins/herdr-core/rpc.ts",
+        "plugins/herdr-core/store.ts",
+        "plugins/herdr-core/task.ts",
+        "plugins/herdr-core/types.ts",
+        "plugins/script/agent.ts",
+        "protocol/job.ts",
+        "protocol/rules.ts",
+        "protocol/schema.json",
+        "scripts/install-smoke.sh",
+        "scripts/real-agents.ts",
+        "scripts/real-protocols.ts",
+        "sim/world.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/acp.test.ts",
+        "tests/adapters.test.ts",
+        "tests/browser-handoff.test.ts",
+        "tests/contract.test.ts",
+        "tests/delivery-input.test.ts",
+        "tests/delivery-review.test.ts",
+        "tests/delivery-scope.test.ts",
+        "tests/delivery.test.ts",
+        "tests/desktop.test.ts",
+        "tests/fixtures/fake-hc.mjs",
+        "tests/herdr.test.ts",
+        "tests/init.test.ts",
+        "tests/install.test.ts",
+        "tests/loop.test.ts",
+        "tests/plugins.test.ts",
+        "tests/recipes.test.ts",
+        "tests/rules.fixture.json",
+        "tests/rules.test.ts",
+        "tests/runs.test.ts",
+        "tests/runtime-loop.test.ts",
+        "tests/script.test.ts",
+        "tests/uninstall.test.ts",
+        "tests/why.test.ts",
+        "tests/worker-path.test.ts",
+        "tests/worker-persistent.test.ts",
+        "tests/worker.test.ts",
+        "worker/agents.ts",
+        "worker/contract.ts",
+        "worker/worker.ts"
+      ]
+    },
+    {
+      "repository": "wangguiyu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "haha20220505/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "shanghaijingdian/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Ebispongebob/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 66,
+      "changed_files": []
+    },
+    {
+      "repository": "SunElliot/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "dream8899/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Doraemon-AGI/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ziduup/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "fnsoxt/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "wushanru/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "BradleyHWQ/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Jack8543/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Megan-TA/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xinlingzhifei-sh/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Regardles/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "crow-y/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "11Karl11/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "liuxin2533/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "fdfdf6182-gif/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yezhwi/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "HammerChen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Ricky940828/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "junqiangyuan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "cytlabs/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Citrus086/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "yuwensu123/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "isaleafa/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zivyuan/agent-autoloop",
+      "head": "1a9d7bc113bf60e4dbd32b9ece29ce63c5b65f63",
+      "status": "diverged",
+      "ahead": 3,
+      "behind": 72,
+      "changed_files": [
+        "README.en.md",
+        "README.md",
+        "cli/main.ts",
+        "plugins/claude/agent.ts",
+        "plugins/codex/agent.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "worker/agents.ts",
+        "worker/worker.ts"
+      ]
+    },
+    {
+      "repository": "MrLiu007/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "velocityX-br/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Rovers-4622/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "leo11wu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "arrenxxxxx/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 24,
+      "changed_files": []
+    },
+    {
+      "repository": "HZJprince/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "oopsAI9527/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Guanhua-Jerry-Yang/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "happydoc45/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "chenailuo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "HY-love-sleep/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "bobhere/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "idairen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Onejhub/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Echoxiawan/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 62,
+      "changed_files": []
+    },
+    {
+      "repository": "mozuipi/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Jayburka/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Xiaoqin42/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "1941890266/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "suixingpay123/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "a3125837/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zqYuan98/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "whalehunter-2026/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "sea-monsters/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xiaozefeng/agent-autoloop",
+      "head": "0142737ad8f71bcb278a5f890cbd76b7f61f4903",
+      "status": "diverged",
+      "ahead": 3,
+      "behind": 72,
+      "changed_files": [
+        ".github/ISSUE_TEMPLATE/bug_report.yml",
+        ".github/ISSUE_TEMPLATE/config.yml",
+        ".github/ISSUE_TEMPLATE/feature_request.yml",
+        "CONTRIBUTING.md",
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "SECURITY.md",
+        "install.sh",
+        "package.json",
+        "plugins/claude/agent.ts",
+        "skills/agent-autoloop/SKILL.md",
+        "tests/adapters.test.ts"
+      ]
+    },
+    {
+      "repository": "drone789/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Aikur0525/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zjjoe2025/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "tomfox19840102-a11y/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "chenqiang0929-opus/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "duya123/agent-workflow-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "baogutang/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "tchen7/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "mochendong/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ra1nzzz/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "AKa-kakakaka/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "JacquesMoen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 68,
+      "changed_files": []
+    },
+    {
+      "repository": "bitbert/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "conversory/agent-autoloop",
+      "head": "a920143cd576a5c3f63e74271892c588c50a96ab",
+      "status": "diverged",
+      "ahead": 4,
+      "behind": 72,
+      "changed_files": [
+        ".gitattributes",
+        "INSTALL.md",
+        "README.en.md",
+        "README.md",
+        "cli/main.ts",
+        "cli/uninstall.ts",
+        "host/service.ts",
+        "host/stayup.ts",
+        "host/up.ts",
+        "install.cmd",
+        "package-lock.json",
+        "plugins/claude/agent.ts",
+        "plugins/codex/agent.ts",
+        "plugins/desktop/channel.ts",
+        "protocol/rules.ts",
+        "scripts/ci-scope.sh",
+        "scripts/install-windows.ts",
+        "tests/helpers.ts",
+        "tests/install-windows.test.ts",
+        "tests/install.test.ts",
+        "tests/loop.test.ts",
+        "tests/uninstall.test.ts",
+        "tests/windows-service.test.ts",
+        "tests/worker-windows.test.ts",
+        "worker/agents.ts",
+        "worker/sitter.ts",
+        "worker/worker.ts"
+      ]
+    },
+    {
+      "repository": "AbrahamLyndau/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "bkvito/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "iyangming/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "zhengjialux/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "q5450/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "sudaozhen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "jerrylee-78/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "miaowenmiao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "lycheeKing1024/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 25,
+      "changed_files": []
+    },
+    {
+      "repository": "AllynYonge/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "SFidea/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "moonslightking/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ZGH0717/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "hysoka15/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "Coder-DaPi/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "aerovicliu/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "william-dk/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "qq1096131247-ux/agent-autoloop--",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xcouturecc/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ahuachen/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "cfree970415/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "JMH13263/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "pekaboo/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 45,
+      "changed_files": []
+    },
+    {
+      "repository": "baidang201/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xiaosys/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "tonytang12138/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "wandso/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "kongfuxiongmao/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "chazz1/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "tjt8719276/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "jmwdpk/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "VastFuture/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "ls76618439-cmd/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "xinghancanlan2026/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    },
+    {
+      "repository": "skylin2026/agent-autoloop",
+      "head": null,
+      "status": "behind",
+      "ahead": 0,
+      "behind": 72,
+      "changed_files": []
+    }
+  ]
+}
