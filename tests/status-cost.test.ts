@@ -117,7 +117,7 @@ test("status includes runs beyond the first page, including old runs that finish
     { env: process.env },
   );
   const lines = stdout.split("\n");
-  assert.match(lines[0], /^Бег /);
+  assert.match(lines[0], /^Выполняется /);
   assert.equal(lines[1], "Сегодня 1 цикл. · 100 Token · $1.00    Последние 7 дней 66 цикл. · 750 Token · $1.65");
 
   for (const table of ["run_events", "runs", "events", "seen", "cards", "deliveries", "timers"] as const)

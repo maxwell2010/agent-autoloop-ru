@@ -34,7 +34,7 @@ test("the simulator rejects a hub that refuses valid receipt replays", () => {
     return original.call(this, type, ...args);
   };
   try {
-    assert.throws(() => simulate(24301, 2048), /种子/);
+    assert.throws(() => simulate(24301, 2048), /seed/);
   } finally {
     World.prototype.call = original;
   }

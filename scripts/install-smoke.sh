@@ -62,7 +62,7 @@ done
 cat >"$work/agent.sh" <<'END'
 #!/bin/sh
 if grep -q 'card.answered' "$AGENT_AUTOLOOP_CONTEXT"; then
-  echo "Вы выбрали зеленый цвет и прошли пробный запуск."
+  echo "Пробный запуск пройден: вы выбрали зеленый."
 else
   cat <<'ASK'
 Задан вопрос
@@ -85,7 +85,7 @@ sh "$repo/install.sh" --no-service --command "$work/agent.sh" --port "$port" >"$
 cat "$work/install.out"
 [ -L "$HOME/.local/bin/agent-autoloop" ] || fail "install.sh didn't put the command in ~/.local/bin"
 [ "$(command -v agent-autoloop)" = "$HOME/.local/bin/agent-autoloop" ] || fail "agent-autoloop isn't what PATH finds"
-grep -q "Беги первым agent-autoloop up" "$work/install.out" || fail "the next step printed isn't to start it"
+grep -q "Сначала выполните agent-autoloop up" "$work/install.out" || fail "the next step printed isn't to start it"
 
 commit=$(git -C "$repo" rev-parse HEAD | cut -c 1-12)
 agent-autoloop --version | grep -q "$commit" || fail "--version doesn't say $commit"

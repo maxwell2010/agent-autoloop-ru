@@ -63,7 +63,7 @@ test("the prompt says what to do and how to end, but not what anyone wrote", () 
   assert.match(text, /NOTHING:/);
   assert.match(text, /```agent-autoloop/);
   assert.ok(!text.includes("王某"));
-  assert.ok(!text.includes("管理员权限"));
+  assert.ok(!text.includes(job().context.events[0].detail));
   assert.ok(!text.includes('"events"'), "a rule that can't emit isn't offered it");
 });
 

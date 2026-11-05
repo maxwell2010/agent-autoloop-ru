@@ -99,5 +99,5 @@ test("doctor says a system-level unit is running", () => {
     { encoding: "utf8", timeout: 30_000 },
   );
   assert.match(doctor.stdout, /● Служба системного уровня работает/);
-  assert.doesNotMatch(doctor.stdout, /Системная служба没Бег/);
+  assert.doesNotMatch(doctor.stdout, /Системная служба не работает/);
 });

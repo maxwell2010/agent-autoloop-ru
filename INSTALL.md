@@ -17,8 +17,10 @@
 ```sh
 git clone https://github.com/maxwell2010/agent-autoloop-ru.git
 cd agent-autoloop-ru
-sh install.sh --no-service --agent codex
+AGENT_AUTOLOOP_REPO=https://github.com/maxwell2010/agent-autoloop-ru.git sh install.sh --no-service --agent codex
 ```
+
+Явное значение `AGENT_AUTOLOOP_REPO` обязательно для этой команды: оно не дает молча продолжить обновление прежнего источника, если на компьютере уже установлен оригинал. При несовпадении установщик остановится. Без этой переменной существующая установка по прежнему контракту следует своему `origin`.
 
 Замените `codex` на `claude`, если нужен Claude Code. Без `--agent` подключаются все найденные поддерживаемые агенты. Другой CLI задается через `--command 'программа {prompt}'`; адаптер сам по себе не ограничивает права программы.
 

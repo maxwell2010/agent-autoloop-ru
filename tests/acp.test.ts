@@ -302,7 +302,11 @@ test("ACP ends a turn as soon as it can't read a line from the agent", async () 
     assert.notEqual(result.code, 0, name);
     const reading = acp.read(result.out, result.code, result.err);
     assert.equal(reading.text, undefined, name);
-    assert.doesNotMatch(reading.error!, /退出/, `${name}: it didn't wait for the agent to go`);
+    assert.doesNotMatch(
+      reading.error!,
+      /завершился до получения результата/,
+      `${name}: it didn't wait for the agent to go`,
+    );
   }
 });
 

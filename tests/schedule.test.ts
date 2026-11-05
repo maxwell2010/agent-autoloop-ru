@@ -48,7 +48,7 @@ test("a schedule fires once when it's due, as an event of its own rule", () => {
   assert.equal(job.rule.name, "Осмотр");
   assert.deepEqual(
     job.context.events.map((e) => [e.source, e.sourceName, e.type]),
-    [["schedule", "Выбор времени", "schedule.tick"]],
+    [["schedule", "Расписание", "schedule.tick"]],
   );
   assert.deepEqual(JSON.parse(one<{ routed: string }>("SELECT routed FROM events")!.routed), ["Осмотр"]);
 });
